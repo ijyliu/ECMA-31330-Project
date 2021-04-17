@@ -1,0 +1,6 @@
+
+# Ignore vscode files
+**/.vscode
+
+# Ignore lyx backup files
+**/*.lyx~
