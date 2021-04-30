@@ -4,3 +4,6 @@
 
 # Ignore lyx backup files
 **/*.lyx~
+
+# Ignore LaTeX sync files
+**/*synctex.gz
