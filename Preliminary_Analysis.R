@@ -2,7 +2,7 @@
 # Do some summary statistics on VDem
 
 library(pacman)
-p_load('tidyverse', 'stargazer', 'estimatr')
+p_load('tidyverse', 'stargazer', 'estimatr', 'plm')
 
 # Start with a very small sample read-in for speed
 VDem <- read_csv('~/../Box/ECMA-31330-Project/V-Dem-CY-Full+Others-v11.1.csv')
@@ -20,3 +20,9 @@ VDem %>%
 # OLS Regression
 OLS_instab_turnout <- lm(e_wbgi_pve ~ v2eltrnout, data = VDem)
 stargazer(OLS_instab_turnout, se = starprep(OLS_instab_turnout, se_type = "stata"), title="Regression of WB Political Stability on Election Voter Turnout", covariate.labels = c("Election Turnout"), dep.var.labels = "WB Political Stability", dep.var.caption = "", align=TRUE, out="~/../repo/ECMA-31330-Project/Output/Instab_Turnout_Reg.tex", omit.stat=c("f", "ser", "adj.rsq"), notes = "Robust standard errors in parentheses.")
+
+# Country-Year Fixed Effects Regression
+FE_instab_turnout <- plm(e_wbgi_pve ~ v2eltrnout, data = VDem, index = c("country_name", "year"), model = "within")
+# Get cluster SEs
+summary(FE_instab_turnout, cluster="country_name") 
+stargazer(FE_instab_turnout, se=list(coef(summary(FE_instab_turnout, cluster = c("country_name")))[, 2]), title="Fixed Effects Regression of WB Political Stability on Election Voter Turnout", covariate.labels = c("Election Turnout"), dep.var.labels = "WB Political Stability", dep.var.caption = "", align=TRUE, out="~/../repo/ECMA-31330-Project/Output/FE_Instab_Turnout_Reg.tex", omit.stat=c("f", "ser", "adj.rsq"), notes = "Includes country and time fixed effects. Country-clustered standard errors in parentheses.")
