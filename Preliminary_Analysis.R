@@ -31,9 +31,10 @@ stargazer(FE_instab_turnout, se=list(coef(summary(FE_instab_turnout, cluster = c
 # Source: http://www.sthda.com/english/articles/31-principal-component-methods-in-r-practical-guide/118-principal-component-analysis-in-r-prcomp-vs-princomp/
 # Let's do some exploratory work as to what are the major patterns in the data
 # We need to pick some numeric variables along interesting dimensions
-# I chose the democracy indices (codebook section 2), suffrage indicators (codebook 3.1.1)
+# For now I select all of the V2 or VDem version 2 variables that aren't strings
 pca_results <- VDem %>%
-    select(starts_with("v2x")) %>%
+    select(starts_with("v2")) %>%
+    select_if(is.numeric) %>%
     prcomp(scale = TRUE)
 # Visualize the eigenvectors/display the percentage of variance explained by each principal component
 pdf("Output/Variance_Explained.pdf")
