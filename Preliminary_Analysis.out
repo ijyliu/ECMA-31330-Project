@@ -1,41 +1,5 @@
 ==========================================
-SLURM_JOB_ID = 2936257
+SLURM_JOB_ID = 2936501
 SLURM_SUBMIT_DIR = /home/ijyliu/repo/ECMA-31330-Project
 SLURM_JOB_NODELIST = mcn08
 ==========================================
-Parsed with column specification:
-cols(
-  .default = col_double(),
-  country_name = col_character(),
-  country_text_id = col_character(),
-  historical_date = col_date(format = ""),
-  histname = col_character(),
-  gapstart1 = col_logical(),
-  gapstart2 = col_logical(),
-  gapstart3 = col_logical(),
-  gapend1 = col_logical(),
-  gapend2 = col_logical(),
-  gapend3 = col_logical(),
-  v2lpname = col_character(),
-  v2slpname = col_character(),
-  v2tlpname = col_character(),
-  v2elregnam = col_character(),
-  v2ellocnam = col_character(),
-  v2exnamhos = col_character(),
-  v2extithos = col_character(),
-  v2exparhos = col_character(),
-  v2exnamhog = col_character(),
-  v2extithog = col_character()
-  # ... with 24 more columns
-)
-See spec(...) for full column specifications.
-Warning: 8852 parsing failures.
- row       col           expected actual                                                       file
-2086 gapstart1 1/0/T/F/TRUE/FALSE   1851 '~/Box/ECMA-31330-Project//V-Dem-CY-Full+Others-v11.1.csv'
-2086 gapend1   1/0/T/F/TRUE/FALSE   1917 '~/Box/ECMA-31330-Project//V-Dem-CY-Full+Others-v11.1.csv'
-2087 gapstart1 1/0/T/F/TRUE/FALSE   1851 '~/Box/ECMA-31330-Project//V-Dem-CY-Full+Others-v11.1.csv'
-2087 gapend1   1/0/T/F/TRUE/FALSE   1917 '~/Box/ECMA-31330-Project//V-Dem-CY-Full+Others-v11.1.csv'
-2088 gapstart1 1/0/T/F/TRUE/FALSE   1851 '~/Box/ECMA-31330-Project//V-Dem-CY-Full+Others-v11.1.csv'
-.... ......... .................. ...... ..........................................................
-See problems(...) for more details.
-

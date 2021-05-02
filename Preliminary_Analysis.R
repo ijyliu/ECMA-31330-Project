@@ -11,19 +11,26 @@ p_load('tidyverse', 'stargazer', 'estimatr', 'plm', 'factoextra')
 # Detect whether this is a local run or on a computing cluster and set the file path appropriately
 data_dir <- ifelse(dir.exists("~/../Box/ECMA-31330-Project"), "~/../Box/ECMA-31330-Project", "~/Box/ECMA-31330-Project")
 
-# Start with a very small sample read-in for speed
+# Read in VDem data
+# Note: if you want to read in a small subsample, set max_n = 1000 or some other value in read_csv
 VDem <- read_csv(file.path(data_dir, '/V-Dem-CY-Full+Others-v11.1.csv'))
 print("Loaded in V-Dem data.")
+
+# General sumary statistics for numeric variables
+VDem %>%
+  select_if(is.numeric) %>%
+  data.frame() %>%
+  stargazer(out="Output/Summary_Statistics_Numeric.tex", title="Summary Statistics for all Numeric Variables")
 
 # Let us consider the relationship between political instability and voter turnout
 # One measure in V-Dem is the WB World Governance Indicators politcal stability index. Higher = more stable. This is variable e_wbgi_pve.
 # Election turnout for a country and year is v2eltrnout.
 
-# Summary Statistics
+# Summary Statistics for the Regression Variables
 VDem %>%
     select(e_wbgi_pve, v2eltrnout) %>%
     data.frame() %>%
-    stargazer(out="Output/Summary_Statistics.tex", title="Summary Statistics", covariate.labels = c("WB Political Stability", "Election Turnout"))
+    stargazer(out="Output/Summary_Statistics_for_Regression.tex", title="Summary Statistics for Regression Variables", covariate.labels = c("WB Political Stability", "Election Turnout"))
 
 # OLS Regression
 OLS_instab_turnout <- lm(e_wbgi_pve ~ v2eltrnout, data = VDem)
