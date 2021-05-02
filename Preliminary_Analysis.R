@@ -41,8 +41,12 @@ stargazer(FE_instab_turnout, se=list(coef(summary(FE_instab_turnout, cluster = c
 # We need to pick some numeric variables along interesting dimensions
 # For now I select all of the V2 or VDem version 2 variables that aren't strings
 pca_results <- VDem %>%
+    # Select VDem version 2 variables
     select(starts_with("v2")) %>%
+    # Remove string columns
     select_if(is.numeric) %>%
+    # Remove zero variance/constant columns
+    select_if(function(v) var(v, na.rm=TRUE) != 0) %>%
     prcomp(scale = TRUE)
 # Visualize the eigenvectors/display the percentage of variance explained by each principal component
 pdf("Output/Variance_Explained.pdf")
