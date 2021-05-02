@@ -1,6 +1,10 @@
 # Preliminary_Analysis.R
 # Do some summary statistics on VDem
 
+# Package Management
+if ('pacman' %in% rownames(installed.packages()) == FALSE) {
+  install.packages('pacman', repos='http://cran.us.r-project.org')
+}
 library(pacman)
 p_load('tidyverse', 'stargazer', 'estimatr', 'plm', 'factoextra')
 
