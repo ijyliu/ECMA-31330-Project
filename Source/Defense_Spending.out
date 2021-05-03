@@ -1,0 +1,28 @@
+==========================================
+SLURM_JOB_ID = 2945257
+SLURM_SUBMIT_DIR = /home/ijyliu/repo/ECMA-31330-Project/Source
+SLURM_JOB_NODELIST = mcn02
+==========================================
+[pca] >Processing dataframe..
+[pca] >The PCA reduction is performed on the [173] columns of the input dataframe.
+[pca] >Fitting using PCA..
+Traceback (most recent call last):
+  File "Defense_Spending.py", line 43, in <module>
+    resultssipri_milex_per_gdp = modelsipri_milex_per_gdp.fit_transform(deMeansipri_milex_per_gdp)
+  File "/home/ijyliu/.local/lib/python3.6/site-packages/pca/pca.py", line 202, in fit_transform
+    model_pca, PC, loadings, percentExplVar = _explainedvar(X, n_components=self.n_components, onehot=self.onehot, random_state=self.random_state, verbose=verbose)
+  File "/home/ijyliu/.local/lib/python3.6/site-packages/pca/pca.py", line 1011, in _explainedvar
+    model.fit(X)
+  File "/apps/python/3.6/lib/python3.6/site-packages/sklearn/decomposition/_pca.py", line 352, in fit
+    self._fit(X)
+  File "/apps/python/3.6/lib/python3.6/site-packages/sklearn/decomposition/_pca.py", line 398, in _fit
+    ensure_2d=True, copy=self.copy)
+  File "/apps/python/3.6/lib/python3.6/site-packages/sklearn/base.py", line 421, in _validate_data
+    X = check_array(X, **check_params)
+  File "/apps/python/3.6/lib/python3.6/site-packages/sklearn/utils/validation.py", line 63, in inner_f
+    return f(*args, **kwargs)
+  File "/apps/python/3.6/lib/python3.6/site-packages/sklearn/utils/validation.py", line 664, in check_array
+    allow_nan=force_all_finite == 'allow-nan')
+  File "/apps/python/3.6/lib/python3.6/site-packages/sklearn/utils/validation.py", line 106, in _assert_all_finite
+    msg_dtype if msg_dtype is not None else X.dtype)
+ValueError: Input contains NaN, infinity or a value too large for dtype('float64').

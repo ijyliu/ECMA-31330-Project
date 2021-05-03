@@ -12,4 +12,4 @@
 #SBATCH --output=%x.out # output file name
 
 module load python/booth/3.6/3.6.12
-python Defense_Spending.py
+python3 Defense_Spending.py

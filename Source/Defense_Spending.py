@@ -17,7 +17,7 @@ output_dir = repo_dir + "/Output"
 figures_dir = output_dir + "/Figures"
 
 # We can look at spending per GDP or spending as a share of government spending.
-sipri_milex_per_gdp = (pd.read_excel(data_dir + "/SIPRI-Milex-data-1949-2020_0.xlsx", sheet_name="Share of GDP", header=5)
+sipri_milex_per_gdp = (pd.read_excel(data_dir + "/SIPRI-Milex-data-1949-2020_0.xlsx", sheet_name="Share of GDP", header=5, engine='openpyxl')
                          .drop(columns='Notes')
                          # Threshold requires a non-NaN country column and at least one observation
                          .dropna(thresh=2)
