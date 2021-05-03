@@ -19,15 +19,30 @@ figures_dir = output_dir + "/Figures"
 # We can look at spending per GDP or spending as a share of government spending.
 sipri_milex_per_gdp = (pd.read_excel(data_dir + "/SIPRI-Milex-data-1949-2020_0.xlsx", sheet_name="Share of GDP", header=5, engine='openpyxl')
                          .drop(columns='Notes')
+                         .replace({"xxx":np.NaN, ". .":np.NaN})
                          # Threshold requires a non-NaN country column and at least one observation
                          .dropna(thresh=2)
-                         .replace({"xxx":np.NaN, ". .":np.NaN})
                          # Remove "Unnamed" columns
                          .filter(regex='^((?!Unnamed).)*$')
                          .set_index('Country')
-                         .transpose())
+                         .transpose()
+                         .rename_axis('Year'))
 
+print(sipri_milex_per_gdp)
+
+# Here's a internally/interpolated version of the data
 sipri_milex_per_gdp_interpolate = (sipri_milex_per_gdp.interpolate(limit_area='inside'))
+
+sipri_milex_per_gdp_interpolate_90s_on = sipri_milex_per_gdp_interpolate.query('Year >= 1990')
+
+# For every year, plot the share of missing values
+sns.heatmap(sipri_milex_per_gdp.isnull(), cbar=False)
+plt.savefig(figures_dir + "/Missing_Values.pdf")
+sns.heatmap(sipri_milex_per_gdp_interpolate.isnull(), cbar=False)
+plt.savefig(figures_dir + "/Missing_Values_Interpolate.pdf")
+sns.heatmap(sipri_milex_per_gdp_interpolate_90s_on.isnull(), cbar=False)
+plt.savefig(figures_dir + "/Missing_Values_Interpolate_Post_1990.pdf")
+
 exit()
 
 # Plot a time series of expenditure for countries
