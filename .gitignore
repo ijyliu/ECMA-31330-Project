@@ -7,3 +7,13 @@
 
 # Ignore LaTeX sync files
 **/*synctex.gz
+
+# Ignore python gmon files
+**/*gmon.out
+
+# Ignore jupyter notebook checkpoints
+**/*checkpoint.ipynb
+
+# Ignore DS_Store
+**/.DS_Store
+.DS_Store

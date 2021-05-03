@@ -16,7 +16,7 @@ data_dir <- ifelse(dir.exists("~/../Box/ECMA-31330-Project"), "~/../Box/ECMA-313
 VDem <- read_csv(file.path(data_dir, '/V-Dem-CY-Full+Others-v11.1.csv'))
 print("Loaded in V-Dem data.")
 
-# General sumary statistics for numeric variables
+# General summary statistics for numeric variables
 VDem %>%
   select_if(is.numeric) %>%
   data.frame() %>%

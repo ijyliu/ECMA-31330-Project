@@ -1,6 +1,48 @@
+==========================================
+SLURM_JOB_ID = 2936501
+SLURM_SUBMIT_DIR = /home/ijyliu/repo/ECMA-31330-Project
+SLURM_JOB_NODELIST = mcn08
+==========================================
+Parsed with column specification:
+cols(
+  .default = col_double(),
+  country_name = col_character(),
+  country_text_id = col_character(),
+  historical_date = col_date(format = ""),
+  histname = col_character(),
+  gapstart1 = col_logical(),
+  gapstart2 = col_logical(),
+  gapstart3 = col_logical(),
+  gapend1 = col_logical(),
+  gapend2 = col_logical(),
+  gapend3 = col_logical(),
+  v2lpname = col_character(),
+  v2slpname = col_character(),
+  v2tlpname = col_character(),
+  v2elregnam = col_character(),
+  v2ellocnam = col_character(),
+  v2exnamhos = col_character(),
+  v2extithos = col_character(),
+  v2exparhos = col_character(),
+  v2exnamhog = col_character(),
+  v2extithog = col_character()
+  # ... with 24 more columns
+)
+See spec(...) for full column specifications.
+Warning: 8852 parsing failures.
+ row       col           expected actual                                                       file
+2086 gapstart1 1/0/T/F/TRUE/FALSE   1851 '~/Box/ECMA-31330-Project//V-Dem-CY-Full+Others-v11.1.csv'
+2086 gapend1   1/0/T/F/TRUE/FALSE   1917 '~/Box/ECMA-31330-Project//V-Dem-CY-Full+Others-v11.1.csv'
+2087 gapstart1 1/0/T/F/TRUE/FALSE   1851 '~/Box/ECMA-31330-Project//V-Dem-CY-Full+Others-v11.1.csv'
+2087 gapend1   1/0/T/F/TRUE/FALSE   1917 '~/Box/ECMA-31330-Project//V-Dem-CY-Full+Others-v11.1.csv'
+2088 gapstart1 1/0/T/F/TRUE/FALSE   1851 '~/Box/ECMA-31330-Project//V-Dem-CY-Full+Others-v11.1.csv'
+.... ......... .................. ...... ..........................................................
+See problems(...) for more details.
+
+[1] "Loaded in V-Dem data."
 
 % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
-% Date and time: Sun, May 02, 2021 - 09:24:29 AM
+% Date and time: Sun, May 02, 2021 - 09:23:50 AM
 \begin{table}[!htbp] \centering 
   \caption{Summary Statistics for all Numeric Variables} 
   \label{} 
@@ -4144,3 +4186,96 @@ e\_pt\_coup & 10,291 & 0.061 & 0.317 & 0.000 & 0.000 & 0.000 & 2.000 \\
 \hline \\[-1.8ex] 
 \end{tabular} 
 \end{table} 
+
+% Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
+% Date and time: Sun, May 02, 2021 - 09:25:40 AM
+\begin{table}[!htbp] \centering 
+  \caption{Summary Statistics for Regression Variables} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}}lccccccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+Statistic & \multicolumn{1}{c}{N} & \multicolumn{1}{c}{Mean} & \multicolumn{1}{c}{St. Dev.} & \multicolumn{1}{c}{Min} & \multicolumn{1}{c}{Pctl(25)} & \multicolumn{1}{c}{Pctl(75)} & \multicolumn{1}{c}{Max} \\ 
+\hline \\[-1.8ex] 
+WB Political Stability & 3,666 & $-$0.169 & 0.980 & $-$3.315 & $-$0.782 & 0.604 & 1.760 \\ 
+Election Turnout & 3,137 & 71.409 & 16.886 & 2.730 & 59.990 & 84.630 & 100.000 \\ 
+\hline \\[-1.8ex] 
+\end{tabular} 
+\end{table} 
+
+% Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
+% Date and time: Sun, May 02, 2021 - 09:25:40 AM
+% Requires LaTeX packages: dcolumn 
+\begin{table}[!htbp] \centering 
+  \caption{Regression of WB Political Stability on Election Voter Turnout} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}}lD{.}{.}{-3} } 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+\\[-1.8ex] & \multicolumn{1}{c}{WB Political Stability} \\ 
+\hline \\[-1.8ex] 
+ Election Turnout & 0.010^{***} \\ 
+  & (0.002) \\ 
+  & \\ 
+ Constant & -0.756^{***} \\ 
+  & (0.128) \\ 
+  & \\ 
+\hline \\[-1.8ex] 
+Observations & \multicolumn{1}{c}{1,039} \\ 
+R$^{2}$ & \multicolumn{1}{c}{0.030} \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{1}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+ & \multicolumn{1}{r}{Robust standard errors in parentheses.} \\ 
+\end{tabular} 
+\end{table} 
+Oneway (individual) effect Within Model
+
+Call:
+plm(formula = e_wbgi_pve ~ v2eltrnout, data = VDem, model = "within", 
+    index = c("country_name", "year"))
+
+Unbalanced Panel: n = 170, T = 1-12, N = 1039
+
+Residuals:
+      Min.    1st Qu.     Median    3rd Qu.       Max. 
+-1.6168381 -0.1706329 -0.0019798  0.1786484  1.3511966 
+
+Coefficients:
+            Estimate Std. Error t-value Pr(>|t|)  
+v2eltrnout 0.0022012  0.0011959  1.8407  0.06601 .
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Total Sum of Squares:    106.4
+Residual Sum of Squares: 105.99
+R-Squared:      0.003888
+Adj. R-Squared: -0.1912
+F-statistic: 3.388 on 1 and 868 DF, p-value: 0.066014
+
+% Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
+% Date and time: Sun, May 02, 2021 - 09:25:41 AM
+% Requires LaTeX packages: dcolumn 
+\begin{table}[!htbp] \centering 
+  \caption{Fixed Effects Regression of WB Political Stability on Election Voter Turnout} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}}lD{.}{.}{-3} } 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+\\[-1.8ex] & \multicolumn{1}{c}{WB Political Stability} \\ 
+\hline \\[-1.8ex] 
+ Election Turnout & 0.002^{*} \\ 
+  & (0.001) \\ 
+  & \\ 
+\hline \\[-1.8ex] 
+Observations & \multicolumn{1}{c}{1,039} \\ 
+R$^{2}$ & \multicolumn{1}{c}{0.004} \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{1}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+ & \multicolumn{1}{r}{Includes country and time fixed effects. Country-clustered standard errors in parentheses.} \\ 
+\end{tabular} 
+\end{table} 
+Error in svd(x, nu = 0, nv = k) : infinite or missing values in 'x'
+Calls: %>% ... withVisible -> <Anonymous> -> prcomp -> prcomp.default -> svd
+Execution halted
