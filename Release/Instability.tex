@@ -1,0 +1,60 @@
+\documentclass{report}
+
+\usepackage{amsmath}
+\usepackage{geometry}
+\usepackage{amsfonts}
+\usepackage[english]{babel}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{multirow}
+\usepackage{pdflscape}
+\usepackage{caption}
+\usepackage{pdflscape}
+\usepackage{outlines}
+\usepackage{subcaption}
+\usepackage{enumerate}
+
+\usepackage{tabularx, booktabs}
+
+\usepackage{standalone}
+
+\usepackage[autostyle, english = american]{csquotes}
+\MakeOuterQuote{"}
+
+\usepackage{comment}
+
+\newcommand{\tabnotes}[2]{\bottomrule \multicolumn{#1}{@{}p{0.95\linewidth}@{}}{\footnotesize #2 }\end{tabular}\end{table}}
+
+\title{ECMA-31330-Project}
+\author{Isaac Liu}
+\date{\today}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.5em}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\begin{document}
+
+	\maketitle
+
+	\newpage \clearpage
+
+    \input{../Output/Summary_Statistics.tex}
+
+    \newpage \clearpage
+
+    \input{../Output/Instab_Turnout_Reg.tex}
+
+    \newpage \clearpage
+
+    \input{../Output/FE_Instab_Turnout_Reg.tex}
+
+\end{document}
