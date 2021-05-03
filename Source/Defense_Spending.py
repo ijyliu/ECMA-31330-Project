@@ -27,6 +27,9 @@ sipri_milex_per_gdp = (pd.read_excel(data_dir + "/SIPRI-Milex-data-1949-2020_0.x
                          .set_index('Country')
                          .transpose())
 
+sipri_milex_per_gdp_interpolate = (sipri_milex_per_gdp.interpolate(limit_area='inside'))
+exit()
+
 # Plot a time series of expenditure for countries
 plt.figure(figsize=(15,15))
 plt.plot(sipri_milex_per_gdp);
