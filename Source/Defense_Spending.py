@@ -59,9 +59,11 @@ demean_sipri_milex_for_pca = sipri_milex_for_pca - np.mean(sipri_milex_for_pca, 
 model_sipri_milex_for_pca = pca(n_components=demean_sipri_milex_for_pca.shape[1])
 results_sipri_milex_for_pca = model_sipri_milex_for_pca.fit_transform(demean_sipri_milex_for_pca)
 sns.heatmap(results_sipri_milex_for_pca['loadings'],cmap='YlGnBu');
+plt.savefig(figures_dir + "/Milex_Loadings.pdf")
 
-# Plot
+# Scree plot of share of variance explained
 model_sipri_milex_for_pca.plot();
+plt.savefig(figures_dir + "/Milex_PC_Share_Explained.pdf")
 
 # Predict values
 K = 3
@@ -71,12 +73,12 @@ Yhat = Fhat@Mus
 
 # Scatterplots and other plots of predicted and actual values
 plt.scatter(demean_sipri_milex_for_pca.iloc[:,0],Yhat[:,0])
-plt.show()
+plt.savefig(figures_dir + "/Milex_Actual_Predicted_Scatter.pdf")
 
 plt.plot(demean_sipri_milex_for_pca.index, demean_sipri_milex_for_pca.iloc[:,0])
 plt.plot(demean_sipri_milex_for_pca.index, Yhat[:,0])
-plt.show()
+plt.savefig(figures_dir + "/Milex_Actual_Predicted_Line_1.pdf")
 
 plt.plot(demean_sipri_milex_for_pca.index, demean_sipri_milex_for_pca.iloc[:,1])
 plt.plot(demean_sipri_milex_for_pca.index, Yhat[:,1])
-plt.show()
+plt.savefig(figures_dir + "/Milex_Actual_Predicted_Line_2.pdf")
