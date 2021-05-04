@@ -28,6 +28,9 @@ sipri_milex_per_gdp = (pd.read_excel(data_dir + "/SIPRI-Milex-data-1949-2020_0.x
                          .transpose()
                          .rename_axis('Year'))
 
+# Identify the weird spike in the time series
+# print(sipri_milex_per_gdp[sipri_milex_per_gdp > 1])
+
 # Here's a internally/interpolated version of the data
 sipri_milex_per_gdp_interpolate = (sipri_milex_per_gdp.interpolate(limit_area='inside'))
 
@@ -47,7 +50,7 @@ sipri_milex_for_pca = (sipri_milex_per_gdp_interpolate_95_on.dropna(axis = 1))
 # Plot a time series of expenditure for countries
 plt.figure(figsize=(15,15))
 plt.plot(sipri_milex_per_gdp);
-plt.legend(sipri_milex_per_gdp.columns);
+#plt.legend(sipri_milex_per_gdp.columns);
 plt.savefig(figures_dir + "/Milex_GDP_Time_Series.pdf")
 
 # Exploring correlations 
@@ -72,13 +75,13 @@ Mus = results_sipri_milex_for_pca['loadings'].iloc[0:K].to_numpy()
 Yhat = Fhat@Mus
 
 # Scatterplots and other plots of predicted and actual values
-plt.scatter(demean_sipri_milex_for_pca.iloc[:,0],Yhat[:,0])
+plt.scatter(demean_sipri_milex_for_pca.iloc[:,0],Yhat[:,0]);
 plt.savefig(figures_dir + "/Milex_Actual_Predicted_Scatter.pdf")
 
-plt.plot(demean_sipri_milex_for_pca.index, demean_sipri_milex_for_pca.iloc[:,0])
-plt.plot(demean_sipri_milex_for_pca.index, Yhat[:,0])
+plt.plot(demean_sipri_milex_for_pca.index, demean_sipri_milex_for_pca.iloc[:,0]);
+plt.plot(demean_sipri_milex_for_pca.index, Yhat[:,0]);
 plt.savefig(figures_dir + "/Milex_Actual_Predicted_Line_1.pdf")
 
-plt.plot(demean_sipri_milex_for_pca.index, demean_sipri_milex_for_pca.iloc[:,1])
-plt.plot(demean_sipri_milex_for_pca.index, Yhat[:,1])
+plt.plot(demean_sipri_milex_for_pca.index, demean_sipri_milex_for_pca.iloc[:,1]);
+plt.plot(demean_sipri_milex_for_pca.index, Yhat[:,1]);
 plt.savefig(figures_dir + "/Milex_Actual_Predicted_Line_2.pdf")
