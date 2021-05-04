@@ -13,3 +13,6 @@
 
 module load python/booth/3.6/3.6.12
 python3 Defense_Spending.py
+
+module load R
+Rscript Defense_Spending_Lasso.R

@@ -24,7 +24,8 @@ X <- patents_merged %>%
     select(-Year, -Country, -Dep_Var_Spend) %>%
     data.matrix()
 
-cv_model = cv.glmnet(X, y, foldid = samples, penalty.factor = penalty_vector, family = "gaussian", intercept=FALSE)
+# 10-fold CV with default settings should be fine
+cv_model = cv.glmnet(X, y, family="gaussian")
 
 chosen_lambda = cv_model['lambda.min'][[1]]
 lambdas = cv_model['lambda']
@@ -33,3 +34,5 @@ cvmeans = cv_model['cvm']
 chosen_beta_lasso <- predict(cv_model, s = chosen_lambda, type="coefficients") %>%
     as.matrix() %>%
     as.data.frame()
+
+# We may also want to try to estimate country or time specific parameters, but this will be difficult.
