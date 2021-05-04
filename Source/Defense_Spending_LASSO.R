@@ -14,7 +14,9 @@ data_dir <- ifelse(dir.exists("~/../Box/ECMA-31330-Project"), "~/../Box/ECMA-313
 # Load the data
 sipri_for_LASSO <- read_csv(paste0('data_dir', '/SIPRI_for_LASSO.csv'))
 
-# No penalty vector for now
+# One way of approaching this regression is to split the data into country subsamples
+
+# No penalty vector for now- include all coefficients
 
 y <- sipri_for_LASSO %>%
     select(Dep_Var_Spend) %>%
