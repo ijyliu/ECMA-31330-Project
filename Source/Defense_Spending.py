@@ -30,10 +30,29 @@ sipri_milex_per_gdp = (pd.read_excel(data_dir + "/SIPRI-Milex-data-1949-2020_0.x
                          .reset_index())
 
 # For the lasso, the idea is to regress a country's military expenditure per GDP on that of all the other countries
+# This takes a lot of manuevering to set up, but I did it
 sipri_for_LASSO = (pd.MultiIndex.from_product([sipri_milex_per_gdp['Year'], sipri_milex_per_gdp.columns], names=['Year', 'Country'])
                                 .to_frame()
                                 .query('Country != "Year"')
                                 .reset_index(drop=True))
+
+# Longer version of sipri_milex_per_gdp for merging on the dependent variable
+sipri_milex_per_gdp_long = (sipri_milex_per_gdp.set_index(['Year'])
+                                               .stack()
+                                               .reset_index())
+
+# Merge on the dependent variable
+sipri_for_LASSO = (sipri_for_LASSO.merge(sipri_milex_per_gdp_long)
+                                  .rename(columns = {0: "Dep_Var_Spend"})
+                                  .merge(sipri_milex_per_gdp)
+                                  .set_index(['Year', 'Country', 'Dep_Var_Spend'])
+                                  .stack()
+                                  .reset_index()
+                                  .query('Country != level_3')
+                                  .pivot(index = ['Year', 'Country', 'Dep_Var_Spend'], columns = 'level_3', values = 0)
+                                  .reset_index()
+                                  .rename_axis(None, axis="columns"))
+
 print(sipri_for_LASSO)
 
 exit()
