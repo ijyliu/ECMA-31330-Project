@@ -117,4 +117,4 @@ sipri_for_LASSO = (sipri_for_LASSO.merge(sipri_milex_inter_no_missing_long)
                                   .rename_axis(None, axis="columns"))
 
 # Save this dataset so we can use glmnet
-sipri_for_LASSO.to_csv(data_dir + "/SIPRI_for_LASSO.csv")
+sipri_for_LASSO.to_csv(data_dir + "/SIPRI_for_LASSO.csv", index=False)
