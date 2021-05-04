@@ -56,7 +56,7 @@ plt.savefig(figures_dir + "/Milex_correlations.pdf")
 
 # Do the PCA
 demean_sipri_milex_for_pca = sipri_milex_for_pca - np.mean(sipri_milex_for_pca, axis=0) 
-model_sipri_milex_for_pca = pca(n_components=demean_sipri_milex_for_pca.shape[1])
+model_sipri_milex_for_pca = pca()
 results_sipri_milex_for_pca = model_sipri_milex_for_pca.fit_transform(demean_sipri_milex_for_pca)
 sns.heatmap(results_sipri_milex_for_pca['loadings'],cmap='YlGnBu');
 plt.savefig(figures_dir + "/Milex_Loadings.pdf")
