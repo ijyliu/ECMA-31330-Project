@@ -53,9 +53,8 @@ sipri_for_LASSO = (sipri_for_LASSO.merge(sipri_milex_per_gdp_long)
                                   .reset_index()
                                   .rename_axis(None, axis="columns"))
 
-print(sipri_for_LASSO)
-
-exit()
+# Save this dataset so we can use glmnet
+sipri_for_LASSO.to_csv(data_dir + "/SIPRI_for_LASSO.csv")
 
 # Identify the weird spike in the time series
 # print(sipri_milex_per_gdp[sipri_milex_per_gdp > 1])
@@ -66,11 +65,11 @@ sipri_milex_per_gdp_interpolate = (sipri_milex_per_gdp.interpolate(limit_area='i
 sipri_milex_per_gdp_interpolate_95_on = sipri_milex_per_gdp_interpolate.query('Year >= 1995')
 
 # For every year, plot the share of missing values
-sns.heatmap(sipri_milex_per_gdp.isnull(), cbar=False)
+sns.heatmap(sipri_milex_per_gdp.isnull(), cbar=False);
 plt.savefig(figures_dir + "/SIPRI_Missing_Values.pdf")
-sns.heatmap(sipri_milex_per_gdp_interpolate.isnull(), cbar=False)
+sns.heatmap(sipri_milex_per_gdp_interpolate.isnull(), cbar=False);
 plt.savefig(figures_dir + "/SIPRI_Missing_Values_Interpolate.pdf")
-sns.heatmap(sipri_milex_per_gdp_interpolate_95_on.isnull(), cbar=False)
+sns.heatmap(sipri_milex_per_gdp_interpolate_95_on.isnull(), cbar=False);
 plt.savefig(figures_dir + "/SIPRI_Missing_Values_Interpolate_Post_1995.pdf")
 
 # For the PCA matrix, take the post 1995 interpolated data
