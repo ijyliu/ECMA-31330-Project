@@ -52,7 +52,7 @@ plt.savefig(figures_dir + "/Milex_GDP_Time_Series.pdf")
 
 # Exploring correlations 
 sns.heatmap(sipri_milex_per_gdp.corr())
-plt.savefig(figures_dir + "/Milex_correlations.pdf")
+plt.savefig(figures_dir + "/Milex_Correlations.pdf")
 
 # Do the PCA
 demean_sipri_milex_for_pca = sipri_milex_for_pca - np.mean(sipri_milex_for_pca, axis=0) 
