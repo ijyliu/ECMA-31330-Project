@@ -27,12 +27,11 @@ run_lasso <- function(data) {
         select(where(function(x) all(!is.na(x))))
 
     # Return NA if there's no variation in the dependent variable and hence no regression
-    if (are_varying(data, Dep_Var_Spend)) {
+    if (length(unique(data$Dep_Var_Spend)) == 1) {
         
         return(NA)
     
-    }
-    else {
+    } else {
 
         y <- data %>%
             select(Dep_Var_Spend) %>%
