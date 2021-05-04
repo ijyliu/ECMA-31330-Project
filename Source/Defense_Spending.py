@@ -26,7 +26,17 @@ sipri_milex_per_gdp = (pd.read_excel(data_dir + "/SIPRI-Milex-data-1949-2020_0.x
                          .filter(regex='^((?!Unnamed).)*$')
                          .set_index('Country')
                          .transpose()
-                         .rename_axis('Year'))
+                         .rename_axis('Year')
+                         .reset_index())
+
+# For the lasso, the idea is to regress a country's military expenditure per GDP on that of all the other countries
+sipri_for_LASSO = (pd.MultiIndex.from_product([sipri_milex_per_gdp['Year'], sipri_milex_per_gdp.columns], names=['Year', 'Country'])
+                                .to_frame()
+                                .query('Country != "Year"')
+                                .reset_index(drop=True))
+print(sipri_for_LASSO)
+
+exit()
 
 # Identify the weird spike in the time series
 # print(sipri_milex_per_gdp[sipri_milex_per_gdp > 1])
@@ -69,19 +79,21 @@ model_sipri_milex_for_pca.plot();
 plt.savefig(figures_dir + "/Milex_PC_Share_Explained.pdf")
 
 # Predict values
-K = 3
-Fhat = results_sipri_milex_for_pca['PC'].iloc[:,0:K].to_numpy()
-Mus = results_sipri_milex_for_pca['loadings'].iloc[0:K].to_numpy()
-Yhat = Fhat@Mus
+# K = 3
+# Fhat = results_sipri_milex_for_pca['PC'].iloc[:,0:K].to_numpy()
+# Mus = results_sipri_milex_for_pca['loadings'].iloc[0:K].to_numpy()
+# Yhat = Fhat@Mus
 
 # Scatterplots and other plots of predicted and actual values
-plt.scatter(demean_sipri_milex_for_pca.iloc[:,0],Yhat[:,0]);
-plt.savefig(figures_dir + "/Milex_Actual_Predicted_Scatter.pdf")
+# plt.scatter(demean_sipri_milex_for_pca.iloc[:,0],Yhat[:,0]);
+# plt.savefig(figures_dir + "/Milex_Actual_Predicted_Scatter.pdf")
 
-plt.plot(demean_sipri_milex_for_pca.index, demean_sipri_milex_for_pca.iloc[:,0]);
-plt.plot(demean_sipri_milex_for_pca.index, Yhat[:,0]);
-plt.savefig(figures_dir + "/Milex_Actual_Predicted_Line_1.pdf")
+# plt.plot(demean_sipri_milex_for_pca.index, demean_sipri_milex_for_pca.iloc[:,0]);
+# plt.plot(demean_sipri_milex_for_pca.index, Yhat[:,0]);
+# plt.savefig(figures_dir + "/Milex_Actual_Predicted_Line_1.pdf")
 
-plt.plot(demean_sipri_milex_for_pca.index, demean_sipri_milex_for_pca.iloc[:,1]);
-plt.plot(demean_sipri_milex_for_pca.index, Yhat[:,1]);
-plt.savefig(figures_dir + "/Milex_Actual_Predicted_Line_2.pdf")
+# plt.plot(demean_sipri_milex_for_pca.index, demean_sipri_milex_for_pca.iloc[:,1]);
+# plt.plot(demean_sipri_milex_for_pca.index, Yhat[:,1]);
+# plt.savefig(figures_dir + "/Milex_Actual_Predicted_Line_2.pdf")
+
+# Try a lasso of one countries military spending on that of others
