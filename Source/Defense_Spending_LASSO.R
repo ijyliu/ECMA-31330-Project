@@ -12,9 +12,16 @@ p_load('tidyverse', 'glmnet')
 data_dir <- ifelse(dir.exists("~/../Box/ECMA-31330-Project"), "~/../Box/ECMA-31330-Project", "~/Box/ECMA-31330-Project")
 
 # Load the data
-sipri_for_LASSO <- read_csv(paste0('data_dir', '/SIPRI_for_LASSO.csv'))
+sipri_for_LASSO <- read_csv(paste0(data_dir, '/SIPRI_for_LASSO.csv'))
 
 # One way of approaching this regression is to split the data into country subsamples
+LASSO_split <- sipri_for_LASSO %>%
+    group_by(Country) %>%
+    group_split
+
+print(LASSO_split)
+
+stop()
 
 # No penalty vector for now- include all coefficients
 
