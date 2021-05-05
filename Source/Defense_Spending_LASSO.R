@@ -15,8 +15,16 @@ data_dir <- ifelse(dir.exists("~/../Box/ECMA-31330-Project"), "~/../Box/ECMA-313
 sipri_for_LASSO <- read_csv(paste0(data_dir, '/SIPRI_for_LASSO.csv'))
 
 # One way of approaching this regression is to split the data into country subsamples
-LASSO_split <- sipri_for_LASSO %>%
-    group_by(Country) %>%
+
+grouped_for_LASSO <- sipri_for_LASSO %>%
+    group_by(Country)
+
+# Save the group keys
+country_keys <- grouped_for_LASSO %>%
+    group_keys()
+
+# Do the actual split into a list of dataframes
+LASSO_split <- grouped_for_LASSO %>%
     group_split()
 
 # Define a function to run the lasso on a country subsample's data
@@ -52,7 +60,9 @@ run_lasso <- function(data) {
 
         beta_lasso <- predict(cv_model, s = chosen_lambda, type="coefficients") %>%
             as.matrix() %>%
-            as.data.frame()
+            as.data.frame() %>%
+            as_tibble(rownames = "Coeff") %>%
+            rename(Value = 2)
 
         return(beta_lasso)
     
@@ -62,6 +72,15 @@ run_lasso <- function(data) {
 
 # Now we can make a dataframe of dataframes and apply this function to get some coefficients
 country_lasso_results <- tibble(country_data = LASSO_split) %>%
-    mutate(beta_lasso = map(country_data, run_lasso))
+    mutate(dep_var_country = country_keys, 
+           beta_lasso = map(country_data, run_lasso)) %>%
+    unnest(beta_lasso) %>%
+    select(-country_data, -beta_lasso) %>%
+    arrange(dep_var_country)
 
-print(country_lasso_results)
+# Get the mean coefficient values across country LASSO specifications
+mean_coeff_values <- country_lasso_results %>%
+    group_by(Coeff) %>%
+    summarize(mean_coeff = mean(Value))
+
+write_csv(mean_coeff_values, "~/../repo/ECMA-31330-Project/Output/Regressions/LASSO_Country_Coeff_Values.csv")
