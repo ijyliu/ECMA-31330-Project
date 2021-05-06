@@ -15,8 +15,10 @@
 \usepackage{outlines}
 \usepackage{subcaption}
 \usepackage{enumerate}
+\usepackage[latin1]{inputenc}
 
 \usepackage{tabularx, booktabs}
+\usepackage{longtable}
 
 \usepackage{standalone}
 
@@ -84,7 +86,9 @@
 
     \section*{The Missing Values Problem}
 
-    In order to use PCA and the LASSO, we need to figure out a way to handle missing values in the panel. Here I interpolate values between data points where we have spending information for a country, and also restrict the sample to observations after 1995. Then I delete any countries which still have a missing value for any year. A lot more could probably done to optimize the size of the balanced panel; we could try to maximize the rectangular filled area in the charts below.
+    In order to use PCA and the LASSO, we need to figure out a way to handle missing values in the panel. Here I interpolate values between data points where we have spending information for a country, and also restrict the sample to observations after 1995.
+
+	Beyond this (graph not shown) I then delete any countries which still have a missing value for any year. A lot more could probably done to optimize the size of the balanced panel; we could try to maximize the rectangular filled area in the charts.
 
 	\begin{figure}[h!]
 		\centering
@@ -122,15 +126,21 @@
 		\includegraphics[width=\linewidth,keepaspectratio=true]{../Output/Figures/Milex_PC_Share_Explained.pdf}
 	\end{figure}
 
+	\newpage \clearpage
+
 	\section*{LASSO Results}
 
 	Doing the LASSO feels a bit strange, given that we don't really have a "different" dependent variable; we are merely regressing a countries spending on that of other countries. This means that we must impose a bunch of potentially dicey sample restrictions. 
 	
 	At the moment, I am running a LASSO regression for each individual country across time (so there is a single observation for each time period). The dependent variable is that country's spending per GDP and the independent variables (which may have penalized coefficients) are spending for all the other countries.
 
-	Here are the average coefficients across countries.
+	Here are the average coefficients across country regressions.
+
+	\input{../Output/Regressions/LASSO_Country_Coeff_Values.tex}
 
 	I am not terribly confident that these results are not just pure noise, because I do not see any clear patterns. The sample size restriction to about 25 observations seems too harsh, but necessary in order to include a large amount of other country independent variables in every regression.
+
+	\newpage \clearpage
 
     \section*{Extension: Textual Analysis}
 

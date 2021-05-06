@@ -6,13 +6,13 @@ if ('pacman' %in% rownames(installed.packages()) == FALSE) {
   install.packages('pacman', repos='http://cran.us.r-project.org')
 }
 library(pacman)
-p_load('tidyverse', 'glmnet', 'panelr')
+p_load('tidyverse', 'glmnet', 'panelr', 'xtable')
 
 # Detect whether this is a local run or on a computing cluster and set the file path appropriately
 data_dir <- ifelse(dir.exists("~/../Box/ECMA-31330-Project"), "~/../Box/ECMA-31330-Project", "~/Box/ECMA-31330-Project")
 
 # Load the data
-sipri_for_LASSO <- read_csv(paste0(data_dir, '/SIPRI_for_LASSO.csv'))
+sipri_for_LASSO <- read_csv(paste0(data_dir, '/SIPRI_for_LASSO.csv'), locale = readr::locale(encoding = "UTF-8"))
 
 # One way of approaching this regression is to split the data into country subsamples
 
@@ -84,3 +84,6 @@ mean_coeff_values <- country_lasso_results %>%
     summarize(mean_coeff = mean(Value))
 
 write_csv(mean_coeff_values, "~/../repo/ECMA-31330-Project/Output/Regressions/LASSO_Country_Coeff_Values.csv")
+
+coeff_table <- xtable(mean_coeff_values, type = "latex", tabular.environment="longtable")
+print(coeff_table, include.rownames=TRUE, tabular.environment="longtable", floating=FALSE, file = "~/../repo/ECMA-31330-Project/Output/Regressions/LASSO_Country_Coeff_Values.tex")
