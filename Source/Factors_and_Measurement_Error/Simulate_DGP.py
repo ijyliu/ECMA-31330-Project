@@ -2,31 +2,30 @@
 # Simulate basic data to test the performance of the factor approach to measurement error
 # We will calculate the estimator in a separate file
 
+import numpy as np
+import pandas as pd
+
 # Write the DGP as a function
-def DGP(N = 1000, rho = 0, betas):
-    
-    # Make sure N is an integer
-    N = int(N)
+# The defaults are 1000 observations, a row of 0 (orthogonal covariates)
+def DGP(N = 1000, rho = 0, p = 5, true_beta, measurement_error):
 
-    # Variance-covariance matrix
-    Sigma = [[1, rho], [rho, 1]]
-
-    # Produce joint normal x vectors, mean 0, variance-covariance Sigma, of length N
-    x_1, x_2 = np.random.multivariate_normal(mean=[0,0], cov=Sigma, size=N).T
-
-    # Standard normal error vector of size N
-    e = np.random.normal(size=N)
-
-    # Compute y using formula
-    y = alpha*np.ones(N) + beta_1*x_1 + beta_2*x_2 + e
-
-    return(y, x_1, x_2)
-
-def genData(N, beta, p, rho):
+    # Random normal error
     u = np.random.normal(size = (N, 1))
+
+    # Specified variance-covariance matrix
     cov = np.ones((p, p)) * rho - np.eye(p) * rho + np.eye(p)
-    X = np.random.multivariate_normal(mean = np.zeros(p), cov = cov, size = N)
-    truep = len(np.transpose(beta))
-    Y = X[:,:truep]@(np.transpose(beta)) + u
-    data = pd.DataFrame(np.concatenate([Y, X], axis=1))
+
+    # Random normal draw for base values of X
+    true_X = np.random.multivariate_normal(mean = np.zeros(p), cov = cov, size = N)
+
+    # Add in some measurement error
+    mismeasured_X = true_X + measurement_error
+
+    # Simulate the Y using the true X values
+    Y = true_X@(np.transpose(true_beta)) + u
+    
+    data = pd.DataFrame(np.concatenate([Y, mismeasured_X], axis=1))
+
     return data
+
+# Run the DGP an appropriate number of times and save the data
