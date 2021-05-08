@@ -33,10 +33,16 @@ def DGP(N, rho, p, beta, x_measurement_errors):
     # Simulate the Y using the true X values
     Y = true_X@beta + u
 
-    # The data we observe are the true Y, but the mismeasured X
-    true_data = pd.DataFrame(np.concatenate([Y, true_X], axis=1))
-    data = pd.DataFrame(np.concatenate([Y, mismeasured_X], axis=1))
+    # Return an appropriately labelled dataframe
+    Y = (pd.DataFrame(Y)
+           .rename(columns={0:"y"}))
+    mismeasured_X = (pd.DataFrame(mismeasured_X)
+                       .add_prefix('mis_x_'))
+    true_X = (pd.DataFrame(true_X)
+                .add_prefix('true_x_'))
+    data = pd.concat([Y, mismeasured_X, true_X], axis=1)
 
-    return(data, true_data)
+    return(data)
 
 # Run the DGP an appropriate number of times and save the data
+print(DGP(100, 0.9, 3, np.array([1,0,0]), np.array([1,1,1])))
