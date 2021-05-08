@@ -4,10 +4,19 @@
 
 import numpy as np
 import pandas as pd
+#from ..Prelim import data_dir
+
+data_dir = "~/Box/ECMA-31330-Project"
 
 # Write the DGP as a function
 # The inputs are sample size, correlation between the non-mismeasured covariates, the number of covariates p, the true beta, and a vector specifying the variance of the classical measurement error for each covariate
 def DGP(N, rho, p, beta, x_measurement_errors):
+
+    if not isinstance(beta, np.ndarray):
+        beta = np.array(beta)
+
+    if not isinstance(x_measurement_errors, np.ndarray):
+        x_measurement_errors = np.array(x_measurement_errors)
 
     beta = beta.reshape(p, 1)
 
@@ -45,4 +54,14 @@ def DGP(N, rho, p, beta, x_measurement_errors):
     return(data)
 
 # Run the DGP an appropriate number of times and save the data
-print(DGP(100, 0.9, 3, np.array([1,0,0]), np.array([1,1,1])))
+num_sims = 2
+
+# List of the data. This will be super-fast to concatenate into a big dataframe
+data_list = []
+for i in range(num_sims):
+    data_list.append(DGP(100, 0.9, 3, [1,0,0], [1,1,1]))
+
+simulation_data = pd.concat(data_list, keys=range(num_sims))
+
+# Export the CSV
+simulation_data.to_csv(data_dir + "/ME_Sim.csv")
