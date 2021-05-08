@@ -17,3 +17,7 @@
 # Ignore DS_Store
 **/.DS_Store
 .DS_Store
+
+# Ignore python cache files
+**/*.pyc
+*.pyc
