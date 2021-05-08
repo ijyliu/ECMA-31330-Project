@@ -2,22 +2,24 @@
 # Simulate basic data to test the performance of the factor approach to measurement error
 # We will calculate the estimator in a separate file
 
+# Packages
 import numpy as np
 import pandas as pd
-#from ..Prelim import data_dir
 
+# Location to store data
 data_dir = "~/Box/ECMA-31330-Project"
 
 # Write the DGP as a function
 # The inputs are sample size, correlation between the non-mismeasured covariates, the number of covariates p, the true beta, and a vector specifying the variance of the classical measurement error for each covariate
 def DGP(N, rho, p, beta, x_measurement_errors):
 
+    # Convert the beta and measurment error inputs to arrays if they are not already
     if not isinstance(beta, np.ndarray):
         beta = np.array(beta)
-
     if not isinstance(x_measurement_errors, np.ndarray):
         x_measurement_errors = np.array(x_measurement_errors)
 
+    # Get beta into an array of convenient dimensions
     beta = beta.reshape(p, 1)
 
     # Random normal error
