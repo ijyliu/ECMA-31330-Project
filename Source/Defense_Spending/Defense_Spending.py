@@ -67,6 +67,8 @@ plt.savefig(figures_dir + "/Milex_Correlations.pdf")
 demean_sipri_milex_inter_no_missing = sipri_milex_inter_no_missing - np.mean(sipri_milex_inter_no_missing, axis=0) 
 model_sipri_milex_inter_no_missing = pca()
 results_sipri_milex_inter_no_missing = model_sipri_milex_inter_no_missing.fit_transform(demean_sipri_milex_inter_no_missing)
+
+# Plot the loadings
 sns.heatmap(results_sipri_milex_inter_no_missing['loadings'],cmap='YlGnBu');
 plt.savefig(figures_dir + "/Milex_Loadings.pdf")
 

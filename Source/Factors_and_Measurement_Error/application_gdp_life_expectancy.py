@@ -5,8 +5,8 @@
 import os
 import pandas as pd
 import statsmodels.api as sm
-from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
+from pca import pca
 from stargazer.stargazer import Stargazer
 from pandas.plotting import scatter_matrix
 import matplotlib
@@ -43,24 +43,45 @@ std_wb_data = pd.DataFrame(StandardScaler().fit_transform(wb_data), index=wb_dat
 
 print(std_wb_data)
 
+# Basic time series plot
+plt.figure(figsize=(15,15))
+plt.plot(std_wb_data.reset_index().set_index('year')['gdp_pc'], std_wb_data.reset_index().set_index('year')['life_exp'])
+plt.savefig(figures_dir + "/GDP_PC_LE_Time_Series.pdf")
+plt.close()
+
+# Exploring correlations between the variables
+sns.heatmap(std_wb_data.corr())
+plt.savefig(figures_dir + "/GDP_LE_Correlations.pdf")
+plt.close()
+
 # OLS for benchmark
 # I'll go with the most basic measure of GDP per capita as the independent variable here
 ols_benchmark = sm.OLS(std_wb_data['life_exp'], std_wb_data['gdp_pc']).fit()
 
-# Decompose into matrices for PCA analysis
+# Decompose into matrix for PCA analysis
 X = std_wb_data.drop(columns = 'life_exp').to_numpy()
 
 # Perform the factor analysis
-pca = PCA(n_components=1)
-X = pca.fit_transform(X)
+pca_model = pca()
+pca_results = pca_model.fit_transform(X)
 
-# Regress y, life_expectancy, on the single pca component and output the results
-factor_regression = sm.OLS(std_wb_data['life_exp'], X).fit()
+# Plot the loadings
+sns.heatmap(pca_results['loadings'], cmap='YlGnBu')
+plt.savefig(figures_dir + "/GDP_LE_Loadings.pdf")
+plt.close()
+
+# Scree plot
+pca_model.plot()
+plt.savefig(figures_dir + "/GDP_LE_Share_Explained.pdf")
+plt.close()
+
+# Regress y, life_expectancy, on the first pca component and output the results
+factor_regression = sm.OLS(std_wb_data['life_exp'].reset_index(drop = True), pca_results['PC'].iloc[:, 0].reset_index(drop = True)).fit()
 
 # Regression table settings
 reg_table = Stargazer([ols_benchmark, factor_regression])
 reg_table.dependent_variable_name("Life Expectancy at Birth (Years)")
-reg_table.rename_covariates({"gdp_pc":"GDP Per Capita, PPP", "x1":"Estimated Factor"})
+reg_table.rename_covariates({"gdp_pc":"GDP Per Capita, PPP"})
 reg_table.show_degrees_of_freedom(False)
 reg_table.add_custom_notes(["All variables are standardized."])
 
