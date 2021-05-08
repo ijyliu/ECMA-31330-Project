@@ -41,6 +41,12 @@ X = pca.fit_transform(X)
 # Regress y, life_expectancy, on the single pca component and output the results
 factor_regression = sm.OLS(wb_data['life_exp'], X).fit()
 
+# Regression table settings
+reg_table = Stargazer([ols_benchmark, factor_regression])
+reg_table.dependent_variable_name("Life Expectancy at Birth (Years)")
+reg_table.rename_covariates({"gdp_pc":"GDP Per Capita, PPP", "x1":"Estimated Factor"})
+reg_table.show_degrees_of_freedom(False)
+
 # Write regression table to LaTeX
 with open(regressions_dir + "/gdp_life_exp_ols_factor.tex", "w") as f:
-    f.write(Stargazer([ols_benchmark, factor_regression]).render_latex())
+    f.write(reg_table.render_latex())
