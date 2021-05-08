@@ -58,7 +58,7 @@ index = pd.MultiIndex.from_product([Ns, rhos, ps, kappas, betas, mes], names = [
 scenarios = pd.DataFrame(index = index).reset_index()
 
 # Make a row for each simulation
-scenarios = pd.concat([scenarios]*3).sort_index()
+scenarios = pd.concat([scenarios] * num_sims).sort_index()
 
 # Apply the DGP function scenario parameters to get the results
 scenarios['results'] = scenarios.apply(lambda x: get_estimators(x.N, x.rho, x.p, x.kappa, x.beta, x.me), axis = 1)
