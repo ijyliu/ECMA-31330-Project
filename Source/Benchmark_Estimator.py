@@ -38,7 +38,9 @@ def get_estimators(N, rho, p, kappa, beta, x_measurement_errors):
     beta_OLS_true = sm.OLS(Y, true_X[:, 0]).fit().params
     beta_OLS_mismeasured = sm.OLS(Y, mismeasured_X[:, 0]).fit().params
     beta_PCR = PCR_coeffs(Y, mismeasured_X)
-    beta_IV = IV2SLS(dependent = Y, endog = mismeasured_X[:, 0], instruments = Z).fit().params
+
+    # Sadly I have to the IV estimation by hand, because the packages I tried required exogenous control variables
+    beta_IV = np.cov(Y, Z)[0,1] / np.cov(mismeasured_X[:, 0].reshape(N, 1), Z)[0,1]
 
     return(beta_OLS_true, beta_OLS_mismeasured, beta_PCR, beta_IV)
 
@@ -48,14 +50,32 @@ Ns = [100, 1000]
 rhos = [0.1, 0.9]
 ps = [3]
 kappas = [0.1, 0.9]
-betas = [[1, 1, 1], [1, 0, 0]]
-mes = [[1, 1, 1], [1, 0, 0]]
+
+# This is an awkward/bad way of making the combos of lists of coefficients
+betas = ['beta_combo_1', 'beta_combo_2']
+mes = ['me_combo_1', 'me_combo_2']
+
+def assign_beta(beta_combo):
+    if beta_combo == 'beta_combo_1':
+        return([1, 1, 1])
+    if beta_combo == 'beta_combo_2':
+        return([1, 0, 0])
+
+def assign_me(me_combo):
+    if me_combo == 'me_combo_1':
+        return([1, 1, 1])
+    if me_combo == 'me_combo_2':
+        return([1, 0, 0])
 
 # Cartesian product of scenarios
 index = pd.MultiIndex.from_product([Ns, rhos, ps, kappas, betas, mes], names = ["N", "rho", "p", "kappa", "beta", "me"])
 
 # Scenarios dataframe
 scenarios = pd.DataFrame(index = index).reset_index()
+
+# Convert the combo strings into lists
+scenarios['beta'] = scenarios.apply(lambda x: assign_beta(x.beta), axis = 1)
+scenarios['me'] = scenarios.apply(lambda x: assign_me(x.me), axis = 1)
 
 # Make a row for each simulation
 scenarios = pd.concat([scenarios] * num_sims).sort_index()

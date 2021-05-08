@@ -34,7 +34,7 @@ def DGP(N, rho, p, kappa, beta, x_measurement_errors):
 
     # Produce an instrument for x_1
     # This Z will be x_1 times the kappa coefficient plus some random noise
-    Z = true_X[:, 0] * kappa + np.random.normal(size = (N, 1))
+    Z = true_X[:, 0].reshape(N, 1) * kappa + np.random.normal(size = (N, 1))
 
     # Vectors of measurement error for each component
     me_vectors = []
