@@ -35,14 +35,17 @@ def get_estimators(N, rho, p, kappa, beta, x_measurement_errors):
     Z = StandardScaler().fit_transform(Z)
 
     # Calculate estimators
-    beta_OLS_true = sm.OLS(Y, true_X[:, 0]).fit().params
-    beta_OLS_mismeasured = sm.OLS(Y, mismeasured_X[:, 0]).fit().params
-    beta_PCR = PCR_coeffs(Y, mismeasured_X)
+    beta_OLS_true = sm.OLS(Y, true_X[:, 0]).fit().params[0]
+    beta_OLS_mismeasured = sm.OLS(Y, mismeasured_X[:, 0]).fit().params[0]
+    beta_PCR = PCR_coeffs(Y, mismeasured_X)[0]
 
     # Sadly I have to the IV estimation by hand, because the packages I tried required exogenous control variables
     beta_IV = np.cov(Y, Z)[0,1] / np.cov(mismeasured_X[:, 0].reshape(N, 1), Z)[0,1]
 
     return(beta_OLS_true, beta_OLS_mismeasured, beta_PCR, beta_IV)
+
+get_estimators(100, 0.1, 3, 0.1, [1,1,1], [1,0,0])
+exit()
 
 # Simulations dataframe with variations of parameter values
 num_sims = 2
@@ -84,3 +87,5 @@ scenarios = pd.concat([scenarios] * num_sims).sort_index()
 scenarios['results'] = scenarios.apply(lambda x: get_estimators(x.N, x.rho, x.p, x.kappa, x.beta, x.me), axis = 1)
 
 print(scenarios)
+
+print(scenarios.explode('results'))
