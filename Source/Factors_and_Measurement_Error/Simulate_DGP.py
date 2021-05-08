@@ -11,7 +11,7 @@ data_dir = "~/Box/ECMA-31330-Project"
 
 # Write the DGP as a function
 # The inputs are sample size, correlation between the non-mismeasured covariates, the number of covariates p, the true beta, and a vector specifying the variance of the classical measurement error for each covariate
-def DGP(N, rho, p, beta, x_measurement_errors):
+def DGP(N, rho, p, kappa, beta, x_measurement_errors):
 
     # Convert the beta and measurment error inputs to arrays if they are not already
     if not isinstance(beta, np.ndarray):
@@ -32,6 +32,10 @@ def DGP(N, rho, p, beta, x_measurement_errors):
     # Random normal draw for base values of X
     true_X = np.random.multivariate_normal(mean = np.zeros(p), cov = cov, size = N)
 
+    # Produce an instrument for x_1
+    # This Z will be x_1 times the kappa coefficient plus some random noise
+    Z = true_X[:, 0] * kappa + np.random.normal(size = (N, 1))
+
     # Vectors of measurement error for each component
     me_vectors = []
     for i in range(p):
@@ -51,7 +55,9 @@ def DGP(N, rho, p, beta, x_measurement_errors):
                        .add_prefix('mis_x_'))
     true_X = (pd.DataFrame(true_X)
                 .add_prefix('true_x_'))
-    data = pd.concat([Y, mismeasured_X, true_X], axis=1)
+    Z = (pd.DataFrame(Z)
+           .rename(columns={0:"z"}))
+    data = pd.concat([Y, mismeasured_X, true_X, Z], axis=1)
 
     return(data)
 
@@ -61,7 +67,7 @@ num_sims = 2
 # List of the data. This will be super-fast to concatenate into a big dataframe
 data_list = []
 for i in range(num_sims):
-    data_list.append(DGP(100, 0.9, 3, [1,0,0], [1,1,1]))
+    data_list.append(DGP(100, 0.9, 3, 0.9, [1,0,0], [1,1,1]))
 
 simulation_data = (pd.concat(data_list, keys=range(num_sims))
                      .rename_axis(['sim_num', 'obs']))
