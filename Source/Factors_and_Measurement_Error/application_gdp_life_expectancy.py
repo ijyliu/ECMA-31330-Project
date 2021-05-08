@@ -1,9 +1,15 @@
 
-import numpy as np
+import os
 import pandas as pd
+import statsmodels.api as sm
 from sklearn.decomposition import PCA
+from stargazer.stargazer import Stargazer
 
 data_dir = "~/Box/ECMA-31330-Project"
+repo_dir = os.path.join(os.path.dirname( __file__ ), '../..')
+output_dir = repo_dir + "/Output"
+figures_dir = output_dir + "/Figures"
+regressions_dir = output_dir + "/Regressions"
 
 # Load in the data
 wb_data = (pd.read_csv(data_dir + "/WB_Data.csv", index_col=['economy', 'series'])
@@ -21,11 +27,20 @@ wb_data = (pd.read_csv(data_dir + "/WB_Data.csv", index_col=['economy', 'series'
 
 print(wb_data)
 
+# OLS for benchmark
+# I'll go with the most basic measure of GDP per capita as the independent variable here
+ols_benchmark = sm.OLS(wb_data['life_exp'], wb_data['gdp_pc']).fit()
+
+# Decompose into matrices for PCA analysis
 X = wb_data.drop(columns = 'life_exp').to_numpy()
-y = wb_data['life_exp'].to_numpy()
 
 # Perform the factor analysis
 pca = PCA(n_components=1)
 X = pca.fit_transform(X)
 
-# Conduct instrumental variables regression
+# Regress y, life_expectancy, on the single pca component and output the results
+factor_regression = sm.OLS(wb_data['life_exp'], X).fit()
+
+# Write regression table to LaTeX
+with open(regressions_dir + "/gdp_life_exp_ols_factor.tex", "w") as f:
+    f.write(Stargazer([ols_benchmark, factor_regression]).render_latex())

@@ -1,0 +1,56 @@
+\documentclass{report}
+
+\usepackage{amsmath}
+\usepackage{geometry}
+\usepackage{amsfonts}
+\usepackage[english]{babel}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{multirow}
+\usepackage{pdflscape}
+\usepackage{caption}
+\usepackage{pdflscape}
+\usepackage{outlines}
+\usepackage{subcaption}
+\usepackage{enumerate}
+\usepackage[latin1]{inputenc}
+
+\usepackage{tabularx, booktabs}
+\usepackage{longtable}
+
+\usepackage{standalone}
+
+\usepackage[autostyle, english = american]{csquotes}
+\MakeOuterQuote{"}
+
+\usepackage{comment}
+
+\newcommand{\tabnotes}[2]{\bottomrule \multicolumn{#1}{@{}p{0.95\linewidth}@{}}{\footnotesize #2 }\end{tabular}\end{table}}
+
+\title{Factors and Measurement Error}
+\author{Isaac Liu}
+\date{\today}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.5em}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\begin{document}
+
+	\maketitle
+
+	\newpage \clearpage
+
+    \section*{Application: GDP and Life Expectancy}
+
+    \input{../Output/Regressions/gdp_life_exp_ols_factor.tex}
+
+\end{document}
