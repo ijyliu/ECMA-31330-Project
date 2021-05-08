@@ -41,3 +41,26 @@ def get_estimators(N, rho, p, kappa, beta, x_measurement_errors):
     beta_IV = IV2SLS(dependent = Y, endog = mismeasured_X[:, 0], instruments = Z).fit().params
 
     return(beta_OLS_true, beta_OLS_mismeasured, beta_PCR, beta_IV)
+
+# Simulations dataframe with variations of parameter values
+num_sims = 2
+Ns = [100, 1000]
+rhos = [0.1, 0.9]
+ps = [3]
+kappas = [0.1, 0.9]
+betas = [[1, 1, 1], [1, 0, 0]]
+mes = [[1, 1, 1], [1, 0, 0]]
+
+# Cartesian product of scenarios
+index = pd.MultiIndex.from_product([Ns, rhos, ps, kappas, betas, mes], names = ["N", "rho", "p", "kappa", "beta", "me"])
+
+# Scenarios dataframe
+scenarios = pd.DataFrame(index = index).reset_index()
+
+# Make a row for each simulation
+scenarios = pd.concat([scenarios]*3).sort_index()
+
+# Apply the DGP function scenario parameters to get the results
+scenarios['results'] = scenarios.apply(lambda x: get_estimators(x.N, x.rho, x.p, x.kappa, x.beta, x.me), axis = 1)
+
+print(scenarios)
