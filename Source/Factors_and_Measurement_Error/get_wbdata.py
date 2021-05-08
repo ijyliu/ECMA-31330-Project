@@ -1,4 +1,7 @@
+# Get_WBData.py 
+# Retrives world bank data for requested indicators, countries, and time periods from the API
 
+# Packages
 import pandas as pd
 import wbgapi as wb
 

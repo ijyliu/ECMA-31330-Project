@@ -1,11 +1,20 @@
+# Application_GDP_Life_Expectancy.py
+# Presents and application of the factor solution to measurment error with the relationship between GDP and life expectancy
 
+# Packages
 import os
 import pandas as pd
 import statsmodels.api as sm
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 from stargazer.stargazer import Stargazer
+from pandas.plotting import scatter_matrix
+import matplotlib
+matplotlib.use('pdf')
+import matplotlib.pyplot as plt
+import seaborn as sns
 
+# Globals defining directories
 data_dir = "~/Box/ECMA-31330-Project"
 repo_dir = os.path.join(os.path.dirname( __file__ ), '../..')
 output_dir = repo_dir + "/Output"
