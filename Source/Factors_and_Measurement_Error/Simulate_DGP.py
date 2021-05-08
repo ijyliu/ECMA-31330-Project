@@ -63,7 +63,8 @@ data_list = []
 for i in range(num_sims):
     data_list.append(DGP(100, 0.9, 3, [1,0,0], [1,1,1]))
 
-simulation_data = pd.concat(data_list, keys=range(num_sims))
+simulation_data = (pd.concat(data_list, keys=range(num_sims))
+                     .rename_axis(['sim_num', 'obs']))
 
 # Export the CSV
 simulation_data.to_csv(data_dir + "/ME_Sim.csv")
