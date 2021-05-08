@@ -6,8 +6,8 @@ import numpy as np
 import pandas as pd
 
 # Write the DGP as a function
-# The defaults are 1000 observations, a row of 0 (orthogonal covariates)
-def DGP(N = 1000, rho = 0, p = 5, true_beta, measurement_error):
+# The defaults are 1000 observations, very correlated true covariates (0.9)
+def DGP(N, rho, p, beta, measurement_error):
 
     # Random normal error
     u = np.random.normal(size = (N, 1))
@@ -22,7 +22,7 @@ def DGP(N = 1000, rho = 0, p = 5, true_beta, measurement_error):
     mismeasured_X = true_X + measurement_error
 
     # Simulate the Y using the true X values
-    Y = true_X@(np.transpose(true_beta)) + u
+    Y = true_X@(np.transpose(beta)) + u
     
     data = pd.DataFrame(np.concatenate([Y, mismeasured_X], axis=1))
 
