@@ -2,6 +2,10 @@
 # Function for the PCR estimator
 # Please standardize the y and X beforehand
 
+# Import objects from the setup file
+from Prelim import *
+
+# Packages
 from pca import pca
 import statsmodels.api as sm
 

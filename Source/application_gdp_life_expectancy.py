@@ -1,6 +1,9 @@
 # Application_GDP_Life_Expectancy.py
 # Presents and application of the factor solution to measurment error with the relationship between GDP and life expectancy
 
+# Import objects from the setup file
+from Prelim import *
+
 # Packages
 import os
 import pandas as pd
@@ -13,13 +16,6 @@ import matplotlib
 matplotlib.use('pdf')
 import matplotlib.pyplot as plt
 import seaborn as sns
-
-# Globals defining directories
-data_dir = "~/Box/ECMA-31330-Project"
-repo_dir = os.path.join(os.path.dirname( __file__ ), '../..')
-output_dir = repo_dir + "/Output"
-figures_dir = output_dir + "/Figures"
-regressions_dir = output_dir + "/Regressions"
 
 # Load in the data
 wb_data = (pd.read_csv(data_dir + "/WB_Data.csv", index_col=['economy', 'series'])

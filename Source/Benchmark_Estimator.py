@@ -1,6 +1,10 @@
+# Benchmark_Estimator.py
+# This file benchmarks PCA against IV for dealing with measurment error
+
+# Import objects from the setup file
+from Prelim import *
 
 # Packages
-import os
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from stargazer.stargazer import Stargazer
@@ -10,7 +14,7 @@ matplotlib.use('pdf')
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# Load in the DGP
+# Load in the DGP function
 from Simulate_DGP import *
 
 DGP(100, 0.9, 3, 0.9, [1,0,0], [1,1,1])
