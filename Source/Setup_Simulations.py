@@ -32,4 +32,4 @@ index = pd.MultiIndex.from_product([Ns, rhos, ps, kappas, betas, mes], names = [
 # Produce scenarios dataframe
 scenarios = pd.DataFrame(index = index).reset_index()
 
-pd.write_csv(data_dir + "/" + str(len(scenarios)) + "_parameters.csv")
+scenarios.to_csv(data_dir + "/" + str(len(scenarios)) + "_parameters.csv")

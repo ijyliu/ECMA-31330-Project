@@ -2,7 +2,7 @@
 
 #SBATCH --account=pi-cpatt
 #SBATCH --partition=standard
-#SBATCH --job-name=Rclone_2_Way_Copy
+#SBATCH --job-name=Rclone_Two_Way_Copy
 
 # Suppress output
 #SBATCH --output=/dev/null
