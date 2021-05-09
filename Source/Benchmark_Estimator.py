@@ -44,9 +44,6 @@ def get_estimators(N, rho, p, kappa, beta, x_measurement_errors):
 
     return(beta_OLS_true, beta_OLS_mismeasured, beta_PCR, beta_IV)
 
-get_estimators(100, 0.1, 3, 0.1, [1,1,1], [1,0,0])
-exit()
-
 # Simulations dataframe with variations of parameter values
 num_sims = 2
 Ns = [100, 1000]
@@ -86,6 +83,16 @@ scenarios = pd.concat([scenarios] * num_sims).sort_index()
 # Apply the DGP function scenario parameters to get the results
 scenarios['results'] = scenarios.apply(lambda x: get_estimators(x.N, x.rho, x.p, x.kappa, x.beta, x.me), axis = 1)
 
-print(scenarios)
+scenarios['sim_num'] = np.tile(range(num_sims), int(len(scenarios) / num_sims))
 
-print(scenarios.explode('results'))
+# Mergesort ensures stability
+scenarios = scenarios.sort_values('sim_num', kind='mergesort')
+
+scenarios['ols_true'] = scenarios.explode('results').reset_index().iloc[::4].reset_index()['results']
+scenarios['ols_mismeasured'] = scenarios.explode('results').reset_index().iloc[1::4].reset_index()['results']
+scenarios['pcr'] = scenarios.explode('results').reset_index().iloc[2::4].reset_index()['results']
+scenarios['iv'] = scenarios.explode('results').reset_index().iloc[3::4].reset_index()['results']
+
+scenarios.to_csv(data_dir + "/estimator_results.csv")
+
+print(scenarios)
