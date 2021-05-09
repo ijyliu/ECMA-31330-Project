@@ -4,7 +4,6 @@
 # Packages
 import os
 import numpy as np
-from pca import pca
 import statsmodels.api as sm
 from sklearn.preprocessing import StandardScaler
 
