@@ -4,8 +4,13 @@
 # Packages
 import os
 import numpy as np
+import pandas as pd
 import statsmodels.api as sm
 from sklearn.preprocessing import StandardScaler
+import matplotlib
+matplotlib.use('pdf')
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # Directory structure
 data_dir = "~/Box/ECMA-31330-Project"
@@ -91,3 +96,32 @@ def get_estimators(N, rho, p, kappa, beta, x_measurement_errors):
     beta_IV = np.cov(Y, Z)[0,1] / np.cov(mismeasured_X[:, 0].reshape(N, 1), Z)[0,1]
 
     return(beta_OLS_true, beta_OLS_mismeasured, beta_PCR, beta_IV)
+
+# Given a dataframe and an indicator for whether the run is local or on a computing cluster, perform some analysis
+def perform_analysis(dataframe, local_or_cluster):
+
+    # Plot some results
+    scenarios_for_plot = (dataframe.melt(id_vars=['N', 'rho', 'p', 'kappa', 'beta', 'me'], value_vars=['ols_true', 'ols_mismeasured', 'pcr', 'iv'], var_name='estimator', value_name='coeff')
+                                   .query('N == 1000' and 'rho == 0.1' and 'kappa == 0.9' and 'beta == "beta_combo_1"' and 'me == "me_combo_2"'))
+
+    grid = sns.FacetGrid(scenarios_for_plot, col='beta', row='me', hue='estimator')
+    grid.map_dataframe(sns.histplot, x='coeff')
+    grid.fig.suptitle('Coefficients Across Simulations for _')
+    grid.add_legend()
+    plt.savefig(figures_dir + "/Simulation_Results_Grid_" + local_or_cluster + ".pdf")
+    plt.close()
+
+    # Mean coefficient values
+    scenarios_for_plot['coeff'] = pd.to_numeric(scenarios_for_plot['coeff'])
+
+    # Overall mean results
+    (scenarios_for_plot.filter(['estimator', 'coeff'])
+                       .groupby('estimator')
+                       .mean()
+                       .to_latex(tables_dir + "/mean_estimator_results_" + local_or_cluster + ".tex"))
+
+    # Results by ME levels
+    (scenarios_for_plot.filter(['estimator', 'coeff', 'me'])
+                       .groupby(['estimator', 'me'])
+                       .mean()
+                       .to_latex(tables_dir + "/mean_me_estimator_results_" + local_or_cluster + ".tex"))

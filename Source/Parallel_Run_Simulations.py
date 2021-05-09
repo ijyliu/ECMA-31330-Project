@@ -1,16 +1,18 @@
 # Run_Simulations.py
 # Read in a row of parameter values, and run a number of simulations using them
 
+# Packages
 from os import sys
 import pandas as pd
 
+# Functions and objects
 from ME_Setup import *
 
 slurm_number = sys.argv[1]
 print('slurm job array number: ' + str(slurm_number))
 
 # Get the name of the parameters file for read in
-param_file_name = 
+param_file_name = [f for f in os.listdir(data_dir) if '_parameter_combos' in f][0]
 
 # Number of simulations to run
 num_sims = 10

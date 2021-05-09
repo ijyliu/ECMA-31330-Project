@@ -7,8 +7,6 @@ from ME_Setup import *
 # Packages
 import numpy as np
 import pandas as pd
-from stargazer.stargazer import Stargazer
-from pandas.plotting import scatter_matrix
 import matplotlib
 matplotlib.use('pdf')
 import matplotlib.pyplot as plt
