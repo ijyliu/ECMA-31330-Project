@@ -7,12 +7,9 @@ from ME_Setup import *
 # Packages
 import numpy as np
 import pandas as pd
-import matplotlib
-matplotlib.use('pdf')
-import matplotlib.pyplot as plt
-import seaborn as sns
 
 # Simulations dataframe with variations of parameter values
+# For local runs such as this file, we limit the number of scenarios considered
 num_sims = 1
 Ns = [100, 1000]
 rhos = [0.8, 0.9]
@@ -61,37 +58,8 @@ scenarios['ols_mismeasured'] = scenarios.explode('results').reset_index().iloc[1
 scenarios['pcr'] = scenarios.explode('results').reset_index().iloc[2::4].reset_index()['results']
 scenarios['iv'] = scenarios.explode('results').reset_index().iloc[3::4].reset_index()['results']
 
+# Write a csv of local results for easy perusal
 scenarios.to_csv(data_dir + "/estimator_results.csv")
 
-#print(scenarios)
-
-# Plot some results
-scenarios_for_plot = (scenarios.melt(id_vars=['N', 'rho', 'p', 'kappa', 'beta', 'me'], value_vars=['ols_true', 'ols_mismeasured', 'pcr', 'iv'], var_name='estimator', value_name='coeff')
-                               .query('N == 1000' and 'rho == 0.1' and 'kappa == 0.9' and 'beta == "beta_combo_1"' and 'me == "me_combo_2"'))
-
-grid = sns.FacetGrid(scenarios_for_plot, col='beta', row='me', hue='estimator')
-grid.map_dataframe(sns.histplot, x='coeff')
-#grid.fig.subplots_adjust(top=0.95)
-#grid.fig.suptitle('Coefficients Across Simulations for _', size = 16, y = 0.99)
-grid.fig.suptitle('Coefficients Across Simulations for _')
-grid.add_legend()
-plt.savefig(figures_dir + "/Simulation_Results_Grid.pdf")
-plt.close()
-
-# Mean coefficient values
-
-scenarios_for_plot['coeff'] = pd.to_numeric(scenarios_for_plot['coeff'])
-
-# Overall mean results
-(scenarios_for_plot.filter(['estimator', 'coeff'])
-                   .groupby('estimator')
-                   .mean()
-                   .to_latex(tables_dir + "/mean_estimator_results.tex"))
-
-print(scenarios_for_plot)
-
-# Results by ME levels
-(scenarios_for_plot.filter(['estimator', 'coeff', 'me'])
-                   .groupby(['estimator', 'me'])
-                   .mean()
-                   .to_latex(tables_dir + "/mean_me_estimator_results.tex"))
+# Perform the main analysis
+perform_analysis(scenarios, "local")
