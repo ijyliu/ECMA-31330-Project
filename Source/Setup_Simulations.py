@@ -1,8 +1,12 @@
 # Setup_Simulations.py
+# Produces a csv file with simulation parameters which can be given to individual jobs
 
-import pandas as pd
-
+# Setup functions and directories
 from ME_Setup import *
+
+# Packages
+import pandas as pd
+import glob
 
 # Simulations dataframe with variations of parameter values
 Ns = [100, 1000]
@@ -32,4 +36,17 @@ index = pd.MultiIndex.from_product([Ns, rhos, ps, kappas, betas, mes], names = [
 # Produce scenarios dataframe
 scenarios = pd.DataFrame(index = index).reset_index()
 
-scenarios.to_csv(data_dir + "/" + str(len(scenarios)) + "_parameters.csv")
+# Convert the combo strings into lists
+scenarios['beta_list'] = scenarios.apply(lambda x: assign_beta(x.beta), axis = 1)
+scenarios['me_list'] = scenarios.apply(lambda x: assign_me(x.me), axis = 1)
+
+# Remove any pre-existing parameter combinations file
+files_to_remove = glob.glob(data_dir + '/*_parameter_combos.csv')
+for filePath in files_to_remove:
+    try:
+        os.remove(filePath)
+    except:
+        print("Error while deleting file : ", filePath)
+
+# Save the csv of parameter combinations, with label of the number of combos
+scenarios.to_csv(data_dir + "/" + str(len(scenarios)) + "_parameter_combos.csv")

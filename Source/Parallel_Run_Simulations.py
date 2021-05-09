@@ -9,11 +9,14 @@ from ME_Setup import *
 slurm_number = sys.argv[1]
 print('slurm job array number: ' + str(slurm_number))
 
+# Get the name of the parameters file for read in
+param_file_name = 
+
 # Number of simulations to run
 num_sims = 10
 
 # Read in the parameters
-simulations = (pd.read_csv(data_dir + "/parameters.csv")
+simulations = (pd.read_csv(param_file_name)
                  .iloc[slurm_number, :])
 
 # Make a row for each simulation
