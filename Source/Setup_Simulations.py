@@ -2,7 +2,7 @@
 
 import pandas as pd
 
-from Prelim import *
+from ME_Setup import *
 
 # Simulations dataframe with variations of parameter values
 Ns = [100, 1000]

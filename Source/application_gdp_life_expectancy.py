@@ -2,10 +2,9 @@
 # Presents and application of the factor solution to measurment error with the relationship between GDP and life expectancy
 
 # Import objects from the setup file
-from Prelim import *
+from ME_Setup import *
 
 # Packages
-import os
 import pandas as pd
 import statsmodels.api as sm
 from sklearn.preprocessing import StandardScaler

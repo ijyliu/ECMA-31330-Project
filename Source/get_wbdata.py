@@ -2,7 +2,7 @@
 # Retrives world bank data for requested indicators, countries, and time periods from the API
 
 # Import objects from the setup file
-from Prelim import *
+from ME_Setup import *
 
 # Packages
 import wbgapi as wb

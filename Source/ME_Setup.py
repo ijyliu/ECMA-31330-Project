@@ -1,13 +1,18 @@
-# Simulate_DGP.py
-# Simulate basic data to test the performance of the factor approach to measurement error
-# We will calculate the estimator in a separate file
+# ME_Setup.py
+# Defines the project directory structure as well as functions to define the estimator and  
 
 # Packages
-import numpy as np
-import pandas as pd
+import os
+from pca import pca
+import statsmodels.api as sm
+from sklearn.preprocessing import StandardScaler
 
-# Location to store data
+# Directory structure
 data_dir = "~/Box/ECMA-31330-Project"
+repo_dir = os.path.join(os.path.dirname( __file__ ), '..')
+output_dir = repo_dir + "/Output"
+figures_dir = output_dir + "/Figures"
+regressions_dir = output_dir + "/Regressions"
 
 # Write the DGP as a function
 # The inputs are sample size, correlation between the non-mismeasured covariates, the number of covariates p, the true beta, and a vector specifying the variance of the classical measurement error for each covariate
@@ -49,3 +54,39 @@ def DGP(N, rho, p, kappa, beta, x_measurement_errors):
     Y = true_X@beta + u
 
     return(Y, true_X, mismeasured_X, Z)
+
+# Function for the PCR estimator
+# Please standardize the y and X beforehand
+def PCR_coeffs(y, X):
+
+    # Perform the factor analysis
+    pca_model = pca()
+    pca_results = pca_model.fit_transform(X)
+
+    # Regress on the first principal component
+    factor_regression = sm.OLS(y, pca_results['PC'].iloc[:, 0].reset_index(drop = True)).fit()
+
+    # Return the parameter values
+    return(factor_regression.params)
+
+# Given some simulation parameters, run both the PCA regression and the IV regression for a simulation
+def get_estimators(N, rho, p, kappa, beta, x_measurement_errors):
+
+    # Run the DGP
+    Y, true_X, mismeasured_X, Z = DGP(N, rho, p, kappa, beta, x_measurement_errors)
+
+    # Standardize
+    Y = StandardScaler().fit_transform(Y)
+    true_X = StandardScaler().fit_transform(true_X)
+    mismeasured_X = StandardScaler().fit_transform(mismeasured_X)
+    Z = StandardScaler().fit_transform(Z)
+
+    # Calculate estimators
+    beta_OLS_true = sm.OLS(Y, true_X[:, 0]).fit().params[0]
+    beta_OLS_mismeasured = sm.OLS(Y, mismeasured_X[:, 0]).fit().params[0]
+    beta_PCR = PCR_coeffs(Y, mismeasured_X)[0]
+
+    # Sadly I have to the IV estimation by hand, because the packages I tried required exogenous control variables
+    beta_IV = np.cov(Y, Z)[0,1] / np.cov(mismeasured_X[:, 0].reshape(N, 1), Z)[0,1]
+
+    return(beta_OLS_true, beta_OLS_mismeasured, beta_PCR, beta_IV)

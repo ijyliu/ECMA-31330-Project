@@ -4,8 +4,7 @@
 from os import sys
 import pandas as pd
 
-from Prelim import *
-from Benchmark_Estimator import get_estimators
+from ME_Setup import *
 
 slurm_number = sys.argv[1]
 print('slurm job array number: ' + str(slurm_number))
