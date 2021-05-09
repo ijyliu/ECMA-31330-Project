@@ -14,6 +14,7 @@ repo_dir = os.path.join(os.path.dirname( __file__ ), '..')
 output_dir = repo_dir + "/Output"
 figures_dir = output_dir + "/Figures"
 regressions_dir = output_dir + "/Regressions"
+tables_dir = output_dir + "/Tables"
 
 # Write the DGP as a function
 # The inputs are sample size, correlation between the non-mismeasured covariates, the number of covariates p, the true beta, and a vector specifying the variance of the classical measurement error for each covariate

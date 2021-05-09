@@ -14,14 +14,8 @@ matplotlib.use('pdf')
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# Load in the DGP function
-from ME_Setup import *
-
-# Load in the PCR/Factor estimator
-from ME_Setup import *
-
 # Simulations dataframe with variations of parameter values
-num_sims = 50
+num_sims = 1
 Ns = [100, 1000]
 rhos = [0.8, 0.9]
 ps = [3]
@@ -35,13 +29,13 @@ def assign_beta(beta_combo):
     if beta_combo == 'beta_combo_1':
         return([1, 1, 1])
     if beta_combo == 'beta_combo_2':
-        return([2, 1, 1])
+        return([1, 0, 0])
 
 def assign_me(me_combo):
     if me_combo == 'me_combo_1':
         return([10, 0, 0])
     if me_combo == 'me_combo_2':
-        return([2, 0, 0])
+        return([100, 0, 0])
 
 # Cartesian product of scenarios
 index = pd.MultiIndex.from_product([Ns, rhos, ps, kappas, betas, mes], names = ["N", "rho", "p", "kappa", "beta", "me"])
@@ -71,11 +65,11 @@ scenarios['iv'] = scenarios.explode('results').reset_index().iloc[3::4].reset_in
 
 scenarios.to_csv(data_dir + "/estimator_results.csv")
 
-print(scenarios)
+#print(scenarios)
 
 # Plot some results
 scenarios_for_plot = (scenarios.melt(id_vars=['N', 'rho', 'p', 'kappa', 'beta', 'me'], value_vars=['ols_true', 'ols_mismeasured', 'pcr', 'iv'], var_name='estimator', value_name='coeff')
-                               .query('N == 1000' and 'rho == 0.9' and 'kappa == 0.9'))
+                               .query('N == 1000' and 'rho == 0.1' and 'kappa == 0.9' and 'beta == "beta_combo_1"' and 'me == "me_combo_2"'))
 
 grid = sns.FacetGrid(scenarios_for_plot, col='beta', row='me', hue='estimator')
 grid.map_dataframe(sns.histplot, x='coeff')
@@ -85,3 +79,21 @@ grid.fig.suptitle('Coefficients Across Simulations for _')
 grid.add_legend()
 plt.savefig(figures_dir + "/Simulation_Results_Grid.pdf")
 plt.close()
+
+# Mean coefficient values
+
+scenarios_for_plot['coeff'] = pd.to_numeric(scenarios_for_plot['coeff'])
+
+# Overall mean results
+(scenarios_for_plot.filter(['estimator', 'coeff'])
+                   .groupby('estimator')
+                   .mean()
+                   .to_latex(tables_dir + "/mean_estimator_results.tex"))
+
+print(scenarios_for_plot)
+
+# Results by ME levels
+(scenarios_for_plot.filter(['estimator', 'coeff', 'me'])
+                   .groupby(['estimator', 'me'])
+                   .mean()
+                   .to_latex(tables_dir + "/mean_me_estimator_results.tex"))
