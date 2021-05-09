@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 import statsmodels.api as sm
 from sklearn.preprocessing import StandardScaler
+from pca import pca
 import matplotlib
 matplotlib.use('pdf')
 import matplotlib.pyplot as plt
