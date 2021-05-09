@@ -4,11 +4,12 @@
 #SBATCH --partition=standard
 #SBATCH --job-name=Parallel_Monte_Carlo
 
-#SBATCH --array=1-381
+#SBATCH --array=0-100
 
 # Suppress output
 #SBATCH --output=/dev/null
 
 # Run array jobs
 module load python/booth/3.6/3.6.12
-python3 Defense_Spending.py $SLURM_ARRAY_TASK_ID
+python3
+python3 Run_Simulations.py $SLURM_ARRAY_TASK_ID
