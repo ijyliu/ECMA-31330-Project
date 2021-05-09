@@ -5,6 +5,7 @@
 from ME_Setup import *
 
 # Packages
+import numpy as np
 import pandas as pd
 from stargazer.stargazer import Stargazer
 from pandas.plotting import scatter_matrix
@@ -20,7 +21,7 @@ from ME_Setup import *
 from ME_Setup import *
 
 # Simulations dataframe with variations of parameter values
-num_sims = 2
+num_sims = 50
 Ns = [100, 1000]
 rhos = [0.8, 0.9]
 ps = [3]
@@ -49,14 +50,14 @@ index = pd.MultiIndex.from_product([Ns, rhos, ps, kappas, betas, mes], names = [
 scenarios = pd.DataFrame(index = index).reset_index()
 
 # Convert the combo strings into lists
-scenarios['beta'] = scenarios.apply(lambda x: assign_beta(x.beta), axis = 1)
-scenarios['me'] = scenarios.apply(lambda x: assign_me(x.me), axis = 1)
+scenarios['beta_list'] = scenarios.apply(lambda x: assign_beta(x.beta), axis = 1)
+scenarios['me_list'] = scenarios.apply(lambda x: assign_me(x.me), axis = 1)
 
 # Make a row for each simulation
 scenarios = pd.concat([scenarios] * num_sims).sort_index()
 
 # Apply the DGP function scenario parameters to get the results
-scenarios['results'] = scenarios.apply(lambda x: get_estimators(x.N, x.rho, x.p, x.kappa, x.beta, x.me), axis = 1)
+scenarios['results'] = scenarios.apply(lambda x: get_estimators(x.N, x.rho, x.p, x.kappa, x.beta_list, x.me_list), axis = 1)
 
 scenarios['sim_num'] = np.tile(range(num_sims), int(len(scenarios) / num_sims))
 
@@ -71,3 +72,16 @@ scenarios['iv'] = scenarios.explode('results').reset_index().iloc[3::4].reset_in
 scenarios.to_csv(data_dir + "/estimator_results.csv")
 
 print(scenarios)
+
+# Plot some results
+scenarios_for_plot = (scenarios.melt(id_vars=['N', 'rho', 'p', 'kappa', 'beta', 'me'], value_vars=['ols_true', 'ols_mismeasured', 'pcr', 'iv'], var_name='estimator', value_name='coeff')
+                               .query('N == 1000' and 'rho == 0.9' and 'kappa == 0.9'))
+
+grid = sns.FacetGrid(scenarios_for_plot, col='beta', row='me', hue='estimator')
+grid.map_dataframe(sns.histplot, x='coeff')
+#grid.fig.subplots_adjust(top=0.95)
+#grid.fig.suptitle('Coefficients Across Simulations for _', size = 16, y = 0.99)
+grid.fig.suptitle('Coefficients Across Simulations for _')
+grid.add_legend()
+plt.savefig(figures_dir + "/Simulation_Results_Grid.pdf")
+plt.close()
