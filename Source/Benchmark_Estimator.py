@@ -10,7 +10,7 @@ import pandas as pd
 
 # Simulations dataframe with variations of parameter values
 # For local runs such as this file, we limit the number of scenarios considered
-num_sims = 1
+num_sims = 1000
 Ns = [100, 1000]
 rhos = [0.8, 0.9]
 ps = [3]
@@ -46,17 +46,9 @@ scenarios['me_list'] = scenarios.apply(lambda x: assign_me(x.me), axis = 1)
 scenarios = pd.concat([scenarios] * num_sims).sort_index()
 
 # Apply the DGP function scenario parameters to get the results
-scenarios['results'] = scenarios.apply(lambda x: get_estimators(x.N, x.rho, x.p, x.kappa, x.beta_list, x.me_list), axis = 1)
+scenarios[['OLS_true', 'OLS_mismeasured', 'PCR', 'IV']] = scenarios.apply(lambda x: get_estimators(x.N, x.rho, x.p, x.kappa, x.beta, x.me), axis = 1)
 
 scenarios['sim_num'] = np.tile(range(num_sims), int(len(scenarios) / num_sims))
-
-# Mergesort ensures stability
-scenarios = scenarios.sort_values('sim_num', kind='mergesort')
-
-scenarios['ols_true'] = scenarios.explode('results').reset_index().iloc[::4].reset_index()['results']
-scenarios['ols_mismeasured'] = scenarios.explode('results').reset_index().iloc[1::4].reset_index()['results']
-scenarios['pcr'] = scenarios.explode('results').reset_index().iloc[2::4].reset_index()['results']
-scenarios['iv'] = scenarios.explode('results').reset_index().iloc[3::4].reset_index()['results']
 
 # Write a csv of local results for easy perusal
 scenarios.to_csv(data_dir + "/estimator_results.csv")

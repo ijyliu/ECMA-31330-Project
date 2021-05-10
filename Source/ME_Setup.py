@@ -62,19 +62,27 @@ def DGP(N, rho, p, kappa, beta, x_measurement_errors):
 
     return(Y, true_X, mismeasured_X, Z)
 
-# Function for the PCR estimator
+# Function for the PCR estimator, with an adjustment for comparability with OLS
 # Please standardize the y and X beforehand
 def PCR_coeffs(y, X):
 
-    # Perform the factor analysis
-    pca_model = pca()
-    pca_results = pca_model.fit_transform(X)
+    # Compute singular value decomposition
+    # I am doing this by hand
+    # Extract the V prime matrix only (the loadings). It will be p x p, as will be V itself.
+    _, _, V_prime = np.linalg.svd(X)
+    V = V_prime.T
 
-    # Regress on the first principal component
-    factor_regression = sm.OLS(y, pca_results['PC'].iloc[:, 0].reset_index(drop = True)).fit()
+    # Regress on the first principal component, constructing it using the loadings
+    # X is N x p and the first column of V is p x 1
+    # Our r, or rank condition is 1
+    pcr_coeff = sm.OLS(y, (X@(V[:, 0]))).fit().params[0]
 
-    # Return the parameter values
-    return(factor_regression.params)
+    # We need to left-multiply by the V for interpretability: https://stats.stackexchange.com/questions/241890/coefficients-of-principal-components-regression-in-terms-of-original-regressors
+    # The first column of V will be p x 1 and the coeff we extracted is a scalar
+    pcr_adjusted = V[:, 0] * pcr_coeff
+
+    # Return the ols-equivalent values
+    return(pcr_adjusted)
 
 # Given some simulation parameters, run both the PCA regression and the IV regression for a simulation
 def get_estimators(N, rho, p, kappa, beta, x_measurement_errors):
