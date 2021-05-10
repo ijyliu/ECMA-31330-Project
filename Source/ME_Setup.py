@@ -7,7 +7,6 @@ import numpy as np
 import pandas as pd
 import statsmodels.api as sm
 from sklearn.preprocessing import StandardScaler
-from pca import pca
 import matplotlib
 matplotlib.use('pdf')
 import matplotlib.pyplot as plt
@@ -23,51 +22,38 @@ regressions_dir = output_dir + "/Regressions"
 tables_dir = output_dir + "/Tables"
 
 # Write the DGP as a function
-# The inputs are sample size, correlation between the non-mismeasured covariates, the number of covariates p, the true beta, and a vector specifying the variance of the classical measurement error for each covariate
-def DGP(N, rho, p, kappa, beta, x_measurement_errors):
+# The inputs are sample size, the true beta, the measurement error mean for each covariate, the measurement error variance-covariance matrix, and the instrumental variable coefficient
+def DGP(N, beta, me_means, me_cov, kappa):
 
-    # Convert strings back into lists
+    # Convert strings back into lists and lists to numpy arrays
     if type(beta) == str:
-        beta = literal_eval(beta)
-    if type(x_measurement_errors) == str:
-        x_measurement_errors = literal_eval(x_measurement_errors)
+        beta = np.array(literal_eval(beta))
+    if type(me_means) == str:
+        me_means = np.array(literal_eval(me_means))
+    if type(me_cov) == str:
+        me_cov = np.array(literal_eval(me_cov))
 
-    # Convert the beta and measurment error inputs to arrays if they are not already
-    if not isinstance(beta, np.ndarray):
-        beta = np.array(beta)
-    if not isinstance(x_measurement_errors, np.ndarray):
-        x_measurement_errors = np.array(x_measurement_errors)
+    # Infer p or number of measurements
+    p = len(me_means)
 
-    # Get beta into an array of convenient dimensions
-    beta = beta.reshape(p, 1)
+    # Random normal draw for base values of true x
+    true_x = np.random.normal(size = (N, 1))
 
-    # Random normal error
-    u = np.random.normal(size = (N, 1))
+    # Construct the measurement error matrix
+    me_matrix = np.random.multivariate_normal(mean = me_means, cov = me_cov, size = N)
 
-    # Specified variance-covariance matrix
-    # First fill in rho for everything, then subtract off rho on the diagonal and add a one back in
-    cov = np.ones((p, p)) * rho - np.eye(p) * rho + np.eye(p)
+    # Add a repeated true x to the me_matrix to get the mismeasured x matrix
+    mismeasured_x = np.tile(true_x, p) + me_matrix
 
-    # Random normal draw for base values of X
-    true_X = np.random.multivariate_normal(mean = np.zeros(p), cov = cov, size = N)
+    # Simulate the Y using the true X values
+    # Random normal error for Y generation
+    Y = true_x * beta + np.random.normal(size = (N, 1))
 
     # Produce an instrument for x_1
     # This Z will be x_1 times the kappa coefficient plus some random noise
-    Z = true_X[:, 0].reshape(N, 1) * kappa + np.random.normal(size = (N, 1))
+    Z = true_x * kappa + np.random.normal(size = (N, 1))
 
-    # Vectors of measurement error for each component
-    me_vectors = []
-    for i in range(p):
-        # Note we need to convert the variance into a standard deviation
-        me_vectors.append(np.random.normal(size = (N, 1), scale = np.sqrt(x_measurement_errors[i])))
-
-    # Add the true x to the list of ME vectors to get mismeasured x
-    mismeasured_X = true_X + np.concatenate(me_vectors, axis=1)
-
-    # Simulate the Y using the true X values
-    Y = true_X@beta + u
-
-    return(Y, true_X, mismeasured_X, Z)
+    return(Y, true_x, mismeasured_x, Z)
 
 # Function for the PCR estimator, with an adjustment for comparability with OLS
 # Please standardize the y and X beforehand
@@ -95,16 +81,16 @@ def PCR_coeffs(y, X):
 def get_estimators(N, rho, p, kappa, beta, x_measurement_errors):
 
     # Run the DGP
-    Y, true_X, mismeasured_X, Z = DGP(N, rho, p, kappa, beta, x_measurement_errors)
+    Y, true_x, mismeasured_X, Z = DGP(N, rho, p, kappa, beta, x_measurement_errors)
 
     # Standardize
     Y = StandardScaler().fit_transform(Y)
-    true_X = StandardScaler().fit_transform(true_X)
+    true_x = StandardScaler().fit_transform(true_x)
     mismeasured_X = StandardScaler().fit_transform(mismeasured_X)
     Z = StandardScaler().fit_transform(Z)
 
     # Calculate estimators
-    beta_OLS_true = sm.OLS(Y, true_X[:, 0]).fit().params[0]
+    beta_OLS_true = sm.OLS(Y, true_x[:, 0]).fit().params[0]
     beta_OLS_mismeasured = sm.OLS(Y, mismeasured_X[:, 0]).fit().params[0]
     beta_PCR = PCR_coeffs(Y, mismeasured_X)[0]
 
