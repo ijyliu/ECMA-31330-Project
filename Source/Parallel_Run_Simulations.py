@@ -37,7 +37,7 @@ print(simulations)
 print(simulations.columns)
 
 # Apply the DGP function scenario parameters to get the results
-simulations[['OLS_true', 'OLS_mismeasured', 'PCR', 'IV']] = simulations.apply(lambda x: pd.Series(get_estimators(x['N'], x['rho'], x['p'], x['kappa'], x['beta_list'], x['me_list'])), axis = 1)
+simulations[['ols_true', 'ols_mismeasured', 'pcr', 'iv']] = simulations.apply(lambda x: pd.Series(get_estimators(x['N'], x['rho'], x['p'], x['kappa'], x['beta_list'], x['me_list'])), axis = 1)
 
 print(simulations)
 
