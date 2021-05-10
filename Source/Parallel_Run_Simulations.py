@@ -16,7 +16,7 @@ param_file_name = [f for f in os.listdir(os.path.expanduser(data_dir)) if '_para
 print(param_file_name)
 
 # Number of simulations to run
-num_sims = 1
+num_sims = 1000
 
 # Read in the parameters
 simulations = (pd.read_csv(data_dir + "/" + param_file_name)
@@ -25,7 +25,10 @@ simulations = (pd.read_csv(data_dir + "/" + param_file_name)
 print(simulations)
 
 # Make a row for each simulation
-simulations = pd.concat([simulations] * num_sims, axis = 1).reset_index().transpose()
+simulations = (pd.concat([simulations] * num_sims, axis = 1)
+                 .reset_index()
+                 .transpose()
+                 .drop(columns = 'Unnamed: 0'))
 
 print(simulations)
 print(simulations.columns)
