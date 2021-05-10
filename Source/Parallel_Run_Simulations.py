@@ -25,8 +25,10 @@ simulations = (pd.read_csv(data_dir + "/" + param_file_name)
 # Make a row for each simulation
 simulations = pd.concat([simulations] * num_sims).reset_index()
 
+print(simulations)
+
 # Apply the DGP function scenario parameters to get the results
-simulations[['OLS_true', 'OLS_mismeasured', 'PCR', 'IV']] = simulations.apply(lambda x: get_estimators(x.N, x.rho, x.p, x.kappa, x.beta, x.me), axis = 1)
+simulations[['OLS_true', 'OLS_mismeasured', 'PCR', 'IV']] = simulations.apply(lambda x: pd.Series(get_estimators(x['N'], x['rho'], x['p'], x['kappa'], x['beta'], x['me'])), axis = 1)
 
 # Save the results
 simulations.to_csv(data_dir + "/sim_results_" + str(sys.argv[1]) + ".csv")
