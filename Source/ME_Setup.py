@@ -78,10 +78,10 @@ def PCR_coeffs(y, X):
     return(pcr_adjusted)
 
 # Given some simulation parameters, run both the PCA regression and the IV regression for a simulation
-def get_estimators(N, rho, p, kappa, beta, x_measurement_errors):
+def get_estimators(N, beta, me_means, me_cov, kappa):
 
     # Run the DGP
-    Y, true_x, mismeasured_X, Z = DGP(N, rho, p, kappa, beta, x_measurement_errors)
+    Y, true_x, mismeasured_X, Z = DGP(N, beta, me_means, me_cov, kappa)
 
     # Standardize
     Y = StandardScaler().fit_transform(Y)
@@ -103,10 +103,10 @@ def get_estimators(N, rho, p, kappa, beta, x_measurement_errors):
 def perform_analysis(dataframe, local_or_cluster):
 
     # Plot some results
-    scenarios_for_plot = (dataframe.melt(id_vars=['N', 'rho', 'p', 'kappa', 'beta', 'me'], value_vars=['ols_true', 'ols_mismeasured', 'pcr', 'iv'], var_name='estimator', value_name='coeff')
-                                   .query('N == 1000' and 'rho == 0.1' and 'kappa == 0.9' and 'beta == "beta_combo_1"' and 'me == "me_combo_2"'))
+    scenarios_for_plot = (dataframe.melt(id_vars=["N", "beta", "me_means", "me_cov", "kappa"], value_vars=['ols_true', 'ols_mismeasured', 'pcr', 'iv'], var_name='estimator', value_name='coeff')
+                                   .query('N == 1000' and 'beta == 1' and 'me_means == "[0,0]"' and 'me_cov == "[[1, 0], [0, 1]]"' and 'kappa == 1'))
 
-    grid = sns.FacetGrid(scenarios_for_plot, col='beta', row='me', hue='estimator')
+    grid = sns.FacetGrid(scenarios_for_plot, col='beta', row='me_cov', hue='estimator')
     grid.map_dataframe(sns.histplot, x='coeff')
     grid.fig.suptitle('Coefficients Across Simulations for _')
     grid.add_legend()
@@ -123,7 +123,7 @@ def perform_analysis(dataframe, local_or_cluster):
                        .to_latex(tables_dir + "/mean_estimator_results_" + local_or_cluster + ".tex"))
 
     # Results by ME levels
-    (scenarios_for_plot.filter(['estimator', 'coeff', 'me'])
-                       .groupby(['estimator', 'me'])
+    (scenarios_for_plot.filter(['estimator', 'coeff', 'me_cov'])
+                       .groupby(['estimator', 'me_cov'])
                        .mean()
                        .to_latex(tables_dir + "/mean_me_estimator_results_" + local_or_cluster + ".tex"))
