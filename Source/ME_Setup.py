@@ -12,6 +12,7 @@ import matplotlib
 matplotlib.use('pdf')
 import matplotlib.pyplot as plt
 import seaborn as sns
+from ast import literal_eval
 
 # Directory structure
 data_dir = "~/Box/ECMA-31330-Project"
@@ -24,6 +25,12 @@ tables_dir = output_dir + "/Tables"
 # Write the DGP as a function
 # The inputs are sample size, correlation between the non-mismeasured covariates, the number of covariates p, the true beta, and a vector specifying the variance of the classical measurement error for each covariate
 def DGP(N, rho, p, kappa, beta, x_measurement_errors):
+
+    # Convert strings back into lists
+    if type(beta) == str:
+        beta = literal_eval(beta)
+    if type(x_measurement_errors) == str:
+        x_measurement_errors = literal_eval(x_measurement_errors)
 
     # Convert the beta and measurment error inputs to arrays if they are not already
     if not isinstance(beta, np.ndarray):

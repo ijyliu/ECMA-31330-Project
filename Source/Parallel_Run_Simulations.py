@@ -16,7 +16,7 @@ param_file_name = [f for f in os.listdir(os.path.expanduser(data_dir)) if '_para
 print(param_file_name)
 
 # Number of simulations to run
-num_sims = 10
+num_sims = 1
 
 # Read in the parameters
 simulations = (pd.read_csv(data_dir + "/" + param_file_name)
@@ -43,3 +43,5 @@ print(simulations)
 
 # Save the results
 simulations.to_csv(data_dir + "/sim_results_" + str(sys.argv[1]) + ".csv")
+
+print('completed sims')
