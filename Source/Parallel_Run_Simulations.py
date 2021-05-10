@@ -22,13 +22,24 @@ num_sims = 10
 simulations = (pd.read_csv(data_dir + "/" + param_file_name)
                  .iloc[slurm_number, :])
 
-# Make a row for each simulation
-simulations = pd.concat([simulations] * num_sims).reset_index()
-
 print(simulations)
 
+# Make a row for each simulation
+simulations = pd.concat([simulations] * num_sims, axis = 1).reset_index().transpose()
+
+print(simulations)
+print(simulations.columns)
+
+simulations.columns = simulations.iloc[0]
+simulations = simulations[1:]
+
+print(simulations)
+print(simulations.columns)
+
 # Apply the DGP function scenario parameters to get the results
-simulations[['OLS_true', 'OLS_mismeasured', 'PCR', 'IV']] = simulations.apply(lambda x: pd.Series(get_estimators(x['N'], x['rho'], x['p'], x['kappa'], x['beta'], x['me'])), axis = 1)
+simulations[['OLS_true', 'OLS_mismeasured', 'PCR', 'IV']] = simulations.apply(lambda x: pd.Series(get_estimators(x['N'], x['rho'], x['p'], x['kappa'], x['beta_list'], x['me_list'])), axis = 1)
+
+print(simulations)
 
 # Save the results
 simulations.to_csv(data_dir + "/sim_results_" + str(sys.argv[1]) + ".csv")
