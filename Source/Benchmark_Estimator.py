@@ -10,7 +10,7 @@ import pandas as pd
 
 # Simulations dataframe with variations of parameter values
 # For local runs such as this file, we limit the number of scenarios considered
-num_sims = 1000
+num_sims = 100
 Ns = [100, 1000]
 rhos = [0.8, 0.9]
 ps = [3]
@@ -39,8 +39,8 @@ index = pd.MultiIndex.from_product([Ns, rhos, ps, kappas, betas, mes], names = [
 scenarios = pd.DataFrame(index = index).reset_index()
 
 # Convert the combo strings into lists
-scenarios['beta_list'] = scenarios.apply(lambda x: assign_beta(x.beta), axis = 1)
-scenarios['me_list'] = scenarios.apply(lambda x: assign_me(x.me), axis = 1)
+scenarios['beta'] = scenarios.apply(lambda x: assign_beta(x.beta), axis = 1)
+scenarios['me'] = scenarios.apply(lambda x: assign_me(x.me), axis = 1)
 
 # Make a row for each simulation
 scenarios = pd.concat([scenarios] * num_sims).sort_index()
