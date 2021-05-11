@@ -99,6 +99,17 @@ def get_estimators(N, beta, me_means, me_cov, kappa):
 
     return(beta_OLS_true, beta_OLS_mismeasured, beta_PCR, beta_IV)
 
+# Given list of parameters, produces a dataframe that considers the cartesian product of them
+def produce_scenarios_cartesian(Ns, betas, me_means, me_covs, kappas):
+
+    # Cartesian product of scenarios
+    index = pd.MultiIndex.from_product([Ns, betas, me_means, me_covs, kappas], names = ["N", "beta", "me_means", "me_cov", "kappa"])
+
+    # Scenarios dataframe
+    scenarios = pd.DataFrame(index = index).reset_index()
+
+    return(scenarios)
+
 # Given a dataframe and an indicator for whether the run is local or on a computing cluster, perform some analysis
 def perform_analysis(dataframe, local_or_cluster):
 

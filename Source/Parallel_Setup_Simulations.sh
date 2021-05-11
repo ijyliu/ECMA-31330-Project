@@ -5,8 +5,8 @@
 #SBATCH --mem=4G           # requested memory
 #SBATCH --time=2-00:00:00          # wall clock limit (d-hh:mm:ss)
 
-#SBATCH --job-name=Setup_Simulations
+#SBATCH --job-name=Parallel_Setup_Simulations
 #SBATCH --output=%x.out
 
 module load python/booth/3.6/3.6.12
-python3 Setup_Simulations.py
+python3 Parallel_Setup_Simulations.py
