@@ -1,6 +1,7 @@
 # ECMA-31330-Project
-
-Econometrics and Machine Learning Group Project
+Econometrics and Machine Learning Group Project  
+PCR and Measurement Error  
+Isaac Liu, Nico Martorelli, Paul Opheim
 
 ## Contents
 
@@ -16,7 +17,7 @@ Contains [tables](Output/Tables), [regressions](Output/Regressions) and [figures
 
 ### [Release](Release)
 
-Contains the [abstract](Release/Abstract.pdf) and [paper](Release/Factors_and_Measurement_Error.pdf) pdfs and LaTeX files.
+Contains the [abstract](Release/Abstract.pdf) and [paper](Release/PCR_and_Measurement_Error.pdf) pdfs and LaTeX files.
 
 ### [Source](Source)
 
@@ -34,4 +35,4 @@ Contains code to run the project locally. [Benchmark_Estimator.py](Source/Local_
 
 #### [Parallel_Cluster_Simulations](Source/Parallel_Cluster_Simulations)
 
-Contains code to run many simulations and scenarios with many different parameter values on a computing cluster
+Contains code to run many simulations and scenarios with many different parameter values on a computing cluster.
