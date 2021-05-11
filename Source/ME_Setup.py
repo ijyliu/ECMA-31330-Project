@@ -40,8 +40,11 @@ def DGP(N, beta, me_means, me_cov, kappa):
     # Infer p or number of measurements
     p = len(me_means)
 
-    # Random normal draw for base values of true x
-    true_x = np.random.normal(size = (N, 1))
+    # Produce an instrument for x_1. This will be the basis of our X values
+    Z = np.random.normal(size = (N, 1))
+
+    # True X is Z times a kappa coefficient plus some more noise
+    true_x = Z * kappa + np.random.normal(size = (N, 1))
 
     # Construct the measurement error matrix
     me_matrix = np.random.multivariate_normal(mean = me_means, cov = me_cov, size = N)
@@ -52,10 +55,6 @@ def DGP(N, beta, me_means, me_cov, kappa):
     # Simulate the Y using the true X values
     # Random normal error for Y generation
     Y = true_x * beta + np.random.normal(size = (N, 1))
-
-    # Produce an instrument for x_1
-    # This Z will be x_1 times the kappa coefficient plus some random noise
-    Z = true_x * kappa + np.random.normal(size = (N, 1))
 
     return(Y, true_x, mismeasured_x, Z)
 
@@ -99,7 +98,8 @@ def get_estimators(N, beta, me_means, me_cov, kappa):
     beta_PCR = PCR_coeffs(Y, mismeasured_X)[0]
 
     # Sadly I have to the IV estimation by hand, because the packages I tried required exogenous control variables
-    beta_IV = np.cov(Y, Z)[0,1] / np.cov(mismeasured_X[:, 0].reshape(N, 1), Z)[0,1]
+    # Need to transpose all of the vectors in order for the covariance to work correctly
+    beta_IV = (np.cov(Y.T, Z.T)[0,1]) / (np.cov(mismeasured_X[:, 0].reshape(N, 1).T, Z.T)[0,1])
 
     return(beta_OLS_true, beta_OLS_mismeasured, beta_PCR, beta_IV)
 
