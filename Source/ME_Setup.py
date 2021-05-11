@@ -1,5 +1,5 @@
 # ME_Setup.py
-# Defines the project directory structure as well as functions to define the estimator and  
+# Defines the project directory structure as well as shared functions for the parallel and non-parallel code
 
 # Packages
 import os
@@ -7,7 +7,6 @@ import numpy as np
 import pandas as pd
 import statsmodels.api as sm
 from sklearn.preprocessing import StandardScaler
-from pca import pca
 import matplotlib
 matplotlib.use('pdf')
 import matplotlib.pyplot as plt
@@ -15,88 +14,87 @@ import seaborn as sns
 from ast import literal_eval
 
 # Directory structure
-data_dir = "~/Box/ECMA-31330-Project"
+box_dir = "~/Box/ECMA-31330-Project"
+parameters_dir = box_dir + "/Parameters"
+sim_results_dir = box_dir + "/Simulation_Results"
+scenario_files_dir = sim_results_dir + "/Scenario_Files"
 repo_dir = os.path.join(os.path.dirname( __file__ ), '..')
+input_dir = repo_dir + "/Input"
 output_dir = repo_dir + "/Output"
 figures_dir = output_dir + "/Figures"
 regressions_dir = output_dir + "/Regressions"
 tables_dir = output_dir + "/Tables"
 
 # Write the DGP as a function
-# The inputs are sample size, correlation between the non-mismeasured covariates, the number of covariates p, the true beta, and a vector specifying the variance of the classical measurement error for each covariate
-def DGP(N, rho, p, kappa, beta, x_measurement_errors):
+# The inputs are sample size, the true beta, the measurement error mean for each covariate, the measurement error variance-covariance matrix, and the instrumental variable coefficient
+def DGP(N, beta, me_means, me_cov, kappa):
 
-    # Convert strings back into lists
+    # Convert strings back into lists and lists to numpy arrays
     if type(beta) == str:
-        beta = literal_eval(beta)
-    if type(x_measurement_errors) == str:
-        x_measurement_errors = literal_eval(x_measurement_errors)
+        beta = np.array(literal_eval(beta))
+    if type(me_means) == str:
+        me_means = np.array(literal_eval(me_means))
+    if type(me_cov) == str:
+        me_cov = np.array(literal_eval(me_cov))
 
-    # Convert the beta and measurment error inputs to arrays if they are not already
-    if not isinstance(beta, np.ndarray):
-        beta = np.array(beta)
-    if not isinstance(x_measurement_errors, np.ndarray):
-        x_measurement_errors = np.array(x_measurement_errors)
+    # Infer p or number of measurements
+    p = len(me_means)
 
-    # Get beta into an array of convenient dimensions
-    beta = beta.reshape(p, 1)
+    # Random normal draw for base values of true x
+    true_x = np.random.normal(size = (N, 1))
 
-    # Random normal error
-    u = np.random.normal(size = (N, 1))
+    # Construct the measurement error matrix
+    me_matrix = np.random.multivariate_normal(mean = me_means, cov = me_cov, size = N)
 
-    # Specified variance-covariance matrix
-    # First fill in rho for everything, then subtract off rho on the diagonal and add a one back in
-    cov = np.ones((p, p)) * rho - np.eye(p) * rho + np.eye(p)
+    # Add a repeated true x to the me_matrix to get the mismeasured x matrix
+    mismeasured_x = np.tile(true_x, p) + me_matrix
 
-    # Random normal draw for base values of X
-    true_X = np.random.multivariate_normal(mean = np.zeros(p), cov = cov, size = N)
+    # Simulate the Y using the true X values
+    # Random normal error for Y generation
+    Y = true_x * beta + np.random.normal(size = (N, 1))
 
     # Produce an instrument for x_1
     # This Z will be x_1 times the kappa coefficient plus some random noise
-    Z = true_X[:, 0].reshape(N, 1) * kappa + np.random.normal(size = (N, 1))
+    Z = true_x * kappa + np.random.normal(size = (N, 1))
 
-    # Vectors of measurement error for each component
-    me_vectors = []
-    for i in range(p):
-        # Note we need to convert the variance into a standard deviation
-        me_vectors.append(np.random.normal(size = (N, 1), scale = np.sqrt(x_measurement_errors[i])))
+    return(Y, true_x, mismeasured_x, Z)
 
-    # Add the true x to the list of ME vectors to get mismeasured x
-    mismeasured_X = true_X + np.concatenate(me_vectors, axis=1)
-
-    # Simulate the Y using the true X values
-    Y = true_X@beta + u
-
-    return(Y, true_X, mismeasured_X, Z)
-
-# Function for the PCR estimator
+# Function for the PCR estimator, with an adjustment for comparability with OLS
 # Please standardize the y and X beforehand
 def PCR_coeffs(y, X):
 
-    # Perform the factor analysis
-    pca_model = pca()
-    pca_results = pca_model.fit_transform(X)
+    # Compute singular value decomposition
+    # I am doing this by hand
+    # Extract the V prime matrix only (the loadings). It will be p x p, as will be V itself.
+    _, _, V_prime = np.linalg.svd(X)
+    V = V_prime.T
 
-    # Regress on the first principal component
-    factor_regression = sm.OLS(y, pca_results['PC'].iloc[:, 0].reset_index(drop = True)).fit()
+    # Regress on the first principal component, constructing it using the loadings
+    # X is N x p and the first column of V is p x 1
+    # Our r, or rank condition is 1
+    pcr_coeff = sm.OLS(y, (X@(V[:, 0]))).fit().params[0]
 
-    # Return the parameter values
-    return(factor_regression.params)
+    # We need to left-multiply by the V for interpretability: https://stats.stackexchange.com/questions/241890/coefficients-of-principal-components-regression-in-terms-of-original-regressors
+    # The first column of V will be p x 1 and the coeff we extracted is a scalar
+    pcr_adjusted = V[:, 0] * pcr_coeff
+
+    # Return the ols-equivalent values
+    return(pcr_adjusted)
 
 # Given some simulation parameters, run both the PCA regression and the IV regression for a simulation
-def get_estimators(N, rho, p, kappa, beta, x_measurement_errors):
+def get_estimators(N, beta, me_means, me_cov, kappa):
 
     # Run the DGP
-    Y, true_X, mismeasured_X, Z = DGP(N, rho, p, kappa, beta, x_measurement_errors)
+    Y, true_x, mismeasured_X, Z = DGP(N, beta, me_means, me_cov, kappa)
 
     # Standardize
     Y = StandardScaler().fit_transform(Y)
-    true_X = StandardScaler().fit_transform(true_X)
+    true_x = StandardScaler().fit_transform(true_x)
     mismeasured_X = StandardScaler().fit_transform(mismeasured_X)
     Z = StandardScaler().fit_transform(Z)
 
     # Calculate estimators
-    beta_OLS_true = sm.OLS(Y, true_X[:, 0]).fit().params[0]
+    beta_OLS_true = sm.OLS(Y, true_x[:, 0]).fit().params[0]
     beta_OLS_mismeasured = sm.OLS(Y, mismeasured_X[:, 0]).fit().params[0]
     beta_PCR = PCR_coeffs(Y, mismeasured_X)[0]
 
@@ -105,14 +103,25 @@ def get_estimators(N, rho, p, kappa, beta, x_measurement_errors):
 
     return(beta_OLS_true, beta_OLS_mismeasured, beta_PCR, beta_IV)
 
+# Given list of parameters, produces a dataframe that considers the cartesian product of them
+def produce_scenarios_cartesian(Ns, betas, me_means, me_covs, kappas):
+
+    # Cartesian product of scenarios
+    index = pd.MultiIndex.from_product([Ns, betas, me_means, me_covs, kappas], names = ["N", "beta", "me_means", "me_cov", "kappa"])
+
+    # Scenarios dataframe
+    scenarios = pd.DataFrame(index = index).reset_index()
+
+    return(scenarios)
+
 # Given a dataframe and an indicator for whether the run is local or on a computing cluster, perform some analysis
 def perform_analysis(dataframe, local_or_cluster):
 
     # Plot some results
-    scenarios_for_plot = (dataframe.melt(id_vars=['N', 'rho', 'p', 'kappa', 'beta', 'me'], value_vars=['ols_true', 'ols_mismeasured', 'pcr', 'iv'], var_name='estimator', value_name='coeff')
-                                   .query('N == 1000' and 'rho == 0.1' and 'kappa == 0.9' and 'beta == "beta_combo_1"' and 'me == "me_combo_2"'))
+    scenarios_for_plot = (dataframe.melt(id_vars=["N", "beta", "me_means", "me_cov", "kappa"], value_vars=['ols_true', 'ols_mismeasured', 'pcr', 'iv'], var_name='estimator', value_name='coeff')
+                                   .query('N == 1000' and 'beta == 1' and 'me_means == "[0,0]"' and 'me_cov == "[[1, 0], [0, 1]]"' and 'kappa == 1'))
 
-    grid = sns.FacetGrid(scenarios_for_plot, col='beta', row='me', hue='estimator')
+    grid = sns.FacetGrid(scenarios_for_plot, col='beta', row='me_cov', hue='estimator')
     grid.map_dataframe(sns.histplot, x='coeff')
     grid.fig.suptitle('Coefficients Across Simulations for _')
     grid.add_legend()
@@ -129,7 +138,7 @@ def perform_analysis(dataframe, local_or_cluster):
                        .to_latex(tables_dir + "/mean_estimator_results_" + local_or_cluster + ".tex"))
 
     # Results by ME levels
-    (scenarios_for_plot.filter(['estimator', 'coeff', 'me'])
-                       .groupby(['estimator', 'me'])
+    (scenarios_for_plot.filter(['estimator', 'coeff', 'me_cov'])
+                       .groupby(['estimator', 'me_cov'])
                        .mean()
                        .to_latex(tables_dir + "/mean_me_estimator_results_" + local_or_cluster + ".tex"))
