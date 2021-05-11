@@ -1,5 +1,5 @@
 # ME_Setup.py
-# Defines the project directory structure as well as functions to define the estimator and  
+# Defines the project directory structure as well as shared functions for the parallel and non-parallel code
 
 # Packages
 import os
