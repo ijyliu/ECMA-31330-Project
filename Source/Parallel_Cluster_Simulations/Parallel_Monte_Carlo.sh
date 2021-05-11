@@ -6,7 +6,7 @@
 #SBATCH --output=/dev/null
 
 # Get the array end
-readarray -d '' filename < <(find ~/Box/ECMA-31330-Project -name "*_parameter_combos.csv" -printf '%f\n')
+readarray -d '' filename < <(find ~/Box/ECMA-31330-Project/Parameters -name "*_parameter_combos.csv" -printf '%f\n')
 let arrayend=${filename//[^0-9]/}-1
 
 module load python/booth/3.6/3.6.12
