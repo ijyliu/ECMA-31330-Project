@@ -12,7 +12,7 @@ import os
 import glob
 
 # Simulations dataframe with variations of parameter values
-# num_sims
+num_sims = 1000
 Ns = [100, 1000]
 betas = [1, 10]
 # The numpy arrays of measurement error values have to be written out as strings for storage and converted later
@@ -22,6 +22,7 @@ kappas = [1]
 
 # Scenarios dataframe
 scenarios = produce_scenarios_cartesian(Ns, betas, me_means, me_covs, kappas)
+scenarios['num_sims'] = num_sims
 
 # Remove any pre-existing parameter combinations file
 files_to_remove = glob.glob(box_dir + '/*_parameter_combos.csv')
