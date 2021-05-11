@@ -24,7 +24,7 @@ kappas = [1]
 scenarios = produce_scenarios_cartesian(Ns, betas, me_means, me_covs, kappas)
 
 # Remove any pre-existing parameter combinations file
-files_to_remove = glob.glob(data_dir + '/*_parameter_combos.csv')
+files_to_remove = glob.glob(box_dir + '/*_parameter_combos.csv')
 for filePath in files_to_remove:
     try:
         os.remove(filePath)
@@ -32,4 +32,4 @@ for filePath in files_to_remove:
         print("Error while deleting file : ", filePath)
 
 # Save the csv of parameter combinations, with label of the number of combos
-scenarios.to_csv(data_dir + "/" + str(len(scenarios)) + "_parameter_combos.csv")
+scenarios.to_csv(box_dir + "/" + str(len(scenarios)) + "_parameter_combos.csv")

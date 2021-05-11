@@ -16,10 +16,10 @@ slurm_number = int(sys.argv[1])
 print('slurm job array number: ' + str(slurm_number))
 
 # Get the name of the parameters file for read in
-param_file_name = [f for f in os.listdir(os.path.expanduser(data_dir)) if '_parameter_combos' in f][0]
+param_file_name = [f for f in os.listdir(os.path.expanduser(parameters_dir)) if '_parameter_combos' in f][0]
 
 # Read in the parameters
-simulations = (pd.read_csv(data_dir + "/" + param_file_name)
+simulations = (pd.read_csv(parameters_dir + "/" + param_file_name)
                  .iloc[slurm_number, :])
 
 # Number of simulations to run
@@ -39,6 +39,6 @@ simulations = simulations[1:]
 simulations[['ols_true', 'ols_mismeasured', 'pcr', 'iv']] = simulations.apply(lambda x: pd.Series(get_estimators(x['N'], x['beta'], x['me_means'], x['me_cov'], x['kappa'])), axis = 1)
 
 # Save the results
-simulations.to_csv(data_dir + "/sim_results_" + str(sys.argv[1]) + ".csv")
+simulations.to_csv(scenario_files_dir + "/sim_results_" + str(sys.argv[1]) + ".csv")
 
 print('completed sims')

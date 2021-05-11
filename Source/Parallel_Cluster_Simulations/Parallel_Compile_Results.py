@@ -14,7 +14,7 @@ import pandas as pd
 print('began compiling results')
 
 # List target simulation results files
-data_files = [data_dir + "/" + f for f in os.listdir(os.path.expanduser(data_dir)) if 'sim_results_' in f]
+data_files = [scenario_files_dir + "/" + f for f in os.listdir(os.path.expanduser(scenario_files_dir)) if 'sim_results_' in f]
 
 # File loading function from the list
 def load_files(filenames):

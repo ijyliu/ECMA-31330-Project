@@ -30,7 +30,7 @@ scenarios = pd.concat([scenarios] * num_sims).sort_index()
 scenarios[['ols_true', 'ols_mismeasured', 'pcr', 'iv']] = scenarios.apply(lambda x: pd.Series(get_estimators(x['N'], x['beta'], x['me_means'], x['me_cov'], x['kappa'])), axis = 1)
 
 # Write a csv of local results for easy perusal
-scenarios.to_csv(data_dir + "/local_estimator_results.csv")
+scenarios.to_csv(sim_results_dir + "/local_estimator_results.csv")
 
 # Perform the main analysis
 perform_analysis(scenarios, "local")
