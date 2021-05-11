@@ -17,7 +17,7 @@ Contains [tables](Output/Tables), [regressions](Output/Regressions) and [figures
 
 ### [Release](Release)
 
-Contains the [abstract](Release/Abstract.pdf) and [paper](Release/Factors_and_Measurement_Error.pdf) pdfs and LaTeX files.
+Contains the [abstract](Release/Abstract.pdf) and [paper](Release/PCR_and_Measurement_Error.pdf) pdfs and LaTeX files.
 
 ### [Source](Source)
 
