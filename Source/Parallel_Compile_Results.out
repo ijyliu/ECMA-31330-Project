@@ -1,7 +1,7 @@
 ==========================================
-SLURM_JOB_ID = 3000980
+SLURM_JOB_ID = 3001016
 SLURM_SUBMIT_DIR = /home/ijyliu/repo/ECMA-31330-Project/Source
-SLURM_JOB_NODELIST = mcn01
+SLURM_JOB_NODELIST = mcn24
 ==========================================
 began compiling results
 finished analysis
