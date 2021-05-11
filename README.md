@@ -1,6 +1,6 @@
 # ECMA-31330-Project
-Econometrics and Machine Learning Group Project
-PCR and Measurement Error
+Econometrics and Machine Learning Group Project  
+PCR and Measurement Error  
 Isaac Liu, Nico Martorelli, Paul Opheim
 
 ## Contents
