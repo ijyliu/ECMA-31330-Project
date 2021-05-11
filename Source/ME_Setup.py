@@ -119,7 +119,9 @@ def perform_analysis(dataframe, local_or_cluster):
 
     # Plot some results
     scenarios_for_plot = (dataframe.melt(id_vars=["N", "beta", "me_means", "me_cov", "kappa"], value_vars=['ols_true', 'ols_mismeasured', 'pcr', 'iv'], var_name='estimator', value_name='coeff')
-                                   .query('N == 1000' and 'beta == 1' and 'me_means == "[0,0]"' and 'me_cov == "[[1, 0], [0, 1]]"' and 'kappa == 1'))
+                                   .query('N == 1000' and 'beta == 1' and 'me_means == "[0,0]"' and 'me_cov == "[[1, 0], [0, 1]]"' and 'kappa == 1')
+                                   # Drop IV spec for plotting purposes for now
+                                   .query('estimator != "iv"'))
 
     grid = sns.FacetGrid(scenarios_for_plot, col='beta', row='me_cov', hue='estimator')
     grid.map_dataframe(sns.histplot, x='coeff')
