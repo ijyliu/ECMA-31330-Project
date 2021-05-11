@@ -1,6 +1,6 @@
 # ECMA-31330-Project
-
-Econometrics and Machine Learning Group Project
+## Econometrics and Machine Learning Group Project
+## Isaac Liu, Nico Martorelli, Paul Opheim
 
 ## Contents
 
@@ -34,4 +34,4 @@ Contains code to run the project locally. [Benchmark_Estimator.py](Source/Local_
 
 #### [Parallel_Cluster_Simulations](Source/Parallel_Cluster_Simulations)
 
-Contains code to run many simulations and scenarios with many different parameter values on a computing cluster
+Contains code to run many simulations and scenarios with many different parameter values on a computing cluster.
