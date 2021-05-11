@@ -1,12 +1,15 @@
 # Run_Simulations.py
 # Read in a row of parameter values, and run a number of simulations using them
 
+# Import objects from the setup file
+import os
+import sys
+sys.path.append(os.path.expanduser('~/repo/ECMA-31330-Project/Source'))
+from ME_Setup import *
+
 # Packages
 from os import sys
 import pandas as pd
-
-# Functions and objects
-from ME_Setup import *
 
 # Get sllurm array number which will be used to get a row of the parameter combinations csv
 slurm_number = int(sys.argv[1])

@@ -1,12 +1,15 @@
 # Parallel_Compile_Results.py
 # Collects all of individual simulations results files and combines them, then performs an analysis of the results
 
+# Import objects from the setup file
+import os
+import sys
+sys.path.append(os.path.expanduser('~/repo/ECMA-31330-Project/Source'))
+from ME_Setup import *
+
 # Packages
 import os
 import pandas as pd
-
-# Functions and objects
-from ME_Setup import *
 
 print('began compiling results')
 

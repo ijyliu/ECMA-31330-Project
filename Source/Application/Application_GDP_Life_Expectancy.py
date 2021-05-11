@@ -2,6 +2,9 @@
 # Presents and application of the factor solution to measurment error with the relationship between GDP and life expectancy
 
 # Import objects from the setup file
+import os
+import sys
+sys.path.append(os.path.expanduser('~/repo/ECMA-31330-Project/Source'))
 from ME_Setup import *
 
 # Packages

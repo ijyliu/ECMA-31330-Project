@@ -1,7 +1,10 @@
 # Setup_Simulations.py
 # Produces a csv file with simulation parameters which can be given to individual jobs
 
-# Setup functions and directories
+# Import objects from the setup file
+import os
+import sys
+sys.path.append(os.path.expanduser('~/repo/ECMA-31330-Project/Source'))
 from ME_Setup import *
 
 # Packages

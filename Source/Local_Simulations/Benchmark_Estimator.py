@@ -2,6 +2,9 @@
 # This file benchmarks PCA for dealing with measurement error
 
 # Import objects from the setup file
+import os
+import sys
+sys.path.append(os.path.expanduser('~/repo/ECMA-31330-Project/Source'))
 from ME_Setup import *
 
 # Packages

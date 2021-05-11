@@ -2,6 +2,9 @@
 # Retrives world bank data for requested indicators, countries, and time periods from the API
 
 # Import objects from the setup file
+import os
+import sys
+sys.path.append(os.path.expanduser('~/repo/ECMA-31330-Project/Source'))
 from ME_Setup import *
 
 # Packages
