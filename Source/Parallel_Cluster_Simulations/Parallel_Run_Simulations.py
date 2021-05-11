@@ -20,20 +20,24 @@ param_file_name = [f for f in os.listdir(os.path.expanduser(parameters_dir)) if 
 
 # Read in the parameters
 simulations = (pd.read_csv(parameters_dir + "/" + param_file_name)
-                 .iloc[slurm_number, :])
-
-# Number of simulations to run
-num_sims = simulations['num_sims'][0]
-
-# Make a row for each simulation
-simulations = (pd.concat([simulations] * num_sims, axis = 1)
+                 .iloc[slurm_number, :]
                  .reset_index()
-                 .transpose()
-                 .drop(columns = 'Unnamed: 0'))
+                 .transpose())
 
 # Clean up the column names
 simulations.columns = simulations.iloc[0]
 simulations = simulations[1:]
+
+# Clean up extra column
+simulations.drop(columns = 'Unnamed: 0', inplace = True)
+
+# Get number of sims to run
+num_sims = int(simulations['num_sims'].mean())
+
+# Make a row for each simulation
+simulations = (pd.concat([simulations] * num_sims, axis = 1))
+
+print('beginning to run simulations')
 
 # Apply the DGP function scenario parameters to get the results
 simulations[['ols_true', 'ols_mismeasured', 'pcr', 'iv']] = simulations.apply(lambda x: pd.Series(get_estimators(x['N'], x['beta'], x['me_means'], x['me_cov'], x['kappa'])), axis = 1)

@@ -34,3 +34,4 @@ for filePath in files_to_remove:
 
 # Save the csv of parameter combinations, with label of the number of combos
 scenarios.to_csv(parameters_dir + "/" + str(len(scenarios)) + "_parameter_combos.csv")
+print('set up parameter combinations')

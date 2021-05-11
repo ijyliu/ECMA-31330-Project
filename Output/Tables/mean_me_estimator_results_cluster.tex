@@ -1,11 +1,15 @@
 \begin{tabular}{llr}
 \toprule
-    &            &     coeff \\
-estimator & me &           \\
+    &                    &     coeff \\
+estimator & me\_cov &           \\
 \midrule
-iv & me\_combo\_2 &       NaN \\
-ols\_mismeasured & me\_combo\_2 &  0.528709 \\
-ols\_true & me\_combo\_2 &  0.917040 \\
-pcr & me\_combo\_2 &  0.010811 \\
+iv & [[1, 0], [0, 1]] &       NaN \\
+    & [[100, 0], [0, 1]] &       NaN \\
+ols\_mismeasured & [[1, 0], [0, 1]] &  0.596182 \\
+    & [[100, 0], [0, 1]] &  0.063789 \\
+ols\_true & [[1, 0], [0, 1]] &  0.850488 \\
+    & [[100, 0], [0, 1]] &  0.847749 \\
+pcr & [[1, 0], [0, 1]] &  0.404427 \\
+    & [[100, 0], [0, 1]] &  0.097791 \\
 \bottomrule
 \end{tabular}

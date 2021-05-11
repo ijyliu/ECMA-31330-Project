@@ -1,0 +1,688 @@
+==========================================
+SLURM_JOB_ID = 3003526
+SLURM_SUBMIT_DIR = /home/ijyliu/repo/ECMA-31330-Project/Source/Parallel_Cluster_Simulations
+SLURM_JOB_NODELIST = mcn02
+==========================================
+/home/ijyliu/repo/ECMA-31330-Project/Source/ME_Setup.py:102: RuntimeWarning: Degrees of freedom <= 0 for slice
+  beta_IV = np.cov(Y, Z)[0,1] / np.cov(mismeasured_X[:, 0].reshape(N, 1), Z)[0,1]
+/apps/python/3.6/lib/python3.6/site-packages/numpy/lib/function_base.py:2480: RuntimeWarning: divide by zero encountered in true_divide
+  c *= np.true_divide(1, fact)
+/apps/python/3.6/lib/python3.6/site-packages/numpy/lib/function_base.py:2480: RuntimeWarning: invalid value encountered in multiply
+  c *= np.true_divide(1, fact)
+slurm job array number: 0
+index    N beta me_means              me_cov kappa num_sims
+0      100    1    [0,0]  [[100, 0], [0, 1]]     1        1
+beginning to run simulations
+completed sims
+==========================================
+SLURM_JOB_ID = 3003536
+SLURM_SUBMIT_DIR = /home/ijyliu/repo/ECMA-31330-Project/Source/Parallel_Cluster_Simulations
+SLURM_JOB_NODELIST = mcn30
+==========================================
+/home/ijyliu/repo/ECMA-31330-Project/Source/ME_Setup.py:102: RuntimeWarning: Degrees of freedom <= 0 for slice
+  beta_IV = np.cov(Y, Z)[0,1] / np.cov(mismeasured_X[:, 0].reshape(N, 1), Z)[0,1]
+/apps/python/3.6/lib/python3.6/site-packages/numpy/lib/function_base.py:2480: RuntimeWarning: divide by zero encountered in true_divide
+  c *= np.true_divide(1, fact)
+/apps/python/3.6/lib/python3.6/site-packages/numpy/lib/function_base.py:2480: RuntimeWarning: invalid value encountered in multiply
+  c *= np.true_divide(1, fact)
+slurm job array number: 10
+index     N beta me_means              me_cov kappa num_sims
+10     1000    1   [1, 0]  [[100, 0], [0, 1]]     1        1
+beginning to run simulations
+completed sims
+==========================================
+SLURM_JOB_ID = 3003537
+SLURM_SUBMIT_DIR = /home/ijyliu/repo/ECMA-31330-Project/Source/Parallel_Cluster_Simulations
+SLURM_JOB_NODELIST = mcn30
+==========================================
+/home/ijyliu/repo/ECMA-31330-Project/Source/ME_Setup.py:102: RuntimeWarning: Degrees of freedom <= 0 for slice
+  beta_IV = np.cov(Y, Z)[0,1] / np.cov(mismeasured_X[:, 0].reshape(N, 1), Z)[0,1]
+/apps/python/3.6/lib/python3.6/site-packages/numpy/lib/function_base.py:2480: RuntimeWarning: divide by zero encountered in true_divide
+  c *= np.true_divide(1, fact)
+/apps/python/3.6/lib/python3.6/site-packages/numpy/lib/function_base.py:2480: RuntimeWarning: invalid value encountered in multiply
+  c *= np.true_divide(1, fact)
+slurm job array number: 11
+index     N beta me_means            me_cov kappa num_sims
+11     1000    1   [1, 0]  [[1, 0], [0, 1]]     1        1
+beginning to run simulations
+completed sims
+==========================================
+SLURM_JOB_ID = 3003538
+SLURM_SUBMIT_DIR = /home/ijyliu/repo/ECMA-31330-Project/Source/Parallel_Cluster_Simulations
+SLURM_JOB_NODELIST = mcn30
+==========================================
+/home/ijyliu/repo/ECMA-31330-Project/Source/ME_Setup.py:102: RuntimeWarning: Degrees of freedom <= 0 for slice
+  beta_IV = np.cov(Y, Z)[0,1] / np.cov(mismeasured_X[:, 0].reshape(N, 1), Z)[0,1]
+/apps/python/3.6/lib/python3.6/site-packages/numpy/lib/function_base.py:2480: RuntimeWarning: divide by zero encountered in true_divide
+  c *= np.true_divide(1, fact)
+/apps/python/3.6/lib/python3.6/site-packages/numpy/lib/function_base.py:2480: RuntimeWarning: invalid value encountered in multiply
+  c *= np.true_divide(1, fact)
+slurm job array number: 12
+index     N beta me_means              me_cov kappa num_sims
+12     1000   10    [0,0]  [[100, 0], [0, 1]]     1        1
+beginning to run simulations
+completed sims
+==========================================
+SLURM_JOB_ID = 3003539
+SLURM_SUBMIT_DIR = /home/ijyliu/repo/ECMA-31330-Project/Source/Parallel_Cluster_Simulations
+SLURM_JOB_NODELIST = mcn30
+==========================================
+/home/ijyliu/repo/ECMA-31330-Project/Source/ME_Setup.py:102: RuntimeWarning: Degrees of freedom <= 0 for slice
+  beta_IV = np.cov(Y, Z)[0,1] / np.cov(mismeasured_X[:, 0].reshape(N, 1), Z)[0,1]
+/apps/python/3.6/lib/python3.6/site-packages/numpy/lib/function_base.py:2480: RuntimeWarning: divide by zero encountered in true_divide
+  c *= np.true_divide(1, fact)
+/apps/python/3.6/lib/python3.6/site-packages/numpy/lib/function_base.py:2480: RuntimeWarning: invalid value encountered in multiply
+  c *= np.true_divide(1, fact)
+slurm job array number: 13
+index     N beta me_means            me_cov kappa num_sims
+13     1000   10    [0,0]  [[1, 0], [0, 1]]     1        1
+beginning to run simulations
+completed sims
+==========================================
+SLURM_JOB_ID = 3003540
+SLURM_SUBMIT_DIR = /home/ijyliu/repo/ECMA-31330-Project/Source/Parallel_Cluster_Simulations
+SLURM_JOB_NODELIST = mcn30
+==========================================
+/home/ijyliu/repo/ECMA-31330-Project/Source/ME_Setup.py:102: RuntimeWarning: Degrees of freedom <= 0 for slice
+  beta_IV = np.cov(Y, Z)[0,1] / np.cov(mismeasured_X[:, 0].reshape(N, 1), Z)[0,1]
+/apps/python/3.6/lib/python3.6/site-packages/numpy/lib/function_base.py:2480: RuntimeWarning: divide by zero encountered in true_divide
+  c *= np.true_divide(1, fact)
+/apps/python/3.6/lib/python3.6/site-packages/numpy/lib/function_base.py:2480: RuntimeWarning: invalid value encountered in multiply
+  c *= np.true_divide(1, fact)
+slurm job array number: 14
+index     N beta me_means              me_cov kappa num_sims
+14     1000   10   [1, 0]  [[100, 0], [0, 1]]     1        1
+beginning to run simulations
+completed sims
+==========================================
+SLURM_JOB_ID = 3003523
+SLURM_SUBMIT_DIR = /home/ijyliu/repo/ECMA-31330-Project/Source/Parallel_Cluster_Simulations
+SLURM_JOB_NODELIST = mcn30
+==========================================
+/home/ijyliu/repo/ECMA-31330-Project/Source/ME_Setup.py:102: RuntimeWarning: Degrees of freedom <= 0 for slice
+  beta_IV = np.cov(Y, Z)[0,1] / np.cov(mismeasured_X[:, 0].reshape(N, 1), Z)[0,1]
+/apps/python/3.6/lib/python3.6/site-packages/numpy/lib/function_base.py:2480: RuntimeWarning: divide by zero encountered in true_divide
+  c *= np.true_divide(1, fact)
+/apps/python/3.6/lib/python3.6/site-packages/numpy/lib/function_base.py:2480: RuntimeWarning: invalid value encountered in multiply
+  c *= np.true_divide(1, fact)
+slurm job array number: 15
+index     N beta me_means            me_cov kappa num_sims
+15     1000   10   [1, 0]  [[1, 0], [0, 1]]     1        1
+beginning to run simulations
+completed sims
+==========================================
+SLURM_JOB_ID = 3003461
+SLURM_SUBMIT_DIR = /home/ijyliu/repo/ECMA-31330-Project/Source/Parallel_Cluster_Simulations
+SLURM_JOB_NODELIST = mcn33
+==========================================
+slurm job array number: 16
+Traceback (most recent call last):
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/indexes/base.py", line 2898, in get_loc
+    return self._engine.get_loc(casted_key)
+  File "pandas/_libs/index.pyx", line 70, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 101, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 1675, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 1683, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: 'num_sims'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "Parallel_Run_Simulations.py", line 26, in <module>
+    num_sims = simulations['num_sims'][0]
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/series.py", line 882, in __getitem__
+    return self._get_value(key)
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/series.py", line 990, in _get_value
+    loc = self.index.get_loc(label)
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/indexes/base.py", line 2900, in get_loc
+    raise KeyError(key) from err
+KeyError: 'num_sims'
+==========================================
+SLURM_JOB_ID = 3003462
+SLURM_SUBMIT_DIR = /home/ijyliu/repo/ECMA-31330-Project/Source/Parallel_Cluster_Simulations
+SLURM_JOB_NODELIST = mcn30
+==========================================
+slurm job array number: 17
+Traceback (most recent call last):
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/indexes/base.py", line 2898, in get_loc
+    return self._engine.get_loc(casted_key)
+  File "pandas/_libs/index.pyx", line 70, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 101, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 1675, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 1683, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: 'num_sims'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "Parallel_Run_Simulations.py", line 26, in <module>
+    num_sims = simulations['num_sims'][0]
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/series.py", line 882, in __getitem__
+    return self._get_value(key)
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/series.py", line 990, in _get_value
+    loc = self.index.get_loc(label)
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/indexes/base.py", line 2900, in get_loc
+    raise KeyError(key) from err
+KeyError: 'num_sims'
+==========================================
+SLURM_JOB_ID = 3003463
+SLURM_SUBMIT_DIR = /home/ijyliu/repo/ECMA-31330-Project/Source/Parallel_Cluster_Simulations
+SLURM_JOB_NODELIST = mcn30
+==========================================
+slurm job array number: 18
+Traceback (most recent call last):
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/indexes/base.py", line 2898, in get_loc
+    return self._engine.get_loc(casted_key)
+  File "pandas/_libs/index.pyx", line 70, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 101, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 1675, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 1683, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: 'num_sims'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "Parallel_Run_Simulations.py", line 26, in <module>
+    num_sims = simulations['num_sims'][0]
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/series.py", line 882, in __getitem__
+    return self._get_value(key)
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/series.py", line 990, in _get_value
+    loc = self.index.get_loc(label)
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/indexes/base.py", line 2900, in get_loc
+    raise KeyError(key) from err
+KeyError: 'num_sims'
+==========================================
+SLURM_JOB_ID = 3003464
+SLURM_SUBMIT_DIR = /home/ijyliu/repo/ECMA-31330-Project/Source/Parallel_Cluster_Simulations
+SLURM_JOB_NODELIST = mcn30
+==========================================
+slurm job array number: 19
+Traceback (most recent call last):
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/indexes/base.py", line 2898, in get_loc
+    return self._engine.get_loc(casted_key)
+  File "pandas/_libs/index.pyx", line 70, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 101, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 1675, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 1683, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: 'num_sims'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "Parallel_Run_Simulations.py", line 26, in <module>
+    num_sims = simulations['num_sims'][0]
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/series.py", line 882, in __getitem__
+    return self._get_value(key)
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/series.py", line 990, in _get_value
+    loc = self.index.get_loc(label)
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/indexes/base.py", line 2900, in get_loc
+    raise KeyError(key) from err
+KeyError: 'num_sims'
+==========================================
+SLURM_JOB_ID = 3003527
+SLURM_SUBMIT_DIR = /home/ijyliu/repo/ECMA-31330-Project/Source/Parallel_Cluster_Simulations
+SLURM_JOB_NODELIST = mcn02
+==========================================
+/home/ijyliu/repo/ECMA-31330-Project/Source/ME_Setup.py:102: RuntimeWarning: Degrees of freedom <= 0 for slice
+  beta_IV = np.cov(Y, Z)[0,1] / np.cov(mismeasured_X[:, 0].reshape(N, 1), Z)[0,1]
+/apps/python/3.6/lib/python3.6/site-packages/numpy/lib/function_base.py:2480: RuntimeWarning: divide by zero encountered in true_divide
+  c *= np.true_divide(1, fact)
+/apps/python/3.6/lib/python3.6/site-packages/numpy/lib/function_base.py:2480: RuntimeWarning: invalid value encountered in multiply
+  c *= np.true_divide(1, fact)
+slurm job array number: 1
+index    N beta me_means            me_cov kappa num_sims
+1      100    1    [0,0]  [[1, 0], [0, 1]]     1        1
+beginning to run simulations
+completed sims
+==========================================
+SLURM_JOB_ID = 3003465
+SLURM_SUBMIT_DIR = /home/ijyliu/repo/ECMA-31330-Project/Source/Parallel_Cluster_Simulations
+SLURM_JOB_NODELIST = mcn30
+==========================================
+slurm job array number: 20
+Traceback (most recent call last):
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/indexes/base.py", line 2898, in get_loc
+    return self._engine.get_loc(casted_key)
+  File "pandas/_libs/index.pyx", line 70, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 101, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 1675, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 1683, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: 'num_sims'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "Parallel_Run_Simulations.py", line 26, in <module>
+    num_sims = simulations['num_sims'][0]
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/series.py", line 882, in __getitem__
+    return self._get_value(key)
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/series.py", line 990, in _get_value
+    loc = self.index.get_loc(label)
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/indexes/base.py", line 2900, in get_loc
+    raise KeyError(key) from err
+KeyError: 'num_sims'
+==========================================
+SLURM_JOB_ID = 3003466
+SLURM_SUBMIT_DIR = /home/ijyliu/repo/ECMA-31330-Project/Source/Parallel_Cluster_Simulations
+SLURM_JOB_NODELIST = mcn30
+==========================================
+slurm job array number: 21
+Traceback (most recent call last):
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/indexes/base.py", line 2898, in get_loc
+    return self._engine.get_loc(casted_key)
+  File "pandas/_libs/index.pyx", line 70, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 101, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 1675, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 1683, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: 'num_sims'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "Parallel_Run_Simulations.py", line 26, in <module>
+    num_sims = simulations['num_sims'][0]
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/series.py", line 882, in __getitem__
+    return self._get_value(key)
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/series.py", line 990, in _get_value
+    loc = self.index.get_loc(label)
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/indexes/base.py", line 2900, in get_loc
+    raise KeyError(key) from err
+KeyError: 'num_sims'
+==========================================
+SLURM_JOB_ID = 3003467
+SLURM_SUBMIT_DIR = /home/ijyliu/repo/ECMA-31330-Project/Source/Parallel_Cluster_Simulations
+SLURM_JOB_NODELIST = mcn30
+==========================================
+slurm job array number: 22
+Traceback (most recent call last):
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/indexes/base.py", line 2898, in get_loc
+    return self._engine.get_loc(casted_key)
+  File "pandas/_libs/index.pyx", line 70, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 101, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 1675, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 1683, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: 'num_sims'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "Parallel_Run_Simulations.py", line 26, in <module>
+    num_sims = simulations['num_sims'][0]
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/series.py", line 882, in __getitem__
+    return self._get_value(key)
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/series.py", line 990, in _get_value
+    loc = self.index.get_loc(label)
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/indexes/base.py", line 2900, in get_loc
+    raise KeyError(key) from err
+KeyError: 'num_sims'
+==========================================
+SLURM_JOB_ID = 3003468
+SLURM_SUBMIT_DIR = /home/ijyliu/repo/ECMA-31330-Project/Source/Parallel_Cluster_Simulations
+SLURM_JOB_NODELIST = mcn30
+==========================================
+slurm job array number: 23
+Traceback (most recent call last):
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/indexes/base.py", line 2898, in get_loc
+    return self._engine.get_loc(casted_key)
+  File "pandas/_libs/index.pyx", line 70, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 101, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 1675, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 1683, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: 'num_sims'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "Parallel_Run_Simulations.py", line 26, in <module>
+    num_sims = simulations['num_sims'][0]
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/series.py", line 882, in __getitem__
+    return self._get_value(key)
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/series.py", line 990, in _get_value
+    loc = self.index.get_loc(label)
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/indexes/base.py", line 2900, in get_loc
+    raise KeyError(key) from err
+KeyError: 'num_sims'
+==========================================
+SLURM_JOB_ID = 3003469
+SLURM_SUBMIT_DIR = /home/ijyliu/repo/ECMA-31330-Project/Source/Parallel_Cluster_Simulations
+SLURM_JOB_NODELIST = mcn31
+==========================================
+slurm job array number: 24
+Traceback (most recent call last):
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/indexes/base.py", line 2898, in get_loc
+    return self._engine.get_loc(casted_key)
+  File "pandas/_libs/index.pyx", line 70, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 101, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 1675, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 1683, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: 'num_sims'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "Parallel_Run_Simulations.py", line 26, in <module>
+    num_sims = simulations['num_sims'][0]
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/series.py", line 882, in __getitem__
+    return self._get_value(key)
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/series.py", line 990, in _get_value
+    loc = self.index.get_loc(label)
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/indexes/base.py", line 2900, in get_loc
+    raise KeyError(key) from err
+KeyError: 'num_sims'
+==========================================
+SLURM_JOB_ID = 3003470
+SLURM_SUBMIT_DIR = /home/ijyliu/repo/ECMA-31330-Project/Source/Parallel_Cluster_Simulations
+SLURM_JOB_NODELIST = mcn31
+==========================================
+slurm job array number: 25
+Traceback (most recent call last):
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/indexes/base.py", line 2898, in get_loc
+    return self._engine.get_loc(casted_key)
+  File "pandas/_libs/index.pyx", line 70, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 101, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 1675, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 1683, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: 'num_sims'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "Parallel_Run_Simulations.py", line 26, in <module>
+    num_sims = simulations['num_sims'][0]
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/series.py", line 882, in __getitem__
+    return self._get_value(key)
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/series.py", line 990, in _get_value
+    loc = self.index.get_loc(label)
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/indexes/base.py", line 2900, in get_loc
+    raise KeyError(key) from err
+KeyError: 'num_sims'
+==========================================
+SLURM_JOB_ID = 3003471
+SLURM_SUBMIT_DIR = /home/ijyliu/repo/ECMA-31330-Project/Source/Parallel_Cluster_Simulations
+SLURM_JOB_NODELIST = mcn31
+==========================================
+slurm job array number: 26
+Traceback (most recent call last):
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/indexes/base.py", line 2898, in get_loc
+    return self._engine.get_loc(casted_key)
+  File "pandas/_libs/index.pyx", line 70, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 101, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 1675, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 1683, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: 'num_sims'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "Parallel_Run_Simulations.py", line 26, in <module>
+    num_sims = simulations['num_sims'][0]
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/series.py", line 882, in __getitem__
+    return self._get_value(key)
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/series.py", line 990, in _get_value
+    loc = self.index.get_loc(label)
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/indexes/base.py", line 2900, in get_loc
+    raise KeyError(key) from err
+KeyError: 'num_sims'
+==========================================
+SLURM_JOB_ID = 3003472
+SLURM_SUBMIT_DIR = /home/ijyliu/repo/ECMA-31330-Project/Source/Parallel_Cluster_Simulations
+SLURM_JOB_NODELIST = mcn31
+==========================================
+slurm job array number: 27
+Traceback (most recent call last):
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/indexes/base.py", line 2898, in get_loc
+    return self._engine.get_loc(casted_key)
+  File "pandas/_libs/index.pyx", line 70, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 101, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 1675, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 1683, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: 'num_sims'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "Parallel_Run_Simulations.py", line 26, in <module>
+    num_sims = simulations['num_sims'][0]
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/series.py", line 882, in __getitem__
+    return self._get_value(key)
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/series.py", line 990, in _get_value
+    loc = self.index.get_loc(label)
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/indexes/base.py", line 2900, in get_loc
+    raise KeyError(key) from err
+KeyError: 'num_sims'
+==========================================
+SLURM_JOB_ID = 3003473
+SLURM_SUBMIT_DIR = /home/ijyliu/repo/ECMA-31330-Project/Source/Parallel_Cluster_Simulations
+SLURM_JOB_NODELIST = mcn31
+==========================================
+slurm job array number: 28
+Traceback (most recent call last):
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/indexes/base.py", line 2898, in get_loc
+    return self._engine.get_loc(casted_key)
+  File "pandas/_libs/index.pyx", line 70, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 101, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 1675, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 1683, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: 'num_sims'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "Parallel_Run_Simulations.py", line 26, in <module>
+    num_sims = simulations['num_sims'][0]
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/series.py", line 882, in __getitem__
+    return self._get_value(key)
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/series.py", line 990, in _get_value
+    loc = self.index.get_loc(label)
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/indexes/base.py", line 2900, in get_loc
+    raise KeyError(key) from err
+KeyError: 'num_sims'
+==========================================
+SLURM_JOB_ID = 3003474
+SLURM_SUBMIT_DIR = /home/ijyliu/repo/ECMA-31330-Project/Source/Parallel_Cluster_Simulations
+SLURM_JOB_NODELIST = mcn31
+==========================================
+slurm job array number: 29
+Traceback (most recent call last):
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/indexes/base.py", line 2898, in get_loc
+    return self._engine.get_loc(casted_key)
+  File "pandas/_libs/index.pyx", line 70, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 101, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 1675, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 1683, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: 'num_sims'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "Parallel_Run_Simulations.py", line 26, in <module>
+    num_sims = simulations['num_sims'][0]
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/series.py", line 882, in __getitem__
+    return self._get_value(key)
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/series.py", line 990, in _get_value
+    loc = self.index.get_loc(label)
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/indexes/base.py", line 2900, in get_loc
+    raise KeyError(key) from err
+KeyError: 'num_sims'
+==========================================
+SLURM_JOB_ID = 3003528
+SLURM_SUBMIT_DIR = /home/ijyliu/repo/ECMA-31330-Project/Source/Parallel_Cluster_Simulations
+SLURM_JOB_NODELIST = mcn02
+==========================================
+/home/ijyliu/repo/ECMA-31330-Project/Source/ME_Setup.py:102: RuntimeWarning: Degrees of freedom <= 0 for slice
+  beta_IV = np.cov(Y, Z)[0,1] / np.cov(mismeasured_X[:, 0].reshape(N, 1), Z)[0,1]
+/apps/python/3.6/lib/python3.6/site-packages/numpy/lib/function_base.py:2480: RuntimeWarning: divide by zero encountered in true_divide
+  c *= np.true_divide(1, fact)
+/apps/python/3.6/lib/python3.6/site-packages/numpy/lib/function_base.py:2480: RuntimeWarning: invalid value encountered in multiply
+  c *= np.true_divide(1, fact)
+slurm job array number: 2
+index    N beta me_means              me_cov kappa num_sims
+2      100    1   [1, 0]  [[100, 0], [0, 1]]     1        1
+beginning to run simulations
+completed sims
+==========================================
+SLURM_JOB_ID = 3003475
+SLURM_SUBMIT_DIR = /home/ijyliu/repo/ECMA-31330-Project/Source/Parallel_Cluster_Simulations
+SLURM_JOB_NODELIST = mcn31
+==========================================
+slurm job array number: 30
+Traceback (most recent call last):
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/indexes/base.py", line 2898, in get_loc
+    return self._engine.get_loc(casted_key)
+  File "pandas/_libs/index.pyx", line 70, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 101, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 1675, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 1683, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: 'num_sims'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "Parallel_Run_Simulations.py", line 26, in <module>
+    num_sims = simulations['num_sims'][0]
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/series.py", line 882, in __getitem__
+    return self._get_value(key)
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/series.py", line 990, in _get_value
+    loc = self.index.get_loc(label)
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/indexes/base.py", line 2900, in get_loc
+    raise KeyError(key) from err
+KeyError: 'num_sims'
+==========================================
+SLURM_JOB_ID = 3003442
+SLURM_SUBMIT_DIR = /home/ijyliu/repo/ECMA-31330-Project/Source/Parallel_Cluster_Simulations
+SLURM_JOB_NODELIST = mcn31
+==========================================
+slurm job array number: 31
+Traceback (most recent call last):
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/indexes/base.py", line 2898, in get_loc
+    return self._engine.get_loc(casted_key)
+  File "pandas/_libs/index.pyx", line 70, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 101, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 1675, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 1683, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: 'num_sims'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "Parallel_Run_Simulations.py", line 26, in <module>
+    num_sims = simulations['num_sims'][0]
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/series.py", line 882, in __getitem__
+    return self._get_value(key)
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/series.py", line 990, in _get_value
+    loc = self.index.get_loc(label)
+  File "/apps/python/3.6/lib/python3.6/site-packages/pandas/core/indexes/base.py", line 2900, in get_loc
+    raise KeyError(key) from err
+KeyError: 'num_sims'
+==========================================
+SLURM_JOB_ID = 3003529
+SLURM_SUBMIT_DIR = /home/ijyliu/repo/ECMA-31330-Project/Source/Parallel_Cluster_Simulations
+SLURM_JOB_NODELIST = mcn02
+==========================================
+/home/ijyliu/repo/ECMA-31330-Project/Source/ME_Setup.py:102: RuntimeWarning: Degrees of freedom <= 0 for slice
+  beta_IV = np.cov(Y, Z)[0,1] / np.cov(mismeasured_X[:, 0].reshape(N, 1), Z)[0,1]
+/apps/python/3.6/lib/python3.6/site-packages/numpy/lib/function_base.py:2480: RuntimeWarning: divide by zero encountered in true_divide
+  c *= np.true_divide(1, fact)
+/apps/python/3.6/lib/python3.6/site-packages/numpy/lib/function_base.py:2480: RuntimeWarning: invalid value encountered in multiply
+  c *= np.true_divide(1, fact)
+slurm job array number: 3
+index    N beta me_means            me_cov kappa num_sims
+3      100    1   [1, 0]  [[1, 0], [0, 1]]     1        1
+beginning to run simulations
+completed sims
+==========================================
+SLURM_JOB_ID = 3003530
+SLURM_SUBMIT_DIR = /home/ijyliu/repo/ECMA-31330-Project/Source/Parallel_Cluster_Simulations
+SLURM_JOB_NODELIST = mcn02
+==========================================
+/home/ijyliu/repo/ECMA-31330-Project/Source/ME_Setup.py:102: RuntimeWarning: Degrees of freedom <= 0 for slice
+  beta_IV = np.cov(Y, Z)[0,1] / np.cov(mismeasured_X[:, 0].reshape(N, 1), Z)[0,1]
+/apps/python/3.6/lib/python3.6/site-packages/numpy/lib/function_base.py:2480: RuntimeWarning: divide by zero encountered in true_divide
+  c *= np.true_divide(1, fact)
+/apps/python/3.6/lib/python3.6/site-packages/numpy/lib/function_base.py:2480: RuntimeWarning: invalid value encountered in multiply
+  c *= np.true_divide(1, fact)
+slurm job array number: 4
+index    N beta me_means              me_cov kappa num_sims
+4      100   10    [0,0]  [[100, 0], [0, 1]]     1        1
+beginning to run simulations
+completed sims
+==========================================
+SLURM_JOB_ID = 3003531
+SLURM_SUBMIT_DIR = /home/ijyliu/repo/ECMA-31330-Project/Source/Parallel_Cluster_Simulations
+SLURM_JOB_NODELIST = mcn02
+==========================================
+/home/ijyliu/repo/ECMA-31330-Project/Source/ME_Setup.py:102: RuntimeWarning: Degrees of freedom <= 0 for slice
+  beta_IV = np.cov(Y, Z)[0,1] / np.cov(mismeasured_X[:, 0].reshape(N, 1), Z)[0,1]
+/apps/python/3.6/lib/python3.6/site-packages/numpy/lib/function_base.py:2480: RuntimeWarning: divide by zero encountered in true_divide
+  c *= np.true_divide(1, fact)
+/apps/python/3.6/lib/python3.6/site-packages/numpy/lib/function_base.py:2480: RuntimeWarning: invalid value encountered in multiply
+  c *= np.true_divide(1, fact)
+slurm job array number: 5
+index    N beta me_means            me_cov kappa num_sims
+5      100   10    [0,0]  [[1, 0], [0, 1]]     1        1
+beginning to run simulations
+completed sims
+==========================================
+SLURM_JOB_ID = 3003532
+SLURM_SUBMIT_DIR = /home/ijyliu/repo/ECMA-31330-Project/Source/Parallel_Cluster_Simulations
+SLURM_JOB_NODELIST = mcn02
+==========================================
+/home/ijyliu/repo/ECMA-31330-Project/Source/ME_Setup.py:102: RuntimeWarning: Degrees of freedom <= 0 for slice
+  beta_IV = np.cov(Y, Z)[0,1] / np.cov(mismeasured_X[:, 0].reshape(N, 1), Z)[0,1]
+/apps/python/3.6/lib/python3.6/site-packages/numpy/lib/function_base.py:2480: RuntimeWarning: divide by zero encountered in true_divide
+  c *= np.true_divide(1, fact)
+/apps/python/3.6/lib/python3.6/site-packages/numpy/lib/function_base.py:2480: RuntimeWarning: invalid value encountered in multiply
+  c *= np.true_divide(1, fact)
+slurm job array number: 6
+index    N beta me_means              me_cov kappa num_sims
+6      100   10   [1, 0]  [[100, 0], [0, 1]]     1        1
+beginning to run simulations
+completed sims
+==========================================
+SLURM_JOB_ID = 3003533
+SLURM_SUBMIT_DIR = /home/ijyliu/repo/ECMA-31330-Project/Source/Parallel_Cluster_Simulations
+SLURM_JOB_NODELIST = mcn02
+==========================================
+/home/ijyliu/repo/ECMA-31330-Project/Source/ME_Setup.py:102: RuntimeWarning: Degrees of freedom <= 0 for slice
+  beta_IV = np.cov(Y, Z)[0,1] / np.cov(mismeasured_X[:, 0].reshape(N, 1), Z)[0,1]
+/apps/python/3.6/lib/python3.6/site-packages/numpy/lib/function_base.py:2480: RuntimeWarning: divide by zero encountered in true_divide
+  c *= np.true_divide(1, fact)
+/apps/python/3.6/lib/python3.6/site-packages/numpy/lib/function_base.py:2480: RuntimeWarning: invalid value encountered in multiply
+  c *= np.true_divide(1, fact)
+slurm job array number: 7
+index    N beta me_means            me_cov kappa num_sims
+7      100   10   [1, 0]  [[1, 0], [0, 1]]     1        1
+beginning to run simulations
+completed sims
+==========================================
+SLURM_JOB_ID = 3003534
+SLURM_SUBMIT_DIR = /home/ijyliu/repo/ECMA-31330-Project/Source/Parallel_Cluster_Simulations
+SLURM_JOB_NODELIST = mcn02
+==========================================
+/home/ijyliu/repo/ECMA-31330-Project/Source/ME_Setup.py:102: RuntimeWarning: Degrees of freedom <= 0 for slice
+  beta_IV = np.cov(Y, Z)[0,1] / np.cov(mismeasured_X[:, 0].reshape(N, 1), Z)[0,1]
+/apps/python/3.6/lib/python3.6/site-packages/numpy/lib/function_base.py:2480: RuntimeWarning: divide by zero encountered in true_divide
+  c *= np.true_divide(1, fact)
+/apps/python/3.6/lib/python3.6/site-packages/numpy/lib/function_base.py:2480: RuntimeWarning: invalid value encountered in multiply
+  c *= np.true_divide(1, fact)
+slurm job array number: 8
+index     N beta me_means              me_cov kappa num_sims
+8      1000    1    [0,0]  [[100, 0], [0, 1]]     1        1
+beginning to run simulations
+completed sims
+==========================================
+SLURM_JOB_ID = 3003535
+SLURM_SUBMIT_DIR = /home/ijyliu/repo/ECMA-31330-Project/Source/Parallel_Cluster_Simulations
+SLURM_JOB_NODELIST = mcn30
+==========================================
+/home/ijyliu/repo/ECMA-31330-Project/Source/ME_Setup.py:102: RuntimeWarning: Degrees of freedom <= 0 for slice
+  beta_IV = np.cov(Y, Z)[0,1] / np.cov(mismeasured_X[:, 0].reshape(N, 1), Z)[0,1]
+/apps/python/3.6/lib/python3.6/site-packages/numpy/lib/function_base.py:2480: RuntimeWarning: divide by zero encountered in true_divide
+  c *= np.true_divide(1, fact)
+/apps/python/3.6/lib/python3.6/site-packages/numpy/lib/function_base.py:2480: RuntimeWarning: invalid value encountered in multiply
+  c *= np.true_divide(1, fact)
+slurm job array number: 9
+index     N beta me_means            me_cov kappa num_sims
+9      1000    1    [0,0]  [[1, 0], [0, 1]]     1        1
+beginning to run simulations
+completed sims
