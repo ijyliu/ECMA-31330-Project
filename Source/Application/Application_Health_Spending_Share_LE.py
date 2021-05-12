@@ -99,13 +99,12 @@ plt.close()
 N = len(std_data)
 
 # Main regression of life expectancy
-# Make a matrix of the mean government health share and the PC
-X_with_PC = np.concatenate([std_data['mean_govt_health_share'].to_numpy().reshape(N, 1), pca_results['PC'].iloc[:, 0].to_numpy().reshape(N, 1)], axis = 1)
-partial_pc_regression = sm.OLS(std_data['life_exp'].reset_index(drop = True), X_with_PC).fit()
+partial_pc_regression = sm.OLS(std_data['life_exp'].reset_index(drop = True), pd.concat([std_data['mean_govt_health_share'].reset_index(drop=True), pca_results['PC'].iloc[:, 0].reset_index(drop=True)], axis = 1)).fit()
 
 # Regression table settings
 reg_table = Stargazer([ols_benchmark, partial_pc_regression])
 reg_table.dependent_variable_name("Life Expectancy at Birth (Years)")
+reg_table.covariate_order(['mean_govt_health_share', 'PC1'])
 reg_table.rename_covariates({"mean_govt_health_share":"Government Share of Health Expenditure"})
 reg_table.show_degrees_of_freedom(False)
 reg_table.add_custom_notes(["All variables are standardized."])
