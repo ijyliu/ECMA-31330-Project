@@ -49,14 +49,14 @@
 
 	\newpage \clearpage
 
-    \section*{Application: GDP and Life Expectancy}
+    \section*{Application: Government Share of Healthcare Spending and Life Expectancy}
 
 	% Add \ref to the following table?
-	In the left column in the table below I first regress the life expectancy at birth for all individuals in a given country and year on the World Bank's PPP adjusted GDP per capita. In the right column I regress the same life expectancy measure on the first principal component combining GDP per capita (PPP), GNI per capita (PPP), Survey Mean Income/Consumption Per Capita, ILO GDP per person employed, and Net Foreign Assets Per Capita, all from the World Bank.
+	In the left column in the table below I first regress the life expectancy at birth for all individuals in a given country and year on a measure of government spending as a share of total health expenditure. In the right column I perform the same regression, adding on the first principal component combining GDP per capita (PPP), GNI per capita (PPP), Survey Mean Income/Consumption Per Capita, ILO GDP per person employed, and Net Foreign Assets Per Capita, all from the World Bank.
 	
 	I standardize all variables by subtracting the mean and dividing by the standard deviation, linearly interpolate data between known observations, and remove country-years with missing values for any of the economic indicators.
 
-    \input{../Output/Regressions/gdp_life_exp_ols_factor.tex}
+    \input{../Output/Regressions/LE_Health_Econ_Regressions.tex}
 
 	Though the coefficients are not readily interpretable, they do differ from each other
 
@@ -74,23 +74,23 @@
 
 	\begin{figure}[h!]
 		\centering
-		\caption{Correlations Between Economic Measures and Life Expectancy}
-		\label{GDP_LE_Correlations_Correlations}	
-		\includegraphics[width=\linewidth,keepaspectratio=true]{../Output/Figures/GDP_LE_Correlations.pdf}
+		\caption{Correlations Between Covariates and Life Expectancy}
+		\label{LE_Health_Econ_Correlations}	
+		\includegraphics[width=\linewidth,keepaspectratio=true]{../Output/Figures/LE_Health_Econ_Correlations.pdf}
 	\end{figure}
 
 	\begin{figure}[h!]
 		\centering
 		\caption{Economic Measures PCA Loadings}
 		\label{Econ_Loadings}	
-		\includegraphics[width=\linewidth,keepaspectratio=true]{../Output/Figures/GDP_LE_Loadings.pdf}
+		\includegraphics[width=\linewidth,keepaspectratio=true]{../Output/Figures/Econ_Indicator_Loadings.pdf}
 	\end{figure}
 
 	\begin{figure}[h!]
 		\centering
 		\caption{Economic Measures PCA Share of Variance Explained}
 		\label{Econ_Share_Explained}	
-		\includegraphics[width=\linewidth,keepaspectratio=true]{../Output/Figures/GDP_LE_Share_Explained.pdf}
+		\includegraphics[width=\linewidth,keepaspectratio=true]{../Output/Figures/Econ_Indicator_Share_Explained.pdf}
 	\end{figure}
 
 \end{document}
