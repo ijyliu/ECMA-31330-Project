@@ -90,6 +90,9 @@ X = std_data.drop(columns = ['life_exp', 'mean_govt_health_share']).to_numpy()
 pca_model = pca()
 pca_results = pca_model.fit_transform(X)
 
+# Add PCA results to the dataframe
+std_data = pd.concat([std_data.reset_index(), pca_results['PC'].iloc[:, 0].reset_index(drop = True)], axis = 1, names = [std_data.columns, 'PC1'])
+
 # Plot the loadings
 sns.heatmap(pca_results['loadings'], cmap='YlGnBu')
 plt.savefig(figures_dir + "/Econ_Indicator_Loadings.pdf")
@@ -101,15 +104,18 @@ plt.savefig(figures_dir + "/Econ_Indicator_Share_Explained.pdf")
 plt.close()
 
 # Main PCR spec
-partial_pc_regression = sm.OLS(std_data['life_exp'].reset_index(drop = True), pd.concat([std_data['mean_govt_health_share'].reset_index(drop=True), pca_results['PC'].iloc[:, 0].reset_index(drop=True)], axis = 1)).fit()
+partial_pc_regression = smf.ols("life_exp ~ mean_govt_health_share + PC1", data = std_data).fit()
+
+# PCR with fixed effects
+pc_fixed_effects_results = smf.ols("life_exp ~ mean_govt_health_share + PC1 + C(year) + C(country)", data = std_data.reset_index()).fit(cov_type='cluster', cov_kwds={'groups': std_data.reset_index()['country']})
 
 # Regression table settings
-reg_table = Stargazer([ols_benchmark, ols_many_covariates, fixed_effects_results, partial_pc_regression])
+reg_table = Stargazer([ols_benchmark, ols_many_covariates, fixed_effects_results, partial_pc_regression, pc_fixed_effects_results])
 reg_table.dependent_variable_name("Life Expectancy at Birth (Years)")
 reg_table.covariate_order(['mean_govt_health_share', 'gdp_pc', 'gnp_pc', 'survey_inc_con_pc', 'gdp_per_emp', 'PC1'])
 reg_table.rename_covariates({"mean_govt_health_share":"Government Share of Health Expenditure", "gdp_pc":"GDP Per Capita PPP", "gnp_pc":"GNP Per Capita PPP", "survey_inc_con_pc":"Survey Income/Consumption Per Capita", "gdp_per_emp":"GDP Per Employed Person"})
 # Fixed effects indicator
-reg_table.add_line('Fixed Effects', ['No', 'No', 'Yes', 'No'])
+reg_table.add_line('Fixed Effects', ['No', 'No', 'Yes', 'No', 'Yes'])
 reg_table.show_degrees_of_freedom(False)
 reg_table.add_custom_notes(["All variables are standardized."])
 
