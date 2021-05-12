@@ -80,10 +80,6 @@ ols_benchmark = sm.OLS(std_data['life_exp'], std_data['mean_govt_health_share'])
 ols_many_covariates = sm.OLS(std_data['life_exp'], pd.concat([std_data['mean_govt_health_share'], std_data['gdp_pc'], std_data['gnp_pc'], std_data['survey_inc_con_pc'], std_data['gdp_per_emp']], axis = 1)).fit()
 
 # Panel Fixed Effects Regression for Benchmark
-# std_data_with_ind = std_data.reset_index()
-# std_data_with_ind = pd.get_dummies(std_data_with_ind, columns = ['country', 'year'])
-# print(std_data_with_ind)
-# print(std_data_with_ind.columns)
 fixed_effects_results = smf.ols("life_exp ~ mean_govt_health_share + gdp_pc + gnp_pc + survey_inc_con_pc + gdp_per_emp + C(year) + C(country)", data = std_data.reset_index()).fit(cov_type='cluster', cov_kwds={'groups': std_data.reset_index()['country']})
 
 # Decompose into matrix for PCA analysis
@@ -104,10 +100,7 @@ pca_model.plot()
 plt.savefig(figures_dir + "/Econ_Indicator_Share_Explained.pdf")
 plt.close()
 
-# Save number of obs
-N = len(std_data)
-
-# Main regression of life expectancy
+# Main PCR spec
 partial_pc_regression = sm.OLS(std_data['life_exp'].reset_index(drop = True), pd.concat([std_data['mean_govt_health_share'].reset_index(drop=True), pca_results['PC'].iloc[:, 0].reset_index(drop=True)], axis = 1)).fit()
 
 # Regression table settings
