@@ -59,27 +59,29 @@ exit()
 
 # Standardize all variables
 # https://stackoverflow.com/questions/35723472/how-to-use-sklearn-fit-transform-with-pandas-and-return-dataframe-instead-of-num
-std_wb_data = pd.DataFrame(StandardScaler().fit_transform(wb_data), index=wb_data.index, columns=wb_data.columns)
+std_data = pd.DataFrame(StandardScaler().fit_transform(merged_data), index=merged_data.index, columns=merged_data.columns)
 
-print(std_wb_data)
+print(std_data)
 
 # Basic time series plot
 plt.figure(figsize=(15,15))
-plt.plot(std_wb_data.reset_index().set_index('year')['gdp_pc'], std_wb_data.reset_index().set_index('year')['life_exp'])
-plt.savefig(figures_dir + "/GDP_PC_LE_Time_Series.pdf")
+plt.plot(std_data.reset_index().set_index('year')['mean_govt_health_share'])
+plt.savefig(figures_dir + "/Govt_Health_Share_Time_Series.pdf")
 plt.close()
 
 # Exploring correlations between the variables
-sns.heatmap(std_wb_data.corr())
-plt.savefig(figures_dir + "/GDP_LE_Correlations.pdf")
+sns.heatmap(std_data.corr())
+plt.savefig(figures_dir + "/LE_Health_Econ_Correlations.pdf")
 plt.close()
 
 # OLS for benchmark
-# I'll go with the most basic measure of GDP per capita as the independent variable here
-ols_benchmark = sm.OLS(std_wb_data['life_exp'], std_wb_data['gdp_pc']).fit()
+ols_benchmark = sm.OLS(std_data['life_exp'], std_data['mean_govt_health_share']).fit()
+
+# Panel Fixed Effects Regression for Benchmark
 
 # Decompose into matrix for PCA analysis
-X = std_wb_data.drop(columns = 'life_exp').to_numpy()
+# This contains only the economic covariates
+X = std_data.drop(columns = ['life_exp', 'mean_govt_health_share']).to_numpy()
 
 # Perform the factor analysis
 pca_model = pca()
@@ -87,24 +89,26 @@ pca_results = pca_model.fit_transform(X)
 
 # Plot the loadings
 sns.heatmap(pca_results['loadings'], cmap='YlGnBu')
-plt.savefig(figures_dir + "/GDP_LE_Loadings.pdf")
+plt.savefig(figures_dir + "/Econ_Indicator_Loadings.pdf")
 plt.close()
 
 # Scree plot
 pca_model.plot()
-plt.savefig(figures_dir + "/GDP_LE_Share_Explained.pdf")
+plt.savefig(figures_dir + "/Econ_Indicator_Share_Explained.pdf")
 plt.close()
 
-# Regress y, life_expectancy, on the first pca component and output the results
-factor_regression = sm.OLS(std_wb_data['life_exp'].reset_index(drop = True), pca_results['PC'].iloc[:, 0].reset_index(drop = True)).fit()
+# Main regression of life expectancy
+# Make a matrix of the mean government health share and the PC
+X_with_PC = np.concat(std_data['mean_govt_health_share'].to_numpy(), pca_results['PC'].iloc[:, 0].to_numpy())
+partial_pc_regression = sm.OLS(std_data['life_exp'].reset_index(drop = True), X_with_PC).fit()
 
 # Regression table settings
-reg_table = Stargazer([ols_benchmark, factor_regression])
+reg_table = Stargazer([ols_benchmark, partial_pc_regression])
 reg_table.dependent_variable_name("Life Expectancy at Birth (Years)")
-reg_table.rename_covariates({"gdp_pc":"GDP Per Capita, PPP"})
+reg_table.rename_covariates({"mean_govt_health_share":"Government Share of Health Expenditure"})
 reg_table.show_degrees_of_freedom(False)
 reg_table.add_custom_notes(["All variables are standardized."])
 
 # Write regression table to LaTeX
-with open(regressions_dir + "/gdp_life_exp_ols_factor.tex", "w") as f:
+with open(regressions_dir + "/LE_Health_Econ_Regressions.tex", "w") as f:
     f.write(reg_table.render_latex())
