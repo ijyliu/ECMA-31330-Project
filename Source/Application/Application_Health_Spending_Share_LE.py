@@ -75,6 +75,9 @@ plt.close()
 # OLS for benchmark
 ols_benchmark = sm.OLS(std_data['life_exp'], std_data['mean_govt_health_share']).fit()
 
+# Many covariate OLS
+ols_many_covariates = sm.OLS(std_data['life_exp'], pd.concat([std_data['mean_govt_health_share'], std_data['gdp_pc'], std_data['gnp_pc'], std_data['survey_inc_con_pc'], std_data['gdp_per_emp']], axis = 1)).fit()
+
 # Panel Fixed Effects Regression for Benchmark
 
 # Decompose into matrix for PCA analysis
@@ -102,10 +105,10 @@ N = len(std_data)
 partial_pc_regression = sm.OLS(std_data['life_exp'].reset_index(drop = True), pd.concat([std_data['mean_govt_health_share'].reset_index(drop=True), pca_results['PC'].iloc[:, 0].reset_index(drop=True)], axis = 1)).fit()
 
 # Regression table settings
-reg_table = Stargazer([ols_benchmark, partial_pc_regression])
+reg_table = Stargazer([ols_benchmark, ols_many_covariates, partial_pc_regression])
 reg_table.dependent_variable_name("Life Expectancy at Birth (Years)")
-reg_table.covariate_order(['mean_govt_health_share', 'PC1'])
-reg_table.rename_covariates({"mean_govt_health_share":"Government Share of Health Expenditure"})
+reg_table.covariate_order(['mean_govt_health_share', 'gdp_pc', 'gnp_pc', 'survey_inc_con_pc', 'gdp_per_emp', 'PC1'])
+reg_table.rename_covariates({"mean_govt_health_share":"Government Share of Health Expenditure", "gdp_pc":"GDP Per Capita PPP", "gnp_pc":"GNP Per Capita PPP", "survey_inc_con_pc":"Survey Income/Consumption Per Capita", "gdp_per_emp":"GDP Per Employed Person"})
 reg_table.show_degrees_of_freedom(False)
 reg_table.add_custom_notes(["All variables are standardized."])
 
