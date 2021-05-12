@@ -18,6 +18,7 @@ import matplotlib
 matplotlib.use('pdf')
 import matplotlib.pyplot as plt
 import seaborn as sns
+import statsmodels.formula.api as smf
 
 # Load in the WB data
 wb_data = (pd.read_csv(input_dir + "/WB_Data.csv", index_col=['economy', 'series'])
@@ -28,7 +29,7 @@ wb_data = (pd.read_csv(input_dir + "/WB_Data.csv", index_col=['economy', 'series
              .rename(columns = {"SP.DYN.LE00.IN":"life_exp", "NY.GDP.PCAP.PP.CD":"gdp_pc", "NY.GNP.PCAP.PP.CD":"gnp_pc", "SI.SPR.PCAP":"survey_inc_con_pc", "SL.GDP.PCAP.EM.KD":"gdp_per_emp", "SH.XPD.GHED.CH.ZS":"govt_health_share_wb"})
              .rename_axis(['year', 'country'])
              .reset_index()
-             .astype({'year': 'int32', 'country': 'str'}))
+             .astype({'year': 'datetime64[ns]', 'country': 'str'}))
 
 oecd_data = (pd.read_csv(input_dir + "/OECD_Govt_Share_Health_Spending.csv")
                .query('INDICATOR == "HEALTHEXP' and 'SUBJECT == "COMPULSORY' and 'MEASURE == "PC_HEALTH_EXP"' and 'FREQUENCY == "A"')
@@ -41,7 +42,7 @@ combos_to_merge = pd.MultiIndex.from_product([oecd_data['country'].unique(), oec
 # Balance the panel and interpolate values
 oecd_data = (combos_to_merge.merge(oecd_data, how = 'left')
                             .reset_index(drop=True)
-                            .astype({'year': 'int32', 'country': 'str'}))
+                            .astype({'year': 'datetime64[ns]', 'country': 'str'}))
 
 # Merge world bank and oecd data
 merged_data = (wb_data.merge(oecd_data, how='outer'))
@@ -79,6 +80,11 @@ ols_benchmark = sm.OLS(std_data['life_exp'], std_data['mean_govt_health_share'])
 ols_many_covariates = sm.OLS(std_data['life_exp'], pd.concat([std_data['mean_govt_health_share'], std_data['gdp_pc'], std_data['gnp_pc'], std_data['survey_inc_con_pc'], std_data['gdp_per_emp']], axis = 1)).fit()
 
 # Panel Fixed Effects Regression for Benchmark
+# std_data_with_ind = std_data.reset_index()
+# std_data_with_ind = pd.get_dummies(std_data_with_ind, columns = ['country', 'year'])
+# print(std_data_with_ind)
+# print(std_data_with_ind.columns)
+fixed_effects_results = smf.ols("life_exp ~ mean_govt_health_share + gdp_pc + gnp_pc + survey_inc_con_pc + gdp_per_emp + C(year) + C(country)", data = std_data.reset_index()).fit(cov_type='cluster', cov_kwds={'groups': std_data.reset_index()['country']})
 
 # Decompose into matrix for PCA analysis
 # This contains only the economic covariates
@@ -105,10 +111,12 @@ N = len(std_data)
 partial_pc_regression = sm.OLS(std_data['life_exp'].reset_index(drop = True), pd.concat([std_data['mean_govt_health_share'].reset_index(drop=True), pca_results['PC'].iloc[:, 0].reset_index(drop=True)], axis = 1)).fit()
 
 # Regression table settings
-reg_table = Stargazer([ols_benchmark, ols_many_covariates, partial_pc_regression])
+reg_table = Stargazer([ols_benchmark, ols_many_covariates, fixed_effects_results, partial_pc_regression])
 reg_table.dependent_variable_name("Life Expectancy at Birth (Years)")
 reg_table.covariate_order(['mean_govt_health_share', 'gdp_pc', 'gnp_pc', 'survey_inc_con_pc', 'gdp_per_emp', 'PC1'])
 reg_table.rename_covariates({"mean_govt_health_share":"Government Share of Health Expenditure", "gdp_pc":"GDP Per Capita PPP", "gnp_pc":"GNP Per Capita PPP", "survey_inc_con_pc":"Survey Income/Consumption Per Capita", "gdp_per_emp":"GDP Per Employed Person"})
+# Fixed effects indicator
+reg_table.add_line('Fixed Effects', ['No', 'No', 'Yes', 'No'])
 reg_table.show_degrees_of_freedom(False)
 reg_table.add_custom_notes(["All variables are standardized."])
 
