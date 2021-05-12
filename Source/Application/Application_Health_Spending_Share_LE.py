@@ -26,7 +26,9 @@ wb_data = (pd.read_csv(input_dir + "/WB_Data.csv", index_col=['economy', 'series
              .stack(level = 'economy')
              .rename_axis(None, axis = 1)
              .rename(columns = {"SP.DYN.LE00.IN":"life_exp", "NY.GDP.PCAP.PP.CD":"gdp_pc", "NY.GNP.PCAP.PP.CD":"gnp_pc", "SI.SPR.PCAP":"survey_inc_con_pc", "SL.GDP.PCAP.EM.KD":"gdp_per_emp", "SH.XPD.GHED.CH.ZS":"govt_health_share_wb"})
-             .rename_axis(['year', 'country']))
+             .rename_axis(['year', 'country'])
+             .reset_index()
+             .astype({'year': 'int32', 'country': 'str'}))
 
 oecd_data = (pd.read_csv(input_dir + "/OECD_Govt_Share_Health_Spending.csv")
                .query('INDICATOR == "HEALTHEXP' and 'SUBJECT == "COMPULSORY' and 'MEASURE == "PC_HEALTH_EXP"' and 'FREQUENCY == "A"')
@@ -38,12 +40,11 @@ combos_to_merge = pd.MultiIndex.from_product([oecd_data['country'].unique(), oec
 
 # Balance the panel and interpolate values
 oecd_data = (combos_to_merge.merge(oecd_data, how = 'left')
-                            .set_index(['country', 'year']))
+                            .reset_index(drop=True)
+                            .astype({'year': 'int32', 'country': 'str'}))
 
 # Merge world bank and oecd data
-merged_data = (wb_data.merge(oecd_data, how='inner', left_index=True, right_index=True))
-
-print(merged_data)
+merged_data = (wb_data.merge(oecd_data, how='outer'))
 
 # Take mean of world bank and oecd spending percentage or use one or the other if the other is missing
 merged_data = (merged_data.assign(mean_govt_health_share=merged_data.loc[:, ["govt_health_share_wb", "govt_health_share_oecd"]].mean(axis=1))
@@ -51,11 +52,8 @@ merged_data = (merged_data.assign(mean_govt_health_share=merged_data.loc[:, ["go
                           .sort_index(level=['country', 'year'])
                           .interpolate(limit_area='inside')
                           .drop(columns=['govt_health_share_wb', 'govt_health_share_oecd'])
-                          .dropna())
-
-print(merged_data)
-
-exit()
+                          .dropna()
+                          .set_index(['year', 'country']))
 
 # Standardize all variables
 # https://stackoverflow.com/questions/35723472/how-to-use-sklearn-fit-transform-with-pandas-and-return-dataframe-instead-of-num
@@ -99,7 +97,7 @@ plt.close()
 
 # Main regression of life expectancy
 # Make a matrix of the mean government health share and the PC
-X_with_PC = np.concat(std_data['mean_govt_health_share'].to_numpy(), pca_results['PC'].iloc[:, 0].to_numpy())
+X_with_PC = np.concatenate(std_data['mean_govt_health_share'].to_numpy(), pca_results['PC'].iloc[:, 0].to_numpy())
 partial_pc_regression = sm.OLS(std_data['life_exp'].reset_index(drop = True), X_with_PC).fit()
 
 # Regression table settings
