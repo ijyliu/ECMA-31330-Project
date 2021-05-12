@@ -95,9 +95,12 @@ pca_model.plot()
 plt.savefig(figures_dir + "/Econ_Indicator_Share_Explained.pdf")
 plt.close()
 
+# Save number of obs
+N = len(std_data)
+
 # Main regression of life expectancy
 # Make a matrix of the mean government health share and the PC
-X_with_PC = np.concatenate(std_data['mean_govt_health_share'].to_numpy(), pca_results['PC'].iloc[:, 0].to_numpy())
+X_with_PC = np.concatenate([std_data['mean_govt_health_share'].to_numpy().reshape(N, 1), pca_results['PC'].iloc[:, 0].to_numpy().reshape(N, 1)], axis = 1)
 partial_pc_regression = sm.OLS(std_data['life_exp'].reset_index(drop = True), X_with_PC).fit()
 
 # Regression table settings
