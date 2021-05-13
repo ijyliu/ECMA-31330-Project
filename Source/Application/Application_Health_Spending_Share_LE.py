@@ -40,6 +40,10 @@ wb_data = (pd.read_csv(apps_dir + "/WB_Data.csv", index_col=['economy', 'series'
              .reset_index()
              .astype({'year': 'datetime64[ns]', 'country': 'str'}))
 
+# Flip sign on poverty measures
+cols = wb_data.columns.str.contains('POV')
+wb_data.loc[:, cols] = wb_data.loc[:, cols].mul(-1)
+
 # Remove periods from column names
 wb_data.columns = wb_data.columns.str.replace(".", "_")
 # Also update the formula string
@@ -91,7 +95,7 @@ plt.yticks(rotation=0)
 plt.xticks(rotation=90)
 plt.savefig(figures_dir + "/LE_Health_Econ_Correlations.pdf")
 plt.close()
-exit()
+
 # OLS for benchmark
 ols_benchmark = smf.ols("life_exp ~ mean_govt_health_share", data = std_data.reset_index()).fit()
 
