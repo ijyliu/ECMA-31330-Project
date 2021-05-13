@@ -38,7 +38,7 @@ wb_data = (pd.read_csv(apps_dir + "/WB_Data.csv", index_col=['economy', 'series'
              .rename(columns = {"SP.DYN.LE00.IN":"life_exp", "SH.XPD.GHED.CH.ZS":"govt_health_share_wb"})
              .rename_axis(['year', 'country'])
              .reset_index()
-             .astype({'year': 'datetime64[ns]', 'country': 'str'}))
+             .astype({'year': 'int', 'country': 'str'}))
 
 # Flip sign on poverty measures
 cols = wb_data.columns.str.contains('POV')
@@ -62,7 +62,7 @@ combos_to_merge = (pd.MultiIndex.from_product([oecd_data['country'].unique(), oe
 # Balance the panel and interpolate values
 oecd_data = (combos_to_merge.merge(oecd_data, how = 'left')
                             .reset_index(drop=True)
-                            .astype({'year': 'datetime64[ns]', 'country': 'str'}))
+                            .astype({'year': 'int', 'country': 'str'}))
 
 # Merge world bank and oecd data
 merged_data = (wb_data.merge(oecd_data, how='outer'))
@@ -150,3 +150,34 @@ reg_table.add_custom_notes(["All variables are standardized."])
 # Write regression table to LaTeX
 with open(regressions_dir + "/LE_Health_Econ_Regressions.tex", "w") as f:
     f.write(reg_table.render_latex())
+
+# All the Ginis
+all_the_ginis = (pd.read_excel(apps_dir + '/allginis_2013.xls', sheet_name = 'data'))
+
+columns_to_keep = [variable for variable in all_the_ginis.columns if 'gini' in variable] + ['Giniall', 'year', 'contcod']
+
+# Try all the ginis material
+all_the_ginis = (all_the_ginis.filter(columns_to_keep)
+                              .rename(columns={"contcod":"country"})
+                              .set_index(['country', 'year'])
+                              .sort_index(level=['country', 'year'])
+                              .interpolate(limit_area = 'inside')
+                              .dropna())
+
+std_ginis = pd.DataFrame(StandardScaler().fit_transform(all_the_ginis), index=all_the_ginis.index, columns=all_the_ginis.columns)
+
+print(std_data)
+print(std_ginis)
+
+# Merge the data
+merged_gini_data = std_data.filter(['year', 'country', 'mean_govt_health_share', 'life_exp']).merge(std_ginis.reset_index().astype({'year': 'int', 'country': 'str'}), how='outer')
+
+print(merged_gini_data)
+
+# Exploring correlations between the variables
+sns.set(font_scale=0.25)
+sns.heatmap(merged_gini_data.corr())
+plt.yticks(rotation=0)
+plt.xticks(rotation=90)
+plt.savefig(figures_dir + "/All_the_Ginis_LE_WB_Correlations.pdf")
+plt.close()
