@@ -23,19 +23,21 @@ import statsmodels.formula.api as smf
 # Get the list of indicators
 indicators_list = get_wb_ind_list()
 covariates_list = [variable for variable in indicators_list if variable != "SP.DYN.LE00.IN" and variable != "SH.XPD.GHED.CH.ZS"]
+# String format of covariates for patsy formulas
+covariates_formula_string = covariates_list[0]
+for i in range(1, len(covariates_list)):
+    covariates_formula_string += " + " + covariates_list[i]
 
 # Load in the WB data
 wb_data = (pd.read_csv(apps_dir + "/WB_Data.csv", index_col=['economy', 'series'])
-             # Reshape and create a balanced panel
+             # Reshape and rename a few columns
              .transpose()
              .stack(level = 'economy')
              .rename_axis(None, axis = 1)
-             .rename(columns = {"SP.DYN.LE00.IN":"life_exp", "SH.XPD.GHED.CH.ZS":"govt_health_share_wb", "NY.GDP.PCAP.PP.CD":"gdp_pc_ppp", "NY.GNP.PCAP.PP.CD":"gnp_pc_ppp", "SI.SPR.PCAP":"survey_inc_con_pc", "SL.GDP.PCAP.EM.KD":"gdp_per_emp", 'NY.GDP.PCAP.CD':"gdp_pc_cd", 'NY.GNP.PCAP.CD':'gnp_pc_cd', 'SI.SPR.PC40':'survey_inc_con_pc_40', 'FI.RES.TOTL.CD':'tot_reserves', 'SI.POV.DDAY':'pov_hcr_ppp', 'SI.POV.NAHC':'nat_pov_hc', 'SI.POV.GAPS':'pov_gap'})
+             .rename(columns = {"SP.DYN.LE00.IN":"life_exp", "SH.XPD.GHED.CH.ZS":"govt_health_share_wb"})
              .rename_axis(['year', 'country'])
              .reset_index()
              .astype({'year': 'datetime64[ns]', 'country': 'str'}))
-
-print(wb_data.columns)
 
 oecd_data = (pd.read_csv(apps_dir + "/OECD_Govt_Share_Health_Spending.csv")
                .query('INDICATOR == "HEALTHEXP' and 'SUBJECT == "COMPULSORY' and 'MEASURE == "PC_HEALTH_EXP"' and 'FREQUENCY == "A"')
@@ -43,7 +45,9 @@ oecd_data = (pd.read_csv(apps_dir + "/OECD_Govt_Share_Health_Spending.csv")
                .filter(['country', 'year', 'govt_health_share_oecd']))
 
 # This step will help fill out the oecd panel
-combos_to_merge = pd.MultiIndex.from_product([oecd_data['country'].unique(), oecd_data['year'].unique()], names = ['country', 'year']).to_frame().reset_index(drop = True)
+combos_to_merge = (pd.MultiIndex.from_product([oecd_data['country'].unique(), oecd_data['year'].unique()], names = ['country', 'year'])
+                                .to_frame()
+                                .reset_index(drop = True))
 
 # Balance the panel and interpolate values
 oecd_data = (combos_to_merge.merge(oecd_data, how = 'left')
@@ -83,10 +87,10 @@ plt.close()
 ols_benchmark = smf.ols("life_exp ~ mean_govt_health_share", data = std_data.reset_index()).fit()
 
 # Many covariate OLS
-ols_many_covariates = smf.ols("life_exp ~ mean_govt_health_share + gdp_pc_ppp + gnp_pc_ppp + survey_inc_con_pc + gdp_per_emp + gdp_pc_cd + gnp_pc_cd + survey_inc_con_pc_40 + tot_reserves + pov_hcr_ppp + nat_pov_hc + pov_gap", data = std_data.reset_index()).fit()
+ols_many_covariates = smf.ols("life_exp ~ mean_govt_health_share + " + covariates_formula_string, data = std_data.reset_index()).fit()
 
 # Panel Fixed Effects Regression for Benchmark
-fixed_effects_results = smf.ols("life_exp ~ mean_govt_health_share + gdp_pc_ppp + gnp_pc_ppp + survey_inc_con_pc + gdp_per_emp + gdp_pc_cd + gnp_pc_cd + survey_inc_con_pc_40 + tot_reserves + pov_hcr_ppp + nat_pov_hc + pov_gap + C(year) + C(country)", data = std_data.reset_index()).fit(cov_type='cluster', cov_kwds={'groups': std_data.reset_index()['country']})
+fixed_effects_results = smf.ols("life_exp ~ mean_govt_health_share + " + covariates_formula_string + " + C(year) + C(country)", data = std_data.reset_index()).fit(cov_type='cluster', cov_kwds={'groups': std_data.reset_index()['country']})
 
 # Decompose into matrix for PCA analysis
 # This contains only the economic covariates
