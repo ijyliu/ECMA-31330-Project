@@ -85,10 +85,13 @@ plt.savefig(figures_dir + "/Govt_Health_Share_Time_Series.pdf")
 plt.close()
 
 # Exploring correlations between the variables
+sns.set(font_scale=0.25)
 sns.heatmap(std_data.corr())
+plt.yticks(rotation=0)
+plt.xticks(rotation=90)
 plt.savefig(figures_dir + "/LE_Health_Econ_Correlations.pdf")
 plt.close()
-
+exit()
 # OLS for benchmark
 ols_benchmark = smf.ols("life_exp ~ mean_govt_health_share", data = std_data.reset_index()).fit()
 
