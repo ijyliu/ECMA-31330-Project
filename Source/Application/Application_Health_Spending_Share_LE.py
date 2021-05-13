@@ -20,6 +20,10 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import statsmodels.formula.api as smf
 
+# Get the list of indicators
+indicators_list = get_wb_ind_list()
+covariates_list = [variable for variable in indicators_list if variable != "SP.DYN.LE00.IN" and variable != "SH.XPD.GHED.CH.ZS"]
+
 # Load in the WB data
 wb_data = (pd.read_csv(apps_dir + "/WB_Data.csv", index_col=['economy', 'series'])
              # Reshape and create a balanced panel

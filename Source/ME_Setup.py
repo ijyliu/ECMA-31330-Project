@@ -145,3 +145,13 @@ def perform_analysis(dataframe, local_or_cluster):
                        .groupby(['estimator', 'me_cov'])
                        .mean()
                        .to_latex(tables_dir + "/mean_me_estimator_results_" + local_or_cluster + ".tex"))
+
+# Get list of WB Indicators to download
+def get_wb_ind_list():
+
+    # Load in codes from csv
+    indicators_list = (pd.read_csv(input_dir + '/wb_indicators_list.csv')
+                     ['Indicator_Code']
+                     .tolist())
+
+    return(indicators_list)
