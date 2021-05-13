@@ -22,7 +22,8 @@ import statsmodels.formula.api as smf
 
 # Get the list of indicators
 indicators_list = get_wb_ind_list()
-covariates_list = [variable for variable in indicators_list if variable != "SP.DYN.LE00.IN" and variable != "SH.XPD.GHED.CH.ZS"]
+# For some reason net foreign assets pc doesn't read in correctly
+covariates_list = [variable for variable in indicators_list if variable != "SP.DYN.LE00.IN" and variable != "SH.XPD.GHED.CH.ZS" and variable != "NW.NFA.PC"]
 # String format of covariates for patsy formulas
 covariates_formula_string = covariates_list[0]
 for i in range(1, len(covariates_list)):
@@ -38,6 +39,11 @@ wb_data = (pd.read_csv(apps_dir + "/WB_Data.csv", index_col=['economy', 'series'
              .rename_axis(['year', 'country'])
              .reset_index()
              .astype({'year': 'datetime64[ns]', 'country': 'str'}))
+
+# Remove periods from column names
+wb_data.columns = wb_data.columns.str.replace(".", "_")
+# Also update the formula string
+covariates_formula_string = covariates_formula_string.replace(".", "_")
 
 oecd_data = (pd.read_csv(apps_dir + "/OECD_Govt_Share_Health_Spending.csv")
                .query('INDICATOR == "HEALTHEXP' and 'SUBJECT == "COMPULSORY' and 'MEASURE == "PC_HEALTH_EXP"' and 'FREQUENCY == "A"')
