@@ -21,7 +21,7 @@ import seaborn as sns
 import statsmodels.formula.api as smf
 
 # Load in the WB data
-wb_data = (pd.read_csv(input_dir + "/WB_Data.csv", index_col=['economy', 'series'])
+wb_data = (pd.read_csv(apps_dir + "/WB_Data.csv", index_col=['economy', 'series'])
              # Reshape and create a balanced panel
              .transpose()
              .stack(level = 'economy')
@@ -33,7 +33,7 @@ wb_data = (pd.read_csv(input_dir + "/WB_Data.csv", index_col=['economy', 'series
 
 print(wb_data.columns)
 
-oecd_data = (pd.read_csv(input_dir + "/OECD_Govt_Share_Health_Spending.csv")
+oecd_data = (pd.read_csv(apps_dir + "/OECD_Govt_Share_Health_Spending.csv")
                .query('INDICATOR == "HEALTHEXP' and 'SUBJECT == "COMPULSORY' and 'MEASURE == "PC_HEALTH_EXP"' and 'FREQUENCY == "A"')
                .rename(columns={"LOCATION":"country", "TIME":"year", "Value":"govt_health_share_oecd"})
                .filter(['country', 'year', 'govt_health_share_oecd']))

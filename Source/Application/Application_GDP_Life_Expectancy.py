@@ -20,7 +20,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Load in the data
-wb_data = (pd.read_csv(input_dir + "/WB_Data.csv", index_col=['economy', 'series'])
+wb_data = (pd.read_csv(apps_dir + "/WB_Data.csv", index_col=['economy', 'series'])
              # Reshape and create a balanced panel
              .transpose()
              .stack(level = 'economy')
