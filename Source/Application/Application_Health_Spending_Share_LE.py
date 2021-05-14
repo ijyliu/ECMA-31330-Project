@@ -152,10 +152,10 @@ with open(regressions_dir + "/LE_Health_Econ_Regressions.tex", "w") as f:
     f.write(reg_table.render_latex())
 
 # All the Ginis
-all_the_ginis = (pd.read_excel(apps_dir + '/allginis_2013.xls', sheet_name = 'data'))
+all_the_ginis = (pd.read_stata(apps_dir + '/allginis_2019_stata12.dta'))
 
-columns_to_keep = [variable for variable in all_the_ginis.columns if 'gini' in variable] + ['Giniall', 'year', 'contcod']
-gini_cols = [variable for variable in all_the_ginis.columns if 'gini' in variable] + ['Giniall']
+columns_to_keep = [variable for variable in all_the_ginis.columns if 'gini' in variable] + ['year', 'contcod']
+gini_cols = [variable for variable in all_the_ginis.columns if 'gini' in variable]
 ginis_formula_string = gini_cols[0]
 for i in range(1, len(gini_cols)):
     ginis_formula_string += " + " + gini_cols[i]
@@ -174,9 +174,17 @@ print(std_data)
 print(std_ginis)
 
 # Merge the data
-merged_gini_data = std_data.filter(['year', 'country', 'mean_govt_health_share', 'life_exp']).merge(std_ginis.reset_index().astype({'year': 'int', 'country': 'str'}), how='outer').dropna().set_index(['year', 'country'])
+merged_gini_data = std_data.filter(['year', 'country', 'mean_govt_health_share', 'life_exp']).merge(std_ginis.reset_index().astype({'year': 'int', 'country': 'str'}), how='outer')#.dropna().set_index(['year', 'country'])
 
-print(merged_gini_data)
+# check the merge
+merged_gini_data.to_csv(apps_dir + "/merged_gini_Data.csv")
+
+# sadly looks like the gini data is too early and the health etc data is too late
+
+merged_gini_data = merged_gini_data.dropna().set_index(['year', 'country'])
+
+# check the merge
+merged_gini_data.to_csv(apps_dir + "/merged_gini_Data_non_na.csv")
 
 # Exploring correlations between the variables
 sns.set(font_scale=0.25)
