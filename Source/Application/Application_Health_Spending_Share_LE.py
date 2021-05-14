@@ -174,7 +174,7 @@ print(std_data)
 print(std_ginis)
 
 # Merge the data
-merged_gini_data = std_data.filter(['year', 'country', 'mean_govt_health_share', 'life_exp']).merge(std_ginis.reset_index().astype({'year': 'int', 'country': 'str'}), how='outer').dropna()
+merged_gini_data = std_data.filter(['year', 'country', 'mean_govt_health_share', 'life_exp']).merge(std_ginis.reset_index().astype({'year': 'int', 'country': 'str'}), how='outer').dropna().set_index(['year', 'country'])
 
 print(merged_gini_data)
 
