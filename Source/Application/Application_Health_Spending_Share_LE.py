@@ -9,7 +9,6 @@ from ME_Setup import *
 
 # Packages
 import pandas as pd
-import statsmodels.api as sm
 from sklearn.preprocessing import StandardScaler
 from pca import pca
 from stargazer.stargazer import Stargazer
