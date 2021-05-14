@@ -155,6 +155,10 @@ with open(regressions_dir + "/LE_Health_Econ_Regressions.tex", "w") as f:
 all_the_ginis = (pd.read_excel(apps_dir + '/allginis_2013.xls', sheet_name = 'data'))
 
 columns_to_keep = [variable for variable in all_the_ginis.columns if 'gini' in variable] + ['Giniall', 'year', 'contcod']
+gini_cols = [variable for variable in all_the_ginis.columns if 'gini' in variable] + ['Giniall']
+ginis_formula_string = gini_cols[0]
+for i in range(1, len(gini_cols)):
+    ginis_formula_string += " + " + gini_cols[i]
 
 # Try all the ginis material
 all_the_ginis = (all_the_ginis.filter(columns_to_keep)
@@ -170,7 +174,7 @@ print(std_data)
 print(std_ginis)
 
 # Merge the data
-merged_gini_data = std_data.filter(['year', 'country', 'mean_govt_health_share', 'life_exp']).merge(std_ginis.reset_index().astype({'year': 'int', 'country': 'str'}), how='outer')
+merged_gini_data = std_data.filter(['year', 'country', 'mean_govt_health_share', 'life_exp']).merge(std_ginis.reset_index().astype({'year': 'int', 'country': 'str'}), how='outer').dropna()
 
 print(merged_gini_data)
 
@@ -181,3 +185,58 @@ plt.yticks(rotation=0)
 plt.xticks(rotation=90)
 plt.savefig(figures_dir + "/All_the_Ginis_LE_WB_Correlations.pdf")
 plt.close()
+
+# OLS for benchmark
+ols_benchmark = smf.ols("life_exp ~ mean_govt_health_share", data = merged_gini_data.reset_index()).fit()
+
+# Many covariate OLS
+ols_many_covariates = smf.ols("life_exp ~ mean_govt_health_share + " + ginis_formula_string, data = merged_gini_data.reset_index()).fit()
+
+# Panel Fixed Effects Regression for Benchmark
+fixed_effects_results = smf.ols("life_exp ~ mean_govt_health_share + " + ginis_formula_string + " + C(year) + C(country)", data = merged_gini_data.reset_index()).fit(cov_type='cluster', cov_kwds={'groups': merged_gini_data.reset_index()['country']})
+
+# Decompose into matrix for PCA analysis
+# This contains only the economic covariates
+X = merged_gini_data.drop(columns = ['life_exp', 'mean_govt_health_share']).to_numpy()
+
+# Perform the factor analysis
+pca_model = pca()
+pca_results = pca_model.fit_transform(X)
+
+# Count number of PCs
+num_pcs = pca_results['PC'].shape[1]
+PC_names = ['PC' + str(i + 1) for i in range(num_pcs)]
+
+# Add PCA results to the dataframe
+merged_gini_data = pd.concat([merged_gini_data.reset_index(), pca_results['PC'].reset_index(drop = True)], axis = 1, names = [merged_gini_data.columns, PC_names])
+
+# Plot the loadings
+sns.heatmap(pca_results['loadings'], cmap='YlGnBu')
+plt.savefig(figures_dir + "/Gini_Loadings.pdf")
+plt.close()
+
+# Scree plot
+pca_model.plot()
+plt.savefig(figures_dir + "/Gini_Share_Explained.pdf")
+plt.close()
+
+# Main PCR spec
+partial_pc_regression = smf.ols("life_exp ~ mean_govt_health_share + PC1", data = merged_gini_data).fit()
+
+# PCR with fixed effects
+pc_fixed_effects_results = smf.ols("life_exp ~ mean_govt_health_share + PC1 + C(year) + C(country)", data = merged_gini_data.reset_index()).fit(cov_type='cluster', cov_kwds={'groups': merged_gini_data.reset_index()['country']})
+
+# Regression table settings
+reg_table = Stargazer([ols_benchmark, ols_many_covariates, fixed_effects_results, partial_pc_regression, pc_fixed_effects_results])
+reg_table.dependent_variable_name("Life Expectancy at Birth (Years)")
+reg_table.covariate_order(['mean_govt_health_share'])
+reg_table.rename_covariates({"mean_govt_health_share":"Govt. Share of Health Exp."})
+# Fixed effects indicator
+reg_table.add_line('Covariates', ['None', 'Ginis', 'Ginis', 'PCs', 'PCs'])
+reg_table.add_line('Fixed Effects', ['No', 'No', 'Yes', 'No', 'Yes'])
+reg_table.show_degrees_of_freedom(False)
+reg_table.add_custom_notes(["All variables are standardized."])
+
+# Write regression table to LaTeX
+with open(regressions_dir + "/LE_Health_Gini_Regressions.tex", "w") as f:
+    f.write(reg_table.render_latex())
