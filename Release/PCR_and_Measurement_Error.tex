@@ -1,82 +1,332 @@
-\documentclass{report}
-
-\usepackage{amsmath}
-\usepackage{geometry}
-\usepackage{amsfonts}
-\usepackage[english]{babel}
-\usepackage{amssymb}
+\documentclass[12pt]{article}
 \usepackage{graphicx}
-\usepackage{float}
-\usepackage{hyperref}
-\usepackage{multirow}
-\usepackage{pdflscape}
+%\usepackage{subcaption}
 \usepackage{caption}
-\usepackage{pdflscape}
-\usepackage{outlines}
-\usepackage{subcaption}
-\usepackage{enumerate}
-\usepackage[latin1]{inputenc}
+\usepackage{mathtools}
+\usepackage{tikz,pgfplots}
+\usepackage{subfig}
+\usepackage{epsfig}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[shortlabels]{enumitem}
+\usetikzlibrary{angles,patterns,calc}
+\usepackage{bbm}
+\usepackage{float}
+\newcommand\der[2]{\frac{\partial{#1}}{\partial{#2}}}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
 
-\usepackage{tabularx, booktabs}
-\usepackage{longtable}
+% stuff to put matlab code in 
+\usepackage{listings}
+\usepackage{color} %red, green, blue, yellow, cyan, magenta, black, white
+\definecolor{mygreen}{RGB}{28,172,0} % color values Red, Green, Blue
+\definecolor{mylilas}{RGB}{170,55,241}
 
-\usepackage{standalone}
+% Shortcut greek
+\def\a{\alpha}
+\def\b{\beta}
+\def\g{\gamma}
+\def\D{\Delta}
+\def\d{\delta}
+\def\z{\zeta}
+\def\k{\kappa}
+\def\l{\lambda}
+\def\n{\nu}
+\def\r{\rho}
+\def\s{\sigma}
+\def\t{\tau}
+\def\x{\xi}
+\def\w{\omega}
+\def\W{\Omega}
 
-\usepackage[autostyle, english = american]{csquotes}
-\MakeOuterQuote{"}
-
-\usepackage{comment}
-
-\newcommand{\tabnotes}[2]{\bottomrule \multicolumn{#1}{@{}p{0.95\linewidth}@{}}{\footnotesize #2 }\end{tabular}\end{table}}
-
-\title{PCR and Measurement Error}
-\author{Isaac Liu}
-\date{\today}
-
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{0.5em}
-
-\hypersetup{
-    colorlinks=true,
-    linkcolor=blue,
-    filecolor=magenta,      
-    urlcolor=cyan,
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{fancyhdr}
+\fancypagestyle{firststyle}
+{
+\fancyhf{}
+    \renewcommand{\headrulewidth}{0pt}
+   \fancyfoot[C]{\footnotesize Page \thepage\ of \pageref{LastPage}}
 }
+
+\newcommand{\numpy}{{\tt numpy}}    % tt font for numpy
+
+\topmargin -.5in
+\textheight 9in
+\oddsidemargin -.25in
+\evensidemargin -.25in
+\textwidth 7in
+
+\newcommand{\question}[1]{ \begin{center} \noindent\colorbox{gray!10}{
+\parbox{0.8\textwidth}{\vspace{0.125in} #1 \vspace{0.125in} } } \end{center} }
 
 \begin{document}
 
-	\maketitle
+    \thispagestyle{firststyle}
 
-	\newpage \clearpage
+    \author{Isaac Liu, Nicol\'as Martorell \& Paul Opheim}
+    \title{Attenuation Bias, Measurment Error \& Principal Component Analysis} 
+    \maketitle
+
+    % code
+
+    \lstset{language=Matlab,%
+        %basicstyle=\color{red},
+        breaklines=true,%
+        morekeywords={matlab2tikz},
+        keywordstyle=\color{blue},%
+        morekeywords=[2]{1}, keywordstyle=[2]{\color{black}},
+        identifierstyle=\color{black},%
+        stringstyle=\color{mylilas},
+        commentstyle=\color{mygreen},%
+        showstringspaces=false,%without this there will be a symbol in the places where there is a space
+        numbers=left,%
+        numberstyle={\tiny \color{black}},% size of the numbers
+        numbersep=9pt, % this defines how far the numbers are from the text
+        emph=[1]{for,end,break},emphstyle=[1]\color{red}, %some words to emphasise
+        %emph=[2]{word1,word2}, emphstyle=[2]{style},    
+    }
+
+    \begin{abstract}
+        Many variables of interest in Economics are not directly available as empirical data. Instead, economists often use other variables that are imperfect measurements of the true focus of their analysis. These available variables are known as \textit{proxies} or ``variables measured with error'', and, if they suffer from classical measurement error, their use causes \textit{attenuation bias} when they are used as independent variables in econometric estimation. Traditionally, instrumental variables are used as a shock of exogeneity to get rid of this bias, but finding truly exogenous variables that satisfy the exclusion restriction is difficult, and so this method can often not be feasibly applied.\\
+        \\
+        As an alternative to dealing with attenuation bias, we propose the use of Principal Component Analysis (PCA) over several variables measured with error. When there are multiple observed variables driven by a single ``true'' one, we propose to use PCA over these variables to extract the ``true'' variable. We then use this extracted value and use it in a standard OLS regression, thus providing a solution to attenuation bias that does not require the strong assumptions of instrumental variable analysis.\\
+        \\
+        To show the properties and behaviour of our estimator on large samples under standard assumptions, we present a theoretical framework and a Monte-Carlo analysis. Additionally, we explore a basic empirical application to our method, by estimating the effect of economic development on life expectancy at birth. Since there is no consensus on how to measure economic development, we take a sample of different variables that may measure economic development with error (GDP per capita, GNI per capita, Household Income Per Capita, among others) over which we apply PCA to apply our identification strategy.
+    \end{abstract}
+
+    \section{Theoretical framework}
+
+    Consider a model where the outcome is denoted by $y_i$. This outcome depends on a variable of interest denoted by $t_i$ and a vector of covariates denoted by $X_i=(x_{i,1},x_{i,2},\dots x_{i,p})'$. Additionally, consider a vector of variables $X^*_i=(x^*_{i,1},x^*_{i,2},\dots x^*_{i,p})'$ that correspond to the covariates $X_i$ but observed with measurement error, where $x^*_{i,k}=x_{i,k}+\eta_{i,k}$ with $\eta_{i,k} \sim {iid}(0,\sigma^2_{\eta_k})$, $\operatorname{E}(x_{i,k}'\eta_{i,k})=0, \forall i$, $\operatorname{E}(x_{i,k}'\eta_{j,l})=0, \forall i\neq j$ and $k \neq l$, and $\operatorname{E}(\eta_{i,k}'\eta_{j,l})=0, \forall i\neq j$ and $k \neq l$. Therefore, each $x^*_{i,k}$ suffers classical measurement error. Note that $\operatorname{E}(x_{i,k})=\operatorname{E}(x^*_{i,k})=\mu_{x_k}$ and that $\operatorname{V}(x_{i,k})=\sigma^2_{x_k}$ while $\operatorname{V}(x^*_{i,k})=\sigma^2_{x_k}+\sigma^2_{\eta_k}\geq \sigma^2_{x_k}$.
+
+    \subsection{Data Generation Process}
+
+    Assume that the outcome $y_i$ is determined by the following Data Generation Process (DGP):
+    \begin{align}
+        y_i = \gamma t_i + X_i'\beta + \epsilon_i
+    \end{align}
+
+    where $\g$ is the parameter of the variable of interest $t_i$, $\b=(\b_1,\b_2,\dots \b_p)'$ is the vector of the parameters of the covariates $X_i$ including a constant and $\epsilon_i \sim \operatorname{iid}(0,\sigma^2_\epsilon)$. Under this specification, the coefficients are such that:
+    \begin{align}
+        \left(\begin{array}{l}
+    {\gamma} \\
+    {\beta}
+    \end{array}\right)=\left(\begin{array}{cc}
+    {\sigma}^2_{t} & \Sigma_{tX} \\
+    \Sigma_{Xt} & {\Sigma}_{X}
+    \end{array}\right)^{-1}\left(\begin{array}{c}
+    \Sigma_{yt} \\
+    \Sigma_{yX}
+    \end{array}\right)
+    \end{align}
+
+    Suppose that the econometrician has access to $t_i$ but, instead of $X_i$ she observes $X^*_i$. Then, she specifies the following linear model
+    \begin{align}
+        y_i = \gamma^* t_i + {X^{*}_i}' \beta^* + \zeta_i
+    \end{align}
+
+    the coefficients would be such that
+    \begin{align}
+        \left(\begin{array}{l}
+    {\gamma}^* \\
+    {\beta}^*
+    \end{array}\right)&=\left(\begin{array}{cc}
+    {\sigma}^2_{t} & \Sigma_{tX^*} \\
+    \Sigma_{X^*t} & {\Sigma}_{X^*}
+    \end{array}\right)^{-1}\left(\begin{array}{c}
+    \Sigma_{yt} \\
+    \Sigma_{yX^*}
+    \end{array}\right) \\
+    & =\left(\begin{array}{cc}
+    {\sigma}^2_{t} & \Sigma_{tX} \\
+    \Sigma_{Xt} & {\Sigma}_{X}+{\Sigma}_{\eta}
+    \end{array}\right)^{-1}\left(\begin{array}{cc}
+    {\sigma}^2_{t} & \Sigma_{tX} \\
+    \Sigma_{Xt} & {\Sigma}_{X}
+    \end{array}\right)\left(\begin{array}{l}
+    {\gamma} \\
+    {\beta}
+    \end{array}\right)
+    \end{align}
+
+    To the see the implications of the of this measurement error in the covariates, consider a simple case where the DGP depends only of the variable of interest and a covariate such that:
+
+    \begin{align}
+        \left(\begin{array}{l}
+    {\gamma} \\
+    {\beta}
+    \end{array}\right)=\left(\begin{array}{l}
+    1 \\
+    1
+    \end{array}\right)
+    \end{align}
+
+    and with $\sigma^2_t=\Sigma_X=\Sigma_\eta=1$ while $\Sigma_{Xt}=0.6$. Then
+    \begin{align*}
+        \left(\begin{array}{l}
+    {\gamma}^* \\
+    {\beta}^*
+    \end{array}\right)& =\left(\begin{array}{cc}
+    1 & 0.6 \\
+    0.6 & 2
+    \end{array}\right)^{-1}\left(\begin{array}{cc}
+    1 & 0.6 \\
+    0.6 & 1
+    \end{array}\right)\left(\begin{array}{l}
+    1\\
+    1
+    \end{array}\right) \\
+    \left(\begin{array}{l}
+    {\gamma}^* \\
+    {\beta}^*
+    \end{array}\right)&=\left(\begin{array}{l}
+    1.37 \\
+    0.39
+    \end{array}\right)
+    \end{align*}
+
+    Clearly, both coefficients shows bias when the econometrician assumes a DGP with $X_i^*$: while there is attenuation bias on the coefficient of the covariate, the coefficient of the variable of interest is biased upward given that both variable have positive correlation.
+
+    \subsection{Principal Component Regression as bias-correction method}
+
+    The classical solution for the measurement-error induced bias in econometrics has been the usage of instrumental variables. Suppose an instrument $Z_i$ that satisfies the relevance condition $\operatorname{E}(Z_i'X_i)\neq 0$ and $\operatorname{E}(Z_i't_i)\neq 0$, and also the exclusion restriction $\operatorname{E}(Z_i'\epsilon_i)=\operatorname{E}(Z_i'\zeta_i)=\operatorname{E}(Z_i'\eta_{i,k})=0$, for all $i$ and $k$. Then premultiplying by $Z_i$ we have
+    \begin{align}
+        Z_i'y_i =  Z_i'\gamma^* t_i +  Z_i'{X^{*}_i}' \beta^* +  Z_i'\zeta_i
+    \end{align}
+
+    and so
+    \begin{align}
+        \left(\begin{array}{l}
+    {\gamma}^{IV} \\
+    {\beta}^{IV}
+    \end{array}\right)
+    & =\left(\begin{array}{cc}
+    {\Sigma}_{Zt} & \Sigma_{ZX,Zt} \\
+    \Sigma_{Zt,ZX}& {\Sigma}_{ZX}+{\Sigma}_{Z\eta}
+    \end{array}\right)^{-1}\left(\begin{array}{cc}
+    {\Sigma}_{Zt} & \Sigma_{ZX,Zt} \\
+    \Sigma_{Zt,ZX} & {\Sigma}_{ZX}
+    \end{array}\right)\left(\begin{array}{l}
+    {\gamma} \\
+    {\beta}
+    \end{array}\right)\\
+    & =\left(\begin{array}{cc}
+    {\Sigma}_{Zt} & \Sigma_{ZX,Zt} \\
+    \Sigma_{Zt,ZX}& {\Sigma}_{ZX}
+    \end{array}\right)^{-1}\left(\begin{array}{cc}
+    {\Sigma}_{Zt} & \Sigma_{ZX,Zt} \\
+    \Sigma_{Zt,ZX} & {\Sigma}_{ZX}
+    \end{array}\right)\left(\begin{array}{l}
+    {\gamma} \\
+    {\beta}
+    \end{array}\right) \\
+    \left(\begin{array}{l}
+    {\gamma}^{IV} \\
+    {\beta}^{IV}
+    \end{array}\right)
+    & =\left(\begin{array}{l}
+    {\gamma} \\
+    {\beta}
+    \end{array}\right)
+    \end{align}
+
+    However, finding reliable source of exogeneity is difficult, as is proving the exclusion condition. Therefore, the use of IV as a bias-correction method should be taken with care given that its feasibilty is hard.\\
+
+    Alternatively, we propose an alternative bias-correction method when there are several missmeasured variables for each covariate, that is when we have more than one $x_{i,k}^*$ for every $x_{i,k}$. Given that in all the miss-measured variables the underlying value is the real value, one could think of extracting the underlying true $x_{i,k}$ through a linear combination of the different $x_{i,k}^*$. Then, we could treat all the $x_{i,k}^*$ as variables that share compononents as follows
+    \begin{align}
+    h_{j}=\underset{h^{\prime} h=1, h^{\prime} h_{1}=0, \ldots, h^{\prime} h_{j-1}=0}{\operatorname{argmax}} \operatorname{var}\left[h^{\prime} X^*_k\right]  
+    \end{align}
+
+
+    where $h_j$ is the eigenvector of $\Sigma$ associated with the $j^{t h}$ ordered eigenvalue $\lambda_{j}$ of $\Sigma_{X^*_k}$, and the principal components of $X^*_k$ are $U_{j}=h_{j}^{\prime} X^*_k$, where $h_{j}$ is the eigenvector of $\Sigma$ associated with the $j^{t h}$ ordered eigenvalue $\lambda_{j}$ of $\Sigma$.\\
+
+    Under our assumptions, the vector of missmeasured values $X^*_k$ of $x_{i,k}$, share only one principal component which is precisely $x_{i,k}$. Then, we only have one principal component, $x_{i,k}$, and so the $x_{i,k}$ is such that
+    \begin{align}
+        x_{i,k}=h_{k}^{\prime} X^*_k
+    \end{align}
+
+    Finally, we could then retrieve the vector of true variables $X_i$
+    \begin{align}
+        X_i=HX^*_i
+    \end{align}
+
+    where $H$ is a matrix such that
+    \begin{align*}
+        H=\left(\begin{array}{ccccc}
+    h_1 & 0 & 0 & \dots & 0 \\
+    0 & h_2 & 0 & \dots & 0 \\
+    \vdots & \ddots & h_3 & \ddots & \vdots \\
+    0 & \dots & \dots & \dots \ddots & h_p
+    \end{array}\right)
+    \end{align*}
+
+    and $h_k$ is the vector of eigenvalues for the variable $x_{i,k}$.
+
+    Our new linear model then would be
+    \begin{align}
+        y_i = \gamma^{PCR} t_i + H{X^*_i}'\beta^{PCR} + \epsilon_i
+    \end{align}
+
+    where the coefficients are as follows
+    \begin{align}
+        \left(\begin{array}{l}
+    {\gamma}^{PCR} \\
+    {\beta}^{PCR}
+    \end{array}\right)&=\left(\begin{array}{cc}
+    {\sigma}^2_{t} & \Sigma_{t,HX^*} \\
+    \Sigma_{HX^*,t} & {\Sigma}_{HX^*}
+    \end{array}\right)^{-1}\left(\begin{array}{c}
+    \Sigma_{yt} \\
+    \Sigma_{y,HX^*}
+    \end{array}\right)\\
+    &=\left(\begin{array}{cc}
+    {\sigma}^2_{t} & \Sigma_{t,HX^*} \\
+    \Sigma_{HX^*,t} & {\Sigma}_{HX^*}
+    \end{array}\right)^{-1}\left(\begin{array}{cc}
+    {\sigma}^2_{t} & \Sigma_{tX} \\
+    \Sigma_{Xt} & {\Sigma}_{X}
+    \end{array}\right)\left(\begin{array}{l}
+    {\gamma} \\
+    {\beta}
+    \end{array}\right)\\
+    &=\left(\begin{array}{l}
+    {\gamma} \\
+    {\beta}
+    \end{array}\right)
+    \end{align}
+
+    where the last equality comes from $(13)$.
+
+    \newpage \clearpage
 
     \section*{Application: Government Share of Healthcare Spending and Life Expectancy}
 
-	% Add \ref to the following table?
-	In the left column in the table below I first regress the life expectancy at birth for all individuals in a given country and year on a measure of government spending as a share of total health expenditure. In the middle column I include the economic controls/covariates of GDP per capita (PPP), GNI per capita (PPP), Survey Mean Income/Consumption Per Capita, ILO GDP per person employed, and Net Foreign Assets Per Capita, all from the World Bank. In the rightmost column I instead use the first principal component combining these covariates.
-	
-	I standardize all variables by subtracting the mean and dividing by the standard deviation, linearly interpolate data between known observations, and remove country-years with missing values for any of the economic indicators.
+    % Add \ref to the following table?
+    In the left column in the table below I first regress the life expectancy at birth for all individuals in a given country and year on a measure of government spending as a share of total health expenditure. In the middle column I include the economic controls/covariates of GDP per capita (PPP), GNI per capita (PPP), Survey Mean Income/Consumption Per Capita, ILO GDP per person employed, and Net Foreign Assets Per Capita, all from the World Bank. In the rightmost column I instead use the first principal component combining these covariates.
+
+    I standardize all variables by subtracting the mean and dividing by the standard deviation, linearly interpolate data between known observations, and remove country-years with missing values for any of the economic indicators.
 
     \input{../Output/Regressions/LE_Health_Econ_Regressions.tex}
 
-	% Though the coefficients are not readily interpretable, they do differ from each other
+    % Though the coefficients are not readily interpretable, they do differ from each other
 
-	% ADD TEST to show coefficients differ? I think this also would not be easy to interpret since the independent variables are different...
+    % ADD TEST to show coefficients differ? I think this also would not be easy to interpret since the independent variables are different...
 
-	% In both cases, they are significant.
-	
-	% Notably, we demonstrate a higher $R^2$ using the principal component model.
+    % In both cases, they are significant.
 
-	\newpage \clearpage
+    % Notably, we demonstrate a higher $R^2$ using the principal component model.
+
+    \newpage \clearpage
 
     \section*{With Ginis instead of econ controls}
 
-	\input{../Output/Regressions/LE_Health_Gini_Regressions.tex}
+    \input{../Output/Regressions/LE_Health_Gini_Regressions.tex}
 
-	\newpage \clearpage
+    \newpage \clearpage
 
     \section*{Health share of gdp}
 
-	\input{../Output/Regressions/LE_Health_GDP_Econ_Regressions.tex}
+    \input{../Output/Regressions/LE_Health_GDP_Econ_Regressions.tex}
 
     \clearpage \newpage
 
@@ -84,25 +334,25 @@
 
     \section*{Appendix}
 
-	\begin{figure}[h!]
-		\centering
-		\caption{Correlations Between Covariates and Life Expectancy}
-		\label{LE_Health_Econ_Correlations}	
-		\includegraphics[width=\linewidth,keepaspectratio=true]{../Output/Figures/LE_Health_Econ_Correlations.pdf}
-	\end{figure}
+    \begin{figure}[h!]
+        \centering
+        \caption{Correlations Between Covariates and Life Expectancy}
+        \label{LE_Health_Econ_Correlations}	
+        \includegraphics[width=\linewidth,keepaspectratio=true]{../Output/Figures/LE_Health_Econ_Correlations.pdf}
+    \end{figure}
 
-	\begin{figure}[h!]
-		\centering
-		\caption{Economic Measures PCA Loadings}
-		\label{Econ_Loadings}	
-		\includegraphics[width=\linewidth,keepaspectratio=true]{../Output/Figures/Econ_Indicator_Loadings.pdf}
-	\end{figure}
+    \begin{figure}[h!]
+        \centering
+        \caption{Economic Measures PCA Loadings}
+        \label{Econ_Loadings}	
+        \includegraphics[width=\linewidth,keepaspectratio=true]{../Output/Figures/Econ_Indicator_Loadings.pdf}
+    \end{figure}
 
-	\begin{figure}[h!]
-		\centering
-		\caption{Economic Measures PCA Share of Variance Explained}
-		\label{Econ_Share_Explained}	
-		\includegraphics[width=\linewidth,keepaspectratio=true]{../Output/Figures/Econ_Indicator_Share_Explained.pdf}
-	\end{figure}
+    \begin{figure}[h!]
+        \centering
+        \caption{Economic Measures PCA Share of Variance Explained}
+        \label{Econ_Share_Explained}	
+        \includegraphics[width=\linewidth,keepaspectratio=true]{../Output/Figures/Econ_Indicator_Share_Explained.pdf}
+    \end{figure}
 
 \end{document}
