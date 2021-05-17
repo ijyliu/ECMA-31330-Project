@@ -313,6 +313,21 @@
 
     \section*{Properties of the Estimator: Monte Carlo Simulations}
 
+We then complement our theoretical analysis by using Monte Carlo Simulation to analyze the effects of using Principal Components Regression as a method of bias correction. For these simulations, we assume that the true DGP for the data is:
+
+$$y_i = \beta_1 x_i + \beta_2 z_i + u_i$$
+
+... where $x_i$ and $z_i$ are single variables drawn from $\mathcal{N}(\begin{bmatrix} 0\\ 0 \end{bmatrix}, \begin{bmatrix} 1 & \rho\\ \rho & 1\end{bmatrix})$, where $\rho$ is some covariance between our main variable of interest ($x_i$) and the covariate ($z_i$). The $u_i$ is drawn from a white noise distribution($\mathcal{N}(0,1)$) that is uncorrelated with both $x_i$ and $z_i$. We then assume (as with the theoretical analysis) that $z_i$ is not directly observable and instead the researchers only have access to $p$ many measurements $z_{i,j}^*$ where $z_{i,j}^* = z_i + \eta_j$ where $\eta_j$ is drawn from a white noise distribution $\mathcal{N}(\mathbf{0},\Sigma)$ where $\mathbf{0}$ is a p-vector and $\Sigma$ is a diagonal p by p matrix with only 1s on the diagonal.\\
+\\
+In our simulations, we assume default values of $\rho = 0.5$, $\beta_1 = \beta_2 = 1$, and $p=5$. We then vary each factor while holding the others fixed, and perform 1,000 simulations of the DGP followed by an OLS regression on either the PCA value from the p measurements of the true $z_i$, or on a single one of the measurements of $z_i$. For each simulation, we generate 100 observations of $y_i,x_i$,etc. The results for each range of parameters can be seen in Appendix 1.\\
+\\
+We can see from these simulations that using PCA on several covariates in order to create an estimate of the single latent covariate driving each measurement noticeably outperforms using a single one of those measurements as a variable, with one notable exception. When the covariance between $x_i$ and $z_i$ is equal to $0, -1$, or $1$ then there is no notable improvement from using the PCA-extracted latent variable. Both the average coefficient on $\beta_1$ obtained when including the PCA output in the regression, and the mean absolute percentage error obtained on the 1,000 simulations are both much closer to the target values with the PCA-based regression than with the single measurement regression.\\
+\\
+However, the performance advantages that we see from using PCA could be driven by the benefit of having multiple measurements of our true covariate of interest, as opposed to any special advantages from PCA specifically. We test this question by comparing the estimated $\beta_1^*$ in our PCA regressions with the estimated $\beta_1^*$ when we include all $p$ measurements as separate covariates in the regression, and the $\beta_1^*$ obtained when the covariate is the mean of all $p$ measurements of the true covariate. The results from these regressions can be seen in Appendix 2.\\
+\\
+As one can see from these results, there does not seem to be a noticeable difference between these three regression methods (across any values of $\beta_1,\beta_2,p$, and $\rho$. Thus, our simulations suggest that there are major benefits to having multiple measurements of a latent covariate of interest, but that using PCA, taking the average of these measurements, and including all measurements as separate covariates seem to give similar benefits to the performance of the regression.
+
+
     \section*{Application: Government Share of Healthcare Spending and Life Expectancy}
 
         Explain economic importance/interesting-ness of the chosen application
@@ -354,7 +369,66 @@
 
     \appendix
 
-    \section*{Appendix}
+    \section*{Appendix 1}
+        \begin{figure}[h!]
+            \centering
+            \caption{PCA and Single Measurement for Different \rho values}
+            \label{sim_reg_results_rho_2methods}	
+            \includegraphics[width=\linewidth,keepaspectratio=true]{../Output/Figures/sim_reg_results_rho_2methods.pdf}
+        \end{figure}
+
+        \begin{figure}[h!]
+            \centering
+            \caption{PCA and Single Measurement for Different \beta_1 values}
+            \label{sim_reg_results_beta1_2methods}	
+            \includegraphics[width=\linewidth,keepaspectratio=true]{../Output/Figures/sim_reg_results_beta1_2methods.pdf}
+        \end{figure}
+
+        \begin{figure}[h!]
+            \centering
+            \caption{PCA and Single Measurement for Different \beta_2 values}
+            \label{sim_reg_results_beta2_2methods}	
+            \includegraphics[width=\linewidth,keepaspectratio=true]{../Output/Figures/sim_reg_results_beta2_2methods.pdf}
+        \end{figure}
+
+        \begin{figure}[h!]
+            \centering
+            \caption{PCA and Single Measurement for Different p values}
+            \label{sim_reg_results_p_2methods}	
+            \includegraphics[width=\linewidth,keepaspectratio=true]{../Output/Figures/sim_reg_results_p_2methods.pdf}
+        \end{figure}
+
+    \section*{Appendix 2}
+        \begin{figure}[h!]
+            \centering
+            \caption{PCA, All Measurements, and Average of Measurements for Different \rho values}
+            \label{sim_reg_results_rho_3methods}	
+            \includegraphics[width=\linewidth,keepaspectratio=true]{../Output/Figures/sim_reg_results_rho_3methods.pdf}
+        \end{figure}
+
+        \begin{figure}[h!]
+            \centering
+            \caption{PCA, All Measurements, and Average of Measurements for Different \beta_1 values}
+            \label{sim_reg_results_beta1_3methods}	
+            \includegraphics[width=\linewidth,keepaspectratio=true]{../Output/Figures/sim_reg_results_beta1_3methods.pdf}
+        \end{figure}
+
+        \begin{figure}[h!]
+            \centering
+            \caption{PCA, All Measurements, and Average of Measurements for Different \beta_2 values}
+            \label{sim_reg_results_beta2_3methods}	
+            \includegraphics[width=\linewidth,keepaspectratio=true]{../Output/Figures/sim_reg_results_beta2_3methods.pdf}
+        \end{figure}
+
+        \begin{figure}[h!]
+            \centering
+            \caption{PCA, All Measurements, and Average of Measurements for Different p values}
+            \label{sim_reg_results_p_3methods}	
+            \includegraphics[width=\linewidth,keepaspectratio=true]{../Output/Figures/sim_reg_results_p_3methods.pdf}
+        \end{figure}
+
+
+    \section*{Appendix 3}
 
         \begin{figure}[h!]
             \centering
