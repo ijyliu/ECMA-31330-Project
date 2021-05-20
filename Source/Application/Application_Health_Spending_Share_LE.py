@@ -18,6 +18,7 @@ matplotlib.use('pdf')
 import matplotlib.pyplot as plt
 import seaborn as sns
 import statsmodels.formula.api as smf
+import regex as re
 
 # Get the list of indicators
 indicators_list = get_wb_ind_list()
@@ -148,7 +149,8 @@ reg_table.add_custom_notes(["All variables are standardized."])
 
 # Write regression table to LaTeX
 with open(regressions_dir + "/LE_Health_Econ_Regressions.tex", "w") as f:
-    f.write(reg_table.render_latex())
+    corrected_table = re.sub('\\cline{[0-9\-]+}', '', reg_table.render_latex())
+    f.write(corrected_table)
 
 ##################################################################################################################################
 
@@ -248,7 +250,8 @@ reg_table.add_custom_notes(["All variables are standardized."])
 
 # Write regression table to LaTeX
 with open(regressions_dir + "/LE_Health_Gini_Regressions.tex", "w") as f:
-    f.write(reg_table.render_latex())
+    corrected_table = re.sub('\\cline{[0-9\-]+}', '', reg_table.render_latex())
+    f.write(corrected_table)
 
 ##################################################################################################################################
 
@@ -385,4 +388,5 @@ reg_table.add_custom_notes(["All variables are standardized."])
 
 # Write regression table to LaTeX
 with open(regressions_dir + "/LE_Health_GDP_Econ_Regressions.tex", "w") as f:
-    f.write(reg_table.render_latex())
+    corrected_table = re.sub('\\cline{[0-9\-]+}', '', reg_table.render_latex())
+    f.write(corrected_table)
