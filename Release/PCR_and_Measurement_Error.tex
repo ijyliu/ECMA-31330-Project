@@ -119,6 +119,32 @@
         Schennach 2016
         focuses on nonclassical measurement error
 
+        https://advstats.psychstat.org/book/factor/index.php#factor-analysis
+        factor analysis can handle measurement errors in multiple ways
+        exploratory factor analysis can be used to explore dimensionality of measurement instrument (like prof mentioned i guess). I think this is like just the PCA step and looking at the Loadings
+        confirmatory factor analysis-test if constructs influence responses
+        some unique observation factors
+        there is discussion of the variance of the true variable and the variance of the measurmenet error.
+        i think there might be misuse of the term measurement errors/this is not clear
+        overall not very related
+
+        http://web.pdx.edu/~newsomj/semclass/ho_latent.pdf
+        latent variable models... are really basically mathematically the same as measurement error
+        simple and standard me explanation
+        reminder- standardized coefificetn is very similar to correlation coefficient
+        reminder that there is no impact of measurmeent error in y on unstandardized coeff
+        multiple regression- x1 coeff can indeed be biased, middle of p.2
+        lower statistical power
+        no bias in the mean of x
+        bad impact on the regression
+        use Structural Equation Modelling to estimate path coefficients among latent variables
+        need three or more measures to estimate a latent variable
+        in a footnote it mentions a case with only two indicators
+        not always me but sometimes uniqueness... really it's just items unaccounted for by the factor
+        latent variance is independent.. classical assumption
+
+        *perhaps note somewhere that governmnet spending is less likely to have measurement error because it's an official statistic... though health spending in the denominator could have error... ow.
+
     \section*{Theoretical framework}
 
         Consider a model where the outcome is denoted by $y_i$. This outcome depends on a variable of interest denoted by $t_i$ and a vector of covariates denoted by $X_i=(x_{i,1},x_{i,2},\dots x_{i,p})'$. Additionally, consider a vector of variables $X^*_i=(x^*_{i,1},x^*_{i,2},\dots x^*_{i,p})'$ that correspond to the covariates $X_i$ but observed with measurement error, where $x^*_{i,k}=x_{i,k}+\eta_{i,k}$ with $\eta_{i,k} \sim {iid}(0,\sigma^2_{\eta_k})$, $\operatorname{E}(x_{i,k}'\eta_{i,k})=0, \forall i$, $\operatorname{E}(x_{i,k}'\eta_{j,l})=0, \forall i\neq j$ and $k \neq l$, and $\operatorname{E}(\eta_{i,k}'\eta_{j,l})=0, \forall i\neq j$ and $k \neq l$. Therefore, each $x^*_{i,k}$ suffers from classical measurement error. Note that $\operatorname{E}(x_{i,k})=\operatorname{E}(x^*_{i,k})=\mu_{x_k}$ and that $\operatorname{V}(x_{i,k})=\sigma^2_{x_k}$ while $\operatorname{V}(x^*_{i,k})=\sigma^2_{x_k}+\sigma^2_{\eta_k}\geq \sigma^2_{x_k}$.
