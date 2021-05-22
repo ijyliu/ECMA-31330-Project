@@ -107,6 +107,20 @@
 
         Brief discussion of https://warwick.ac.uk/fac/soc/economics/staff/knagasawa/PartialEffects.pdf, as well as anything else important that comes up on Google Scholar
 
+        Nagasawa 2020 theoretically develops the use of a proxy variable to deal with unobserved heterogeneity in line with the definitions in the measurement error literature
+
+        Uses an imperfect measurment of the error, the proxy
+
+        problem is in nuisance parameters
+
+        has a single proxy variable
+
+        nonparametric approach mentioned as having limited usefulness due to curse of dimensionality and restrictive common support
+
+        kernel first stage
+
+        new partial effects method of proxy
+
     \section*{Theoretical framework}
 
         Consider a model where the outcome is denoted by $y_i$. This outcome depends on a variable of interest denoted by $t_i$ and a vector of covariates denoted by $X_i=(x_{i,1},x_{i,2},\dots x_{i,p})'$. Additionally, consider a vector of variables $X^*_i=(x^*_{i,1},x^*_{i,2},\dots x^*_{i,p})'$ that correspond to the covariates $X_i$ but observed with measurement error, where $x^*_{i,k}=x_{i,k}+\eta_{i,k}$ with $\eta_{i,k} \sim {iid}(0,\sigma^2_{\eta_k})$, $\operatorname{E}(x_{i,k}'\eta_{i,k})=0, \forall i$, $\operatorname{E}(x_{i,k}'\eta_{j,l})=0, \forall i\neq j$ and $k \neq l$, and $\operatorname{E}(\eta_{i,k}'\eta_{j,l})=0, \forall i\neq j$ and $k \neq l$. Therefore, each $x^*_{i,k}$ suffers from classical measurement error. Note that $\operatorname{E}(x_{i,k})=\operatorname{E}(x^*_{i,k})=\mu_{x_k}$ and that $\operatorname{V}(x_{i,k})=\sigma^2_{x_k}$ while $\operatorname{V}(x^*_{i,k})=\sigma^2_{x_k}+\sigma^2_{\eta_k}\geq \sigma^2_{x_k}$.
