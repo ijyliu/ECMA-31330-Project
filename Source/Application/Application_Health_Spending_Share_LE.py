@@ -17,6 +17,7 @@ matplotlib.use('pdf')
 import matplotlib.pyplot as plt
 import seaborn as sns
 import statsmodels.formula.api as smf
+from linearmodels import IV2SLS
 import regex as re
 
 # Get the list of indicators
@@ -128,9 +129,6 @@ def run_empirical_analysis(data, name):
     # Mean of standardized covariates OLS
     ols_mean_covariates = smf.ols("life_exp ~ govt_health_share + covariates_mean", data = std_data.reset_index()).fit()
 
-    # Panel Fixed Effects Regression for Benchmark
-    fixed_effects_results = smf.ols("life_exp ~ govt_health_share + " + covariates_formula_string + " + C(year) + C(country)", data = std_data.reset_index()).fit(cov_type='cluster', cov_kwds={'groups': std_data.reset_index()['country']})
-
     # Decompose into matrix for PCA analysis
     # This contains only the economic covariates
     X = std_data[covariates_list].to_numpy()
@@ -159,22 +157,48 @@ def run_empirical_analysis(data, name):
     # Main PCR spec
     partial_pc_regression = smf.ols("life_exp ~ govt_health_share + PC1", data = std_data).fit()
 
-    # PCR with fixed effects
-    pc_fixed_effects_results = smf.ols("life_exp ~ govt_health_share + PC1 + C(year) + C(country)", data = std_data.reset_index()).fit(cov_type='cluster', cov_kwds={'groups': std_data.reset_index()['country']})
-
     # Regression table settings
     reg_table = Stargazer([ols_benchmark, ols_one_covariate, ols_many_covariates, ols_mean_covariates, partial_pc_regression])
     reg_table.dependent_variable_name("Life Expectancy at Birth (Years)")
     reg_table.covariate_order(['govt_health_share'])
     reg_table.rename_covariates({"govt_health_share":"Govt. Share of Health Exp."})
     # Fixed effects indicator
-    reg_table.add_line('Covariates', ['None', 'GDP PC', 'Econ Indicators', 'Mean', 'PCs'])
+    reg_table.add_line('Covariates', ['None', 'GDP PC', 'Econ Indicators', 'Mean', 'PC 1'])
     reg_table.show_degrees_of_freedom(False)
     reg_table.add_custom_notes(["All variables are standardized."])
 
     # Write regression table to LaTeX
     with open(tables_dir + "/LE_Health_Econ_Regressions" + name + ".tex", "w") as f:
         corrected_table = re.sub('\\cline{[0-9\-]+}', '', reg_table.render_latex())
+        f.write(corrected_table)
+
+    # Additional results
+
+    # Fixed effects
+    # Panel Fixed Effects Regression for Benchmark
+    fixed_effects_results = smf.ols("life_exp ~ govt_health_share + " + covariates_formula_string + " + C(year) + C(country)", data = std_data.reset_index()).fit(cov_type='cluster', cov_kwds={'groups': std_data.reset_index()['country']})
+    # PCR with fixed effects
+    pc_fixed_effects_results = smf.ols("life_exp ~ govt_health_share + PC1 + C(year) + C(country)", data = std_data.reset_index()).fit(cov_type='cluster', cov_kwds={'groups': std_data.reset_index()['country']})
+    # Use first 9 principal components (this gets at around 95% of the variance in development)
+    more_pcs_results = smf.ols("life_exp ~ govt_health_share + PC1 + PC2 + PC3 + PC4 + PC5 + PC6 + PC7 + PC8 + PC9", data = std_data).fit()
+    # Instrumental variables- instrument GDP per capita (probably mismeasured) on all the other development indicators
+    iv_instruments_string = covariates_formula_string.replace('gdp_pc_ppp +', '')
+    iv_results = IV2SLS.from_formula("life_exp ~ govt_health_share + [gdp_pc_ppp ~ " + iv_instruments_string + "]", data = std_data).fit()
+
+    # Regression table settings
+    additional_reg_table = Stargazer([fixed_effects_results, pc_fixed_effects_results, more_pcs_results, iv_results])
+    additional_reg_table.dependent_variable_name("Life Expectancy at Birth (Years)")
+    additional_reg_table.covariate_order(['govt_health_share'])
+    additional_reg_table.rename_covariates({"govt_health_share":"Govt. Share of Health Exp."})
+    # Fixed effects indicator
+    additional_reg_table.add_line('Covariates', ['None', 'PC 1', 'PC 1-9', 'GDP PC (IV)'])
+    additional_reg_table.add_line('Fixed Effects', ['Yes', 'Yes', 'No', 'No'])
+    additional_reg_table.show_degrees_of_freedom(False)
+    additional_reg_table.add_custom_notes(["All variables are standardized."])
+
+    # Write regression table to LaTeX
+    with open(tables_dir + "/Additional_LE_Health_Econ_Regressions" + name + ".tex", "w") as f:
+        corrected_table = re.sub('\\cline{[0-9\-]+}', '', additional_reg_table.render_latex())
         f.write(corrected_table)
 
 # Do the analysis on the two datasets
