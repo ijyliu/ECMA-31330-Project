@@ -34,7 +34,7 @@ wb_data = (pd.read_csv(apps_dir + "/WB_Data.csv", index_col=['economy', 'series'
              .transpose()
              .stack(level = 'economy')
              .rename_axis(None, axis = 1)
-             .rename(columns = {"SP.DYN.LE00.IN":"life_exp", "SH.XPD.GHED.CH.ZS":"govt_health_share_wb"})
+             .rename(columns = {"SP.DYN.LE00.IN":"life_exp", "SH.XPD.GHED.CH.ZS":"govt_health_share_wb", "NY.GDP.PCAP.PP.CD":"gdp_pc_ppp"})
              # Get rid of old health GDP share measure
              .drop(columns='SH.XPD.CHEX.GD.ZS')
              .rename_axis(['year', 'country'])
@@ -99,6 +99,9 @@ plt.close()
 
 # OLS for benchmark
 ols_benchmark = smf.ols("life_exp ~ mean_govt_health_share", data = std_data.reset_index()).fit()
+
+# Single mismeasured covariate OLS
+ols_one_covariate = smf.ols("life_exp ~ mean_govt_health_share + gdp_pc_ppp", data = std_data.reset_index()).fit()
 
 # Many covariate OLS
 ols_many_covariates = smf.ols("life_exp ~ mean_govt_health_share + " + covariates_formula_string, data = std_data.reset_index()).fit()
