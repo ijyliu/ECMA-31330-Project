@@ -430,11 +430,9 @@
 
     \section*{Application: Government Share of Healthcare Spending and Life Expectancy}
 
-        Explain economic importance/interesting-ness of the chosen application
-
-        Mini literature review on this question
-
         We now examine the implications of the principal components estimator in an empirical setting with measurement error. One interesting question in public economics and public health is the comparison between publicly and privately funded healthcare systems and outcomes such as life expectancy. To measure the public or private nature of a healthcare system we use the continuous variable of the government's share of total health expenditure in a given country and year.
+
+        TODO: Mini literature review on this question
 
         In this regression it is important to account for the role that a country's level of economic development. There is an extensive literature linking economic development to life expectancy. cite gapminder etc. Somewhat less obvious is the linkage between government provision of healthcare and development. In general, public goods provision in fields such as healthcare has been linked to prosperity (cite)
 
@@ -454,17 +452,14 @@
         % does the averaging do anything? seems kind of sketchy because it's like measurement error in the variable of interest as well!
 
         % Add \ref to the following table?
-        In the left column in the table begin with an OLS regression. In the middle column we include the economic controls/covariates of GDP per capita (PPP), GNI per capita (PPP), Survey Mean Income/Consumption Per Capita, ILO GDP per person employed, and Net Foreign Assets Per Capita. In the rightmost column we instead use the first principal component combining these covariates.
-
-        % Add: include just a single mismeasured covariate
+        In the table below we begin with a univariate OLS regression, which produces a large and significant coeffcient indicating a one standard deviation increase in the government share of health expenditure is linked to a 0.56 standard deviation increase in life expectancy. Next we include the potentially mismeasured covariate of GDP per capita, which greatly reduces the size of the coefficient on the governments share. After this we include a full set of economic covariates listed in Table (make table based off CSV here!), agian reducing the size of the coefficient. However, this result is then adjusted upwards again in the last two columns, where use the mean of the mismeasured covariates and the first principal component.
 
         \input{../Output/Tables/LE_Health_Econ_Regressions.tex}
 
-        The results clearly demonstrate that the principal components method achieves a noticably different coefficient on the government health share coefficient relative to multivariate OLS; in this case, a larger one.
+        The results clearly demonstrate that all of the methods using multiple measures of the covariates produce noticably different coefficients for government health share. The univariate omitted variable bias formula yields that $\beta_{OLS} = \beta_{true} + \delta\gamma$ where $\delta$ is the effect of GDP on the government share and $\gamma$ is the effect of GDP on life expectancy. In this case, it is likely that in truth $\delta, \gamma > 0$.
+        In model (2), where we include only a single mismeasured coefficient, mismeasurement leads to an attenuated $\gamma$ and hence an overly large $\beta$ coefficient relative to the other models.
 
-        The univariate omitted variable bias formula yields that $\beta_{OLS} = \beta_{true} + \delta\gamma$ where $\delta$ is the effect of GDP on the government share and $\gamma$ is the effect of GDP on life expectancy, OLS naturally provides an overestimate. It is likely $\delta, \gamma > 0$, but mismeasurement leads to an attenuated $\gamma$
-
-        NOTE- the math as worked out in the previous paragraph doesn't make sense.
+        NOTE- I don't know what's going on with the mean and why it makes such a large coefficient... probably want to check my code at some point.
 
         % Though the coefficients are not readily interpretable, they do differ from each other
         % ADD TEST to show coefficients differ? I think this also would not be easy to interpret since the independent variables are different...
