@@ -1,19 +1,18 @@
 Indicator_Code,Indicator_Name
-SP.DYN.LE00.IN,Life Expectancy at Birth (Total)
-NY.GDP.PCAP.PP.CD,GCP PC PPP
-NY.GDP.PCAP.CD,GDP PC Current USD
-NY.GNP.PCAP.PP.CD,GNP PC PPP
-NY.GNP.PCAP.CD,GNP PC Current USD
-SI.SPR.PCAP,Survey Mean Inc/Cons PC
-SI.SPR.PC40,Survey Mean Inc/Cons PC Bott 40%
+SP.DYN.LE00.IN,Life Expectancy at Birth (All Population)
+NY.GDP.PCAP.PP.CD,GDP Per Capita PPP (Current International $)
+NY.GDP.PCAP.CD,GDP Per Capita (Current USD)
+NY.GNP.PCAP.PP.CD,GNP Per Capita PPP (Current International $)
+NY.GNP.PCAP.CD,GNP Per Capita (Current USD)
+SI.SPR.PCAP,Survey Mean Income or Consumption Per Capita
+SI.SPR.PC40,"Survey Mean Income or Consumption Per Capita, Bottom 40%"
 SL.GDP.PCAP.EM.KD,ILO GDP Per Person Employed
-NW.NFA.PC,Net Foreign Assets PC
-FI.RES.TOTL.CD,Total Reserves
-SI.POV.DDAY,Pov HCR PPP
-SI.POV.NAHC,Pov HCR National Line
-SI.POV.GAPS,Pov Gap PPP
-SH.XPD.GHED.CH.ZS,Govt Health Share
-DT.ODA.ODAT.PC.ZS,Net ODA PC Current USD
-DT.ODA.ODAT.GN.ZS,Net ODA Percent GNI
-DT.ODA.ODAT.XP.ZS,Net ODA Percent Govt Expense
-SH.XPD.CHEX.GD.ZS,Health Spending as Percent of GDP Current USD
+FI.RES.TOTL.CD,Total Foreign Reserves
+SI.POV.DDAY,Poverty Headcount Ratio (International Extreme Poverty Line)
+SI.POV.NAHC,Poverty Headcount Ratio (National Poverty Line)
+SI.POV.GAPS,Poverty Gap (International Extreme Poverty Line)
+SH.XPD.GHED.CH.ZS,Government Share of Health Expenditure
+DT.ODA.ODAT.PC.ZS,Net Official Development Assistance Per Capita (Current USD)
+DT.ODA.ODAT.GN.ZS,"Net Official Development Assistance Per Capita, Percent of GNI"
+DT.ODA.ODAT.XP.ZS,"Net Official Development Assistance, Percent of Total Government Expenditure"
+SH.XPD.CHEX.GD.ZS,Health Spending Share of GDP (Current USD)

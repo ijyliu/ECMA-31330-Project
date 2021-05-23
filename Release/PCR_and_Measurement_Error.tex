@@ -1,4 +1,5 @@
 \documentclass[12pt]{article}
+\usepackage{booktabs}
 \usepackage{graphicx}
 %\usepackage{subcaption}
 \usepackage{caption}
@@ -452,7 +453,7 @@
         % does the averaging do anything? seems kind of sketchy because it's like measurement error in the variable of interest as well!
 
         % Add \ref to the following table?
-        In Table \ref{main_regs} below we begin with a univariate OLS regression, which produces a large and significant coeffcient indicating a one standard deviation increase in the government share of health expenditure is linked to a 0.56 standard deviation increase in life expectancy. Next we include the potentially mismeasured covariate of GDP per capita, which greatly reduces the size of the coefficient on the governments share. After this we include a full set of economic covariates listed in Table (make table based off CSV here!), again reducing the size of the coefficient. However, this result is then adjusted upwards again in the last two columns, where use the mean of the mismeasured covariates, and the first principal component.
+        In Table \ref{main_regs} below we begin with a univariate OLS regression, which produces a large and significant coeffcient indicating a one standard deviation increase in the government share of health expenditure is linked to a 0.56 standard deviation increase in life expectancy. Next we include the potentially mismeasured covariate of GDP per capita, which greatly reduces the size of the coefficient on the governments share. After this we include a full set of economic covariates listed in Table \ref{covariates}, again reducing the size of the coefficient. However, this result is then adjusted upwards again in the last two columns, where use the mean of the mismeasured covariates, and the first principal component.
 
         \input{../Output/Tables/LE_Health_Econ_Regressions_combined.tex}
 
@@ -486,6 +487,11 @@
 
 
     \section*{Appendix 3}
+
+        \begin{table}[!htbp] \centering
+            \caption{Covariates \label{covariates}}
+            \input{../Output/Tables/indicators.tex}
+        \end{table}
 
         \input{../Output/Tables/Additional_LE_Health_Econ_Regressions_combined.tex}
 

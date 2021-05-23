@@ -208,3 +208,16 @@ def run_empirical_analysis(data, name):
 run_empirical_analysis(data = combined_data, name = "combined")
 run_empirical_analysis(data = wb_only_data, name = "wb_only")
 run_empirical_analysis(data = oecd_only_data, name = "oecd_only")
+
+# For reference, produce a full table of covariates
+covariates_fullnames = (pd.read_csv(input_dir + '/wb_indicators_list.csv')
+                .query('Indicator_Code != "SH.XPD.CHEX.GD.ZS"')
+                .query('Indicator_Code != "SP.DYN.LE00.IN"')
+                .query('Indicator_Code != "NY.GDP.PCAP.PP.CD"')
+                .drop(columns = 'Indicator_Code')
+                .rename(columns = {"Indicator_Name":"Indicator Name"})
+                .reset_index(drop = True))
+
+# Ensure entire strings/columns get printed
+with pd.option_context('display.max_colwidth', -1):
+    covariates_fullnames.to_latex(tables_dir + '/indicators.tex', index = False)
