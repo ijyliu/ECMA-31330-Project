@@ -442,29 +442,32 @@
         GDP measurements rely on surveys
         Informal economy and non-monetary but productive work
         Particularly in developing economies subject (nonclassical problem?)
-        Hence, this setup, with a covariate in regression subject to measurement error
-        possible bias in coefficient on health share
+        Hence, this setup, with a covariate in regression subject to measurement error, fits the situation described in the theory and simulations in the previous sections. In this case, we aim to to accurately reduce possible bias in the coefficient of the government's share of health spending by reducing bias in the coefficients for development indicators.
+
+        % Go into more detail on what particular simulation parameters we envision
 
         %It is very difficult to find an instrumental variable for economic development which satisfies a reasonable exclusion restriction.
 
-        Our data comes from the World Bank and OECD
+        Our data on all measures comes from the World Bank, though we also make usage of OECD government health share data to fill in missing years, and average World Bank and OECD measurements when both are available. We standardize all variables by subtracting the mean and dividing by the standard deviation, linearly interpolate data between known observations, and remove country-years with missing values for any of the economic indicators.
 
-        Cite, describe cleaning procedure
+        % need to compile stats in terms of what country years are missing in WB versus OECD
+        % does the averaging do anything? seems kind of sketchy because it's like measurement error in the variable of interest as well!
 
         % Add \ref to the following table?
-        In the left column in the table below I first regress the life expectancy at birth for all individuals in a given country and year on a measure of government spending as a share of total health expenditure. In the middle column I include the economic controls/covariates of GDP per capita (PPP), GNI per capita (PPP), Survey Mean Income/Consumption Per Capita, ILO GDP per person employed, and Net Foreign Assets Per Capita, all from the World Bank. In the rightmost column I instead use the first principal component combining these covariates.
+        In the left column in the table begin with an OLS regression. In the middle column we include the economic controls/covariates of GDP per capita (PPP), GNI per capita (PPP), Survey Mean Income/Consumption Per Capita, ILO GDP per person employed, and Net Foreign Assets Per Capita. In the rightmost column we instead use the first principal component combining these covariates.
 
-        I standardize all variables by subtracting the mean and dividing by the standard deviation, linearly interpolate data between known observations, and remove country-years with missing values for any of the economic indicators.
+        % Add: include just a single mismeasured covariate
 
         \input{../Output/Tables/LE_Health_Econ_Regressions.tex}
 
+        The results clearly demonstrate that the principal components method achieves a noticably different coefficient on the government health share coefficient relative to multivariate OLS; in this case, a larger one.
+
+        The univariate omitted variable bias formula yields that $\beta_{OLS} = \beta_{true} + \delta\gamma$ where $\delta$ is the effect of GDP on the government share and $\gamma$ is the effect of GDP on life expectancy, OLS naturally provides an overestimate. It is likely $\delta, \gamma > 0$, but mismeasurement leads to an attenuated $\gamma$
+
+        NOTE- the math as worked out in the previous paragraph doesn't make sense.
+
         % Though the coefficients are not readily interpretable, they do differ from each other
-
         % ADD TEST to show coefficients differ? I think this also would not be easy to interpret since the independent variables are different...
-
-        % In both cases, they are significant.
-
-        % Notably, we demonstrate a higher $R^2$ using the principal component model.
 
     \section*{Conclusion}
 
