@@ -119,7 +119,7 @@ fixed_effects_results = smf.ols("life_exp ~ mean_govt_health_share + " + covaria
 
 # Decompose into matrix for PCA analysis
 # This contains only the economic covariates
-X = std_data.drop(columns = ['life_exp', 'mean_govt_health_share']).to_numpy()
+X = std_data[covariates_list].to_numpy()
 
 # Perform the factor analysis
 pca_model = pca()
@@ -154,7 +154,7 @@ reg_table.dependent_variable_name("Life Expectancy at Birth (Years)")
 reg_table.covariate_order(['mean_govt_health_share'])
 reg_table.rename_covariates({"mean_govt_health_share":"Govt. Share of Health Exp."})
 # Fixed effects indicator
-reg_table.add_line('Covariates', ['None', 'GDP Per Capita PPP', 'Econ Indicators', 'Mean of Standardized Indicators', 'Principal Component'])
+reg_table.add_line('Covariates', ['None', 'GDP PC', 'Econ Indicators', 'Mean', 'PCs'])
 reg_table.show_degrees_of_freedom(False)
 reg_table.add_custom_notes(["All variables are standardized."])
 
