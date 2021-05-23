@@ -41,8 +41,8 @@ wb_data = (pd.read_csv(apps_dir + "/WB_Data.csv", index_col=['economy', 'series'
 # Fix covariates list with renamed gdp_pc_ppp
 covariates_list = ["gdp_pc_ppp" if item == "NY.GDP.PCAP.PP.CD" else item for item in covariates_list]
 
-# Flip sign on poverty measures
-cols = wb_data.columns.str.contains('POV')
+# Flip sign on poverty and ODA measures
+cols = np.logical_or(wb_data.columns.str.contains('POV'), wb_data.columns.str.contains('ODA'))
 wb_data.loc[:, cols] = wb_data.loc[:, cols].mul(-1)
 
 # Remove periods from column names
