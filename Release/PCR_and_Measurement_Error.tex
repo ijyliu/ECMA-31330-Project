@@ -453,9 +453,14 @@
         % does the averaging do anything? seems kind of sketchy because it's like measurement error in the variable of interest as well!
 
         % Add \ref to the following table?
-        In Table \ref{main_regs} below we begin with a univariate OLS regression, which produces a large and significant coeffcient indicating a one standard deviation increase in the government share of health expenditure is linked to a 0.56 standard deviation increase in life expectancy. Next we include the potentially mismeasured covariate of GDP per capita, which greatly reduces the size of the coefficient on the governments share. After this we include a full set of economic covariates listed in Table \ref{covariates}, again reducing the size of the coefficient. However, this result is then adjusted upwards again in the last two columns, where use the mean of the mismeasured covariates, and the first principal component.
+        In Table \ref{main_regs} below we begin with a univariate OLS regression, which produces a large and significant coeffcient indicating a one standard deviation increase in the government share of health expenditure is linked to a 0.56 standard deviation increase in life expectancy. Next we include the potentially mismeasured covariate of GDP per capita, which greatly reduces the size of the coefficient on the governments share. After this we include a full set of economic covariates listed in Table \ref{Econ_Indicators}, again reducing the size of the coefficient. However, this result is then adjusted upwards again in the last two columns, where use the mean of the mismeasured covariates, and the first principal component.
 
         \input{../Output/Tables/LE_Health_Econ_Regressions_combined.tex}
+
+        \begin{table}[!htbp] \centering
+            \caption{Econ Indicators \label{Econ_Indicators}}
+            \input{../Output/Tables/indicators.tex}
+        \end{table}
 
         The results clearly demonstrate that all of the methods using multiple measures of the covariates produce noticably different coefficients for government health share. The univariate omitted variable bias formula yields that $\beta_{OLS} = \beta_{true} + \delta\gamma$ where $\delta$ is the effect of GDP on the government share and $\gamma$ is the effect of GDP on life expectancy. In this case, it is likely that in truth $\delta, \gamma > 0$. In our model (2), where we include only a single mismeasured coefficient, mismeasurement leads to an attenuated $\gamma$ and hence an overly large $\beta$ coefficient relative to the other models.
 
@@ -487,11 +492,6 @@
 
 
     \section*{Appendix 3}
-
-        \begin{table}[!htbp] \centering
-            \caption{Covariates \label{covariates}}
-            \input{../Output/Tables/indicators.tex}
-        \end{table}
 
         \input{../Output/Tables/Additional_LE_Health_Econ_Regressions_combined.tex}
 
