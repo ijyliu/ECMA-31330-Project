@@ -159,6 +159,7 @@ def run_empirical_analysis(data, name):
 
     # Regression table settings
     reg_table = Stargazer([ols_benchmark, ols_one_covariate, ols_many_covariates, ols_mean_covariates, partial_pc_regression])
+    reg_table.title("Regressions of Life Expectancy on Government Share of Health Spending \label{main_regs}")
     reg_table.dependent_variable_name("Life Expectancy at Birth (Years)")
     reg_table.covariate_order(['govt_health_share'])
     reg_table.rename_covariates({"govt_health_share":"Govt. Share of Health Exp."})
@@ -189,6 +190,7 @@ def run_empirical_analysis(data, name):
 
     # Regression table settings
     additional_reg_table = Stargazer([fixed_effects_results, pc_fixed_effects_results, more_pcs_results, iv_results])
+    reg_table.title("Additional Regressions \label{additional_regs}")
     additional_reg_table.dependent_variable_name("Life Expectancy at Birth (Years)")
     additional_reg_table.covariate_order(['govt_health_share'])
     additional_reg_table.rename_covariates({"govt_health_share":"Govt. Share of Health Exp."})
