@@ -24,10 +24,6 @@ indicators_list = get_wb_ind_list()
 # Create a list of covariates
 # For some reason net foreign assets pc doesn't read in correctly
 covariates_list = [variable for variable in indicators_list if variable != "SP.DYN.LE00.IN" and variable != "SH.XPD.GHED.CH.ZS" and variable != "NW.NFA.PC" and variable != "SH.XPD.CHEX.GD.ZS"]
-# String format of covariates for patsy formulas
-covariates_formula_string = covariates_list[0]
-for i in range(1, len(covariates_list)):
-    covariates_formula_string += " + " + covariates_list[i]
 
 # Load in the WB data
 wb_data = (pd.read_csv(apps_dir + "/WB_Data.csv", index_col=['economy', 'series'])
@@ -51,8 +47,6 @@ wb_data.loc[:, cols] = wb_data.loc[:, cols].mul(-1)
 
 # Remove periods from column names
 wb_data.columns = wb_data.columns.str.replace(".", "_")
-# Also update the formula string
-covariates_formula_string = covariates_formula_string.replace(".", "_")
 
 oecd_data = (pd.read_csv(apps_dir + "/OECD_Govt_Share_Health_Spending.csv")
                .query('INDICATOR == "HEALTHEXP' and 'SUBJECT == "COMPULSORY' and 'MEASURE == "PC_HEALTH_EXP"' and 'FREQUENCY == "A"')
@@ -86,7 +80,9 @@ merged_data = (merged_data.assign(mean_govt_health_share=merged_data.loc[:, ["go
 std_data = pd.DataFrame(StandardScaler().fit_transform(merged_data), index=merged_data.index, columns=merged_data.columns)
 
 # Calculate the 'averaged' covariate measure, now that the standardization is done
-std_data['covariates_mean'] =  std_data[[covariates_list]].mean(axis = 1)
+covariates_list = [var_name.replace('.', '_') for var_name in covariates_list]
+print(std_data)
+std_data['covariates_mean'] =  std_data[covariates_list].mean(axis = 1)
 
 # Basic time series plot
 plt.figure(figsize=(15,15))
@@ -109,6 +105,10 @@ ols_benchmark = smf.ols("life_exp ~ mean_govt_health_share", data = std_data.res
 ols_one_covariate = smf.ols("life_exp ~ mean_govt_health_share + gdp_pc_ppp", data = std_data.reset_index()).fit()
 
 # Many covariate OLS
+# String format of covariates for patsy formulas
+covariates_formula_string = covariates_list[0]
+for i in range(1, len(covariates_list)):
+    covariates_formula_string += " + " + covariates_list[i]
 ols_many_covariates = smf.ols("life_exp ~ mean_govt_health_share + " + covariates_formula_string, data = std_data.reset_index()).fit()
 
 # Mean of standardized covariates OLS
@@ -149,13 +149,12 @@ partial_pc_regression = smf.ols("life_exp ~ mean_govt_health_share + PC1", data 
 pc_fixed_effects_results = smf.ols("life_exp ~ mean_govt_health_share + PC1 + C(year) + C(country)", data = std_data.reset_index()).fit(cov_type='cluster', cov_kwds={'groups': std_data.reset_index()['country']})
 
 # Regression table settings
-reg_table = Stargazer([ols_benchmark, ols_many_covariates, fixed_effects_results, partial_pc_regression, pc_fixed_effects_results])
+reg_table = Stargazer([ols_benchmark, ols_one_covariate, ols_many_covariates, ols_mean_covariates, partial_pc_regression])
 reg_table.dependent_variable_name("Life Expectancy at Birth (Years)")
 reg_table.covariate_order(['mean_govt_health_share'])
 reg_table.rename_covariates({"mean_govt_health_share":"Govt. Share of Health Exp."})
 # Fixed effects indicator
-reg_table.add_line('Covariates', ['None', 'Econ Indicators', 'Econ Indicators', 'PCs', 'PCs'])
-reg_table.add_line('Fixed Effects', ['No', 'No', 'Yes', 'No', 'Yes'])
+reg_table.add_line('Covariates', ['None', 'GDP Per Capita PPP', 'Econ Indicators', 'Mean of Standardized Indicators', 'Principal Component'])
 reg_table.show_degrees_of_freedom(False)
 reg_table.add_custom_notes(["All variables are standardized."])
 
