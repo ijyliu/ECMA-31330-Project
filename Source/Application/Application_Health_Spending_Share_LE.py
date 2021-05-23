@@ -165,7 +165,7 @@ def run_empirical_analysis(data, name):
     # Fixed effects indicator
     reg_table.add_line('Covariates', ['None', 'GDP PC', 'Econ Indicators', 'Mean', 'PC 1'])
     reg_table.show_degrees_of_freedom(False)
-    reg_table.add_custom_notes(["All variables are standardized. All columns make use of robust standard errors."])
+    #reg_table.add_custom_notes(["All variables are standardized. All columns make use of robust standard errors."])
 
     # Write regression table to LaTeX
     with open(tables_dir + "/LE_Health_Econ_Regressions_" + name + ".tex", "w") as f:
@@ -196,7 +196,7 @@ def run_empirical_analysis(data, name):
     additional_reg_table.add_line('Covariates', ['None', 'PC 1', 'PC 1-7', 'GDP PC (IV)'])
     additional_reg_table.add_line('Fixed Effects', ['Yes', 'Yes', 'No', 'No'])
     additional_reg_table.show_degrees_of_freedom(False)
-    additional_reg_table.add_custom_notes(["All variables are standardized. Fixed effects columns make use of country clustered standard errors: others use robust standard errors."])
+    #additional_reg_table.add_custom_notes(["All variables are standardized. \nFixed effects columns make use of country clustered standard errors: \nothers use robust standard errors."])
 
     # Write regression table to LaTeX
     with open(tables_dir + "/Additional_LE_Health_Econ_Regressions_" + name + ".tex", "w") as f:
