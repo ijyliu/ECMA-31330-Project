@@ -40,6 +40,8 @@ wb_data = (pd.read_csv(apps_dir + "/WB_Data.csv", index_col=['economy', 'series'
 
 # Fix covariates list with renamed gdp_pc_ppp
 covariates_list = ["gdp_pc_ppp" if item == "NY.GDP.PCAP.PP.CD" else item for item in covariates_list]
+# Also get rid of problematic periods and replace with underscores
+covariates_list = [var_name.replace('.', '_') for var_name in covariates_list]
 
 # Flip sign on poverty and ODA measures
 cols = np.logical_or(wb_data.columns.str.contains('POV'), wb_data.columns.str.contains('ODA'))
@@ -66,99 +68,116 @@ oecd_data = (combos_to_merge.merge(oecd_data, how = 'left')
 # Merge world bank and oecd data
 merged_data = (wb_data.merge(oecd_data, how='outer'))
 
+# Combined data
 # Take mean of world bank and oecd spending percentage or use one or the other if the other is missing
-merged_data = (merged_data.assign(mean_govt_health_share=merged_data.loc[:, ["govt_health_share_wb", "govt_health_share_oecd"]].mean(axis=1))
-                          # Sort and interpolate
-                          .sort_index(level=['country', 'year'])
-                          .interpolate(limit_area='inside')
-                          .drop(columns=['govt_health_share_wb', 'govt_health_share_oecd'])
-                          .dropna()
-                          .set_index(['year', 'country']))
+combined_data = (merged_data.assign(govt_health_share=merged_data.loc[:, ["govt_health_share_wb", "govt_health_share_oecd"]].mean(axis=1)))
 
-# Standardize all variables
-# https://stackoverflow.com/questions/35723472/how-to-use-sklearn-fit-transform-with-pandas-and-return-dataframe-instead-of-num
-std_data = pd.DataFrame(StandardScaler().fit_transform(merged_data), index=merged_data.index, columns=merged_data.columns)
+# WB only data
+# The obove procedure is a little weird, so we can also use just the WB govt health share measure
+wb_only_data = (merged_data.assign(govt_health_share = merged_data['govt_health_share_wb']))
 
-# Calculate the 'averaged' covariate measure, now that the standardization is done
-covariates_list = [var_name.replace('.', '_') for var_name in covariates_list]
-print(std_data)
-std_data['covariates_mean'] =  std_data[covariates_list].mean(axis = 1)
+# OECD only data
+# Also do the similar with only the OECD measure
+oecd_only_data = (merged_data.assign(govt_health_share = merged_data['govt_health_share_oecd']))
 
-# Basic time series plot
-plt.figure(figsize=(15,15))
-plt.plot(std_data.reset_index().set_index('year')['mean_govt_health_share'])
-plt.savefig(figures_dir + "/Govt_Health_Share_Time_Series.pdf")
-plt.close()
+# Run the empirical analysis for dataset
+# This could be using both the World Bank and OECD data or just the World Bank Data
+def run_empirical_analysis(data, name):
 
-# Exploring correlations between the variables
-sns.set(font_scale=0.25)
-sns.heatmap(std_data.corr())
-plt.yticks(rotation=0)
-plt.xticks(rotation=90)
-plt.savefig(figures_dir + "/LE_Health_Econ_Correlations.pdf")
-plt.close()
+    # First, sort, interpolate and fill
+    filled_data = (data.sort_index(level=['country', 'year'])
+                       .interpolate(limit_area='inside')
+                       .drop(columns=['govt_health_share_wb', 'govt_health_share_oecd'])
+                       .dropna()
+                       .set_index(['year', 'country']))
 
-# OLS for benchmark
-ols_benchmark = smf.ols("life_exp ~ mean_govt_health_share", data = std_data.reset_index()).fit()
+    # Standardize all variables
+    # https://stackoverflow.com/questions/35723472/how-to-use-sklearn-fit-transform-with-pandas-and-return-dataframe-instead-of-num
+    std_data = pd.DataFrame(StandardScaler().fit_transform(filled_data), index=filled_data.index, columns=filled_data.columns)
 
-# Single mismeasured covariate OLS
-ols_one_covariate = smf.ols("life_exp ~ mean_govt_health_share + gdp_pc_ppp", data = std_data.reset_index()).fit()
+    # Calculate the 'averaged' covariate measure, now that the standardization is done
+    std_data['covariates_mean'] =  std_data[covariates_list].mean(axis = 1)
 
-# Many covariate OLS
-# String format of covariates for patsy formulas
-covariates_formula_string = covariates_list[0]
-for i in range(1, len(covariates_list)):
-    covariates_formula_string += " + " + covariates_list[i]
-ols_many_covariates = smf.ols("life_exp ~ mean_govt_health_share + " + covariates_formula_string, data = std_data.reset_index()).fit()
+    # Basic time series plot
+    plt.figure(figsize=(15,15))
+    plt.plot(std_data.reset_index().set_index('year')['govt_health_share'])
+    plt.savefig(figures_dir + "/Govt_Health_Share_Time_Series" + name + ".pdf")
+    plt.close()
 
-# Mean of standardized covariates OLS
-ols_mean_covariates = smf.ols("life_exp ~ mean_govt_health_share + covariates_mean", data = std_data.reset_index()).fit()
+    # Exploring correlations between the variables
+    sns.set(font_scale=0.25)
+    sns.heatmap(std_data.corr())
+    plt.yticks(rotation=0)
+    plt.xticks(rotation=90)
+    plt.savefig(figures_dir + "/LE_Health_Econ_Correlations" + name + ".pdf")
+    plt.close()
 
-# Panel Fixed Effects Regression for Benchmark
-fixed_effects_results = smf.ols("life_exp ~ mean_govt_health_share + " + covariates_formula_string + " + C(year) + C(country)", data = std_data.reset_index()).fit(cov_type='cluster', cov_kwds={'groups': std_data.reset_index()['country']})
+    # OLS for benchmark
+    ols_benchmark = smf.ols("life_exp ~ govt_health_share", data = std_data.reset_index()).fit()
 
-# Decompose into matrix for PCA analysis
-# This contains only the economic covariates
-X = std_data[covariates_list].to_numpy()
+    # Single mismeasured covariate OLS
+    ols_one_covariate = smf.ols("life_exp ~ govt_health_share + gdp_pc_ppp", data = std_data.reset_index()).fit()
 
-# Perform the factor analysis
-pca_model = pca()
-pca_results = pca_model.fit_transform(X)
+    # Many covariate OLS
+    # String format of covariates for patsy formulas
+    covariates_formula_string = covariates_list[0]
+    for i in range(1, len(covariates_list)):
+        covariates_formula_string += " + " + covariates_list[i]
+    ols_many_covariates = smf.ols("life_exp ~ govt_health_share + " + covariates_formula_string, data = std_data.reset_index()).fit()
 
-# Count number of PCs
-num_pcs = pca_results['PC'].shape[1]
-PC_names = ['PC' + str(i + 1) for i in range(num_pcs)]
+    # Mean of standardized covariates OLS
+    ols_mean_covariates = smf.ols("life_exp ~ govt_health_share + covariates_mean", data = std_data.reset_index()).fit()
 
-# Add PCA results to the dataframe
-std_data = pd.concat([std_data.reset_index(), pca_results['PC'].reset_index(drop = True)], axis = 1, names = [std_data.columns, PC_names])
+    # Panel Fixed Effects Regression for Benchmark
+    fixed_effects_results = smf.ols("life_exp ~ govt_health_share + " + covariates_formula_string + " + C(year) + C(country)", data = std_data.reset_index()).fit(cov_type='cluster', cov_kwds={'groups': std_data.reset_index()['country']})
 
-# Plot the loadings
-sns.heatmap(pca_results['loadings'], cmap='YlGnBu')
-plt.savefig(figures_dir + "/Econ_Indicator_Loadings.pdf")
-plt.close()
+    # Decompose into matrix for PCA analysis
+    # This contains only the economic covariates
+    X = std_data[covariates_list].to_numpy()
 
-# Scree plot
-pca_model.plot()
-plt.savefig(figures_dir + "/Econ_Indicator_Share_Explained.pdf")
-plt.close()
+    # Perform the factor analysis
+    pca_model = pca()
+    pca_results = pca_model.fit_transform(X)
 
-# Main PCR spec
-partial_pc_regression = smf.ols("life_exp ~ mean_govt_health_share + PC1", data = std_data).fit()
+    # Count number of PCs
+    num_pcs = pca_results['PC'].shape[1]
+    PC_names = ['PC' + str(i + 1) for i in range(num_pcs)]
 
-# PCR with fixed effects
-pc_fixed_effects_results = smf.ols("life_exp ~ mean_govt_health_share + PC1 + C(year) + C(country)", data = std_data.reset_index()).fit(cov_type='cluster', cov_kwds={'groups': std_data.reset_index()['country']})
+    # Add PCA results to the dataframe
+    std_data = pd.concat([std_data.reset_index(), pca_results['PC'].reset_index(drop = True)], axis = 1, names = [std_data.columns, PC_names])
 
-# Regression table settings
-reg_table = Stargazer([ols_benchmark, ols_one_covariate, ols_many_covariates, ols_mean_covariates, partial_pc_regression])
-reg_table.dependent_variable_name("Life Expectancy at Birth (Years)")
-reg_table.covariate_order(['mean_govt_health_share'])
-reg_table.rename_covariates({"mean_govt_health_share":"Govt. Share of Health Exp."})
-# Fixed effects indicator
-reg_table.add_line('Covariates', ['None', 'GDP PC', 'Econ Indicators', 'Mean', 'PCs'])
-reg_table.show_degrees_of_freedom(False)
-reg_table.add_custom_notes(["All variables are standardized."])
+    # Plot the loadings
+    sns.heatmap(pca_results['loadings'], cmap='YlGnBu')
+    plt.savefig(figures_dir + "/Econ_Indicator_Loadings.pdf")
+    plt.close()
 
-# Write regression table to LaTeX
-with open(tables_dir + "/LE_Health_Econ_Regressions.tex", "w") as f:
-    corrected_table = re.sub('\\cline{[0-9\-]+}', '', reg_table.render_latex())
-    f.write(corrected_table)
+    # Scree plot
+    pca_model.plot()
+    plt.savefig(figures_dir + "/Econ_Indicator_Share_Explained.pdf")
+    plt.close()
+
+    # Main PCR spec
+    partial_pc_regression = smf.ols("life_exp ~ govt_health_share + PC1", data = std_data).fit()
+
+    # PCR with fixed effects
+    pc_fixed_effects_results = smf.ols("life_exp ~ govt_health_share + PC1 + C(year) + C(country)", data = std_data.reset_index()).fit(cov_type='cluster', cov_kwds={'groups': std_data.reset_index()['country']})
+
+    # Regression table settings
+    reg_table = Stargazer([ols_benchmark, ols_one_covariate, ols_many_covariates, ols_mean_covariates, partial_pc_regression])
+    reg_table.dependent_variable_name("Life Expectancy at Birth (Years)")
+    reg_table.covariate_order(['govt_health_share'])
+    reg_table.rename_covariates({"govt_health_share":"Govt. Share of Health Exp."})
+    # Fixed effects indicator
+    reg_table.add_line('Covariates', ['None', 'GDP PC', 'Econ Indicators', 'Mean', 'PCs'])
+    reg_table.show_degrees_of_freedom(False)
+    reg_table.add_custom_notes(["All variables are standardized."])
+
+    # Write regression table to LaTeX
+    with open(tables_dir + "/LE_Health_Econ_Regressions" + name + ".tex", "w") as f:
+        corrected_table = re.sub('\\cline{[0-9\-]+}', '', reg_table.render_latex())
+        f.write(corrected_table)
+
+# Do the analysis on the two datasets
+run_empirical_analysis(data = combined_data, name = "combined")
+run_empirical_analysis(data = wb_only_data, name = "wb_only")
+run_empirical_analysis(data = oecd_only_data, name = "oecd_only")
