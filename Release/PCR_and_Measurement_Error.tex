@@ -434,13 +434,13 @@
 
         TODO: Mini literature review on this question
 
-        In this regression it is important to account for the role that a country's level of economic development. There is an extensive literature linking economic development to life expectancy. cite gapminder etc. Somewhat less obvious is the linkage between government provision of healthcare and development. In general, public goods provision in fields such as healthcare has been linked to prosperity (cite)
+        In this regression it is important to account for the role of a country's level of economic development. There is an extensive literature linking economic development to life expectancy. cite gapminder etc. Somewhat less obvious is the linkage between government provision of healthcare and development. In general, public goods provision in fields such as healthcare has been linked to prosperity (cite)
 
         However, economic development as it is often conceptualized using GDP is liable to be measured with error.
         GDP measurements rely on surveys
         Informal economy and non-monetary but productive work
         Particularly in developing economies subject (nonclassical problem?)
-        Hence, this setup, with a covariate in regression subject to measurement error, fits the situation described in the theory and simulations in the previous sections. In this case, we aim to to accurately reduce possible bias in the coefficient of the government's share of health spending by reducing bias in the coefficients for development indicators.
+        Hence, this setup, with a covariate in regression subject to measurement error, fits the situation described in the theory and simulations in the previous sections. In this case, we aim to to reduce possible bias in the coefficient of the government's share of health spending by reducing bias in the coefficients for development indicators.
 
         % Go into more detail on what particular simulation parameters we envision
 
@@ -452,12 +452,11 @@
         % does the averaging do anything? seems kind of sketchy because it's like measurement error in the variable of interest as well!
 
         % Add \ref to the following table?
-        In the table below we begin with a univariate OLS regression, which produces a large and significant coeffcient indicating a one standard deviation increase in the government share of health expenditure is linked to a 0.56 standard deviation increase in life expectancy. Next we include the potentially mismeasured covariate of GDP per capita, which greatly reduces the size of the coefficient on the governments share. After this we include a full set of economic covariates listed in Table (make table based off CSV here!), agian reducing the size of the coefficient. However, this result is then adjusted upwards again in the last two columns, where use the mean of the mismeasured covariates and the first principal component.
+        In the table below we begin with a univariate OLS regression, which produces a large and significant coeffcient indicating a one standard deviation increase in the government share of health expenditure is linked to a 0.56 standard deviation increase in life expectancy. Next we include the potentially mismeasured covariate of GDP per capita, which greatly reduces the size of the coefficient on the governments share. After this we include a full set of economic covariates listed in Table (make table based off CSV here!), agian reducing the size of the coefficient. However, this result is then adjusted upwards again in the last two columns, where use the mean of the mismeasured covariates, and the first principal component.
 
         \input{../Output/Tables/LE_Health_Econ_Regressions.tex}
 
-        The results clearly demonstrate that all of the methods using multiple measures of the covariates produce noticably different coefficients for government health share. The univariate omitted variable bias formula yields that $\beta_{OLS} = \beta_{true} + \delta\gamma$ where $\delta$ is the effect of GDP on the government share and $\gamma$ is the effect of GDP on life expectancy. In this case, it is likely that in truth $\delta, \gamma > 0$.
-        In model (2), where we include only a single mismeasured coefficient, mismeasurement leads to an attenuated $\gamma$ and hence an overly large $\beta$ coefficient relative to the other models.
+        The results clearly demonstrate that all of the methods using multiple measures of the covariates produce noticably different coefficients for government health share. The univariate omitted variable bias formula yields that $\beta_{OLS} = \beta_{true} + \delta\gamma$ where $\delta$ is the effect of GDP on the government share and $\gamma$ is the effect of GDP on life expectancy. In this case, it is likely that in truth $\delta, \gamma > 0$. In our model (2), where we include only a single mismeasured coefficient, mismeasurement leads to an attenuated $\gamma$ and hence an overly large $\beta$ coefficient relative to the other models.
 
         NOTE- I don't know what's going on with the mean and why it makes such a large coefficient... probably want to check my code at some point.
 
