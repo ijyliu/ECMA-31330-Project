@@ -179,11 +179,13 @@ def run_empirical_analysis(data, name):
     fixed_effects_results = smf.ols("life_exp ~ govt_health_share + " + covariates_formula_string + " + C(year) + C(country)", data = std_data.reset_index()).fit(cov_type='cluster', cov_kwds={'groups': std_data.reset_index()['country']})
     # PCR with fixed effects
     pc_fixed_effects_results = smf.ols("life_exp ~ govt_health_share + PC1 + C(year) + C(country)", data = std_data.reset_index()).fit(cov_type='cluster', cov_kwds={'groups': std_data.reset_index()['country']})
-    # Use first 9 principal components (this gets at around 95% of the variance in development)
-    more_pcs_results = smf.ols("life_exp ~ govt_health_share + PC1 + PC2 + PC3 + PC4 + PC5 + PC6 + PC7 + PC8 + PC9", data = std_data).fit()
+    # Use first 7 principal components (this gets at a large share of the variance)
+    more_pcs_results = smf.ols("life_exp ~ govt_health_share + PC1 + PC2 + PC3 + PC4 + PC5 + PC6 + PC7", data = std_data).fit()
     # Instrumental variables- instrument GDP per capita (probably mismeasured) on all the other development indicators
     iv_instruments_string = covariates_formula_string.replace('gdp_pc_ppp + ', '')
-    iv_results = IV2SLS.from_formula("life_exp ~ govt_health_share + [gdp_pc_ppp ~ " + iv_instruments_string + "]", data = std_data).fit()
+    # Create the predicted value of gdp_pc_ppp
+    std_data['pred_gdp_pc_ppp'] = smf.ols("gdp_pc_ppp ~ " + iv_instruments_string, data = std_data).fit().predict()
+    iv_results = smf.ols("life_exp ~ govt_health_share + pred_gdp_pc_ppp", data = std_data.reset_index()).fit()
 
     # Regression table settings
     additional_reg_table = Stargazer([fixed_effects_results, pc_fixed_effects_results, more_pcs_results, iv_results])
@@ -191,7 +193,7 @@ def run_empirical_analysis(data, name):
     additional_reg_table.covariate_order(['govt_health_share'])
     additional_reg_table.rename_covariates({"govt_health_share":"Govt. Share of Health Exp."})
     # Fixed effects indicator
-    additional_reg_table.add_line('Covariates', ['None', 'PC 1', 'PC 1-9', 'GDP PC (IV)'])
+    additional_reg_table.add_line('Covariates', ['None', 'PC 1', 'PC 1-7', 'GDP PC (IV)'])
     additional_reg_table.add_line('Fixed Effects', ['Yes', 'Yes', 'No', 'No'])
     additional_reg_table.show_degrees_of_freedom(False)
     additional_reg_table.add_custom_notes(["All variables are standardized. Fixed effects columns make use of country clustered standard errors: others use robust standard errors."])
