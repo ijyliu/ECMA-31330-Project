@@ -182,7 +182,7 @@ def run_empirical_analysis(data, name):
     # Use first 9 principal components (this gets at around 95% of the variance in development)
     more_pcs_results = smf.ols("life_exp ~ govt_health_share + PC1 + PC2 + PC3 + PC4 + PC5 + PC6 + PC7 + PC8 + PC9", data = std_data).fit()
     # Instrumental variables- instrument GDP per capita (probably mismeasured) on all the other development indicators
-    iv_instruments_string = covariates_formula_string.replace('gdp_pc_ppp +', '')
+    iv_instruments_string = covariates_formula_string.replace('gdp_pc_ppp + ', '')
     iv_results = IV2SLS.from_formula("life_exp ~ govt_health_share + [gdp_pc_ppp ~ " + iv_instruments_string + "]", data = std_data).fit()
 
     # Regression table settings
