@@ -12,7 +12,6 @@ import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from pca import pca
 from stargazer.stargazer import Stargazer
-from pandas.plotting import scatter_matrix
 import matplotlib
 matplotlib.use('pdf')
 import matplotlib.pyplot as plt
@@ -36,6 +35,8 @@ wb_data = (pd.read_csv(apps_dir + "/WB_Data.csv", index_col=['economy', 'series'
              .stack(level = 'economy')
              .rename_axis(None, axis = 1)
              .rename(columns = {"SP.DYN.LE00.IN":"life_exp", "SH.XPD.GHED.CH.ZS":"govt_health_share_wb"})
+             # Get rid of old health GDP share measure
+             .drop(columns='SH.XPD.CHEX.GD.ZS')
              .rename_axis(['year', 'country'])
              .reset_index()
              .astype({'year': 'int', 'country': 'str'}))
