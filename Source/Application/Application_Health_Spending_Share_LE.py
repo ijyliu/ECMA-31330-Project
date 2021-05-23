@@ -17,7 +17,6 @@ matplotlib.use('pdf')
 import matplotlib.pyplot as plt
 import seaborn as sns
 import statsmodels.formula.api as smf
-from linearmodels import IV2SLS
 import regex as re
 
 # Get the list of indicators
@@ -146,12 +145,12 @@ def run_empirical_analysis(data, name):
 
     # Plot the loadings
     sns.heatmap(pca_results['loadings'], cmap='YlGnBu')
-    plt.savefig(figures_dir + "/Econ_Indicator_Loadings.pdf")
+    plt.savefig(figures_dir + "/Econ_Indicator_Loadings_" + name + ".pdf")
     plt.close()
 
     # Scree plot
     pca_model.plot()
-    plt.savefig(figures_dir + "/Econ_Indicator_Share_Explained.pdf")
+    plt.savefig(figures_dir + "/Econ_Indicator_Share_Explained_" + name + ".pdf")
     plt.close()
 
     # Main PCR spec
