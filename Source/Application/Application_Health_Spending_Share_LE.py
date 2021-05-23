@@ -21,6 +21,7 @@ import regex as re
 
 # Get the list of indicators
 indicators_list = get_wb_ind_list()
+# Create a list of covariates
 # For some reason net foreign assets pc doesn't read in correctly
 covariates_list = [variable for variable in indicators_list if variable != "SP.DYN.LE00.IN" and variable != "SH.XPD.GHED.CH.ZS" and variable != "NW.NFA.PC" and variable != "SH.XPD.CHEX.GD.ZS"]
 # String format of covariates for patsy formulas
@@ -40,6 +41,9 @@ wb_data = (pd.read_csv(apps_dir + "/WB_Data.csv", index_col=['economy', 'series'
              .rename_axis(['year', 'country'])
              .reset_index()
              .astype({'year': 'int', 'country': 'str'}))
+
+# Fix covariates list with renamed gdp_pc_ppp
+covariates_list = ["gdp_pc_ppp" if item == "NY.GDP.PCAP.PP.CD" else item for item in covariates_list]
 
 # Flip sign on poverty measures
 cols = wb_data.columns.str.contains('POV')
@@ -81,7 +85,8 @@ merged_data = (merged_data.assign(mean_govt_health_share=merged_data.loc[:, ["go
 # https://stackoverflow.com/questions/35723472/how-to-use-sklearn-fit-transform-with-pandas-and-return-dataframe-instead-of-num
 std_data = pd.DataFrame(StandardScaler().fit_transform(merged_data), index=merged_data.index, columns=merged_data.columns)
 
-print(std_data)
+# Calculate the 'averaged' covariate measure, now that the standardization is done
+std_data['covariates_mean'] =  std_data[[covariates_list]].mean(axis = 1)
 
 # Basic time series plot
 plt.figure(figsize=(15,15))
@@ -105,6 +110,9 @@ ols_one_covariate = smf.ols("life_exp ~ mean_govt_health_share + gdp_pc_ppp", da
 
 # Many covariate OLS
 ols_many_covariates = smf.ols("life_exp ~ mean_govt_health_share + " + covariates_formula_string, data = std_data.reset_index()).fit()
+
+# Mean of standardized covariates OLS
+ols_mean_covariates = smf.ols("life_exp ~ mean_govt_health_share + covariates_mean", data = std_data.reset_index()).fit()
 
 # Panel Fixed Effects Regression for Benchmark
 fixed_effects_results = smf.ols("life_exp ~ mean_govt_health_share + " + covariates_formula_string + " + C(year) + C(country)", data = std_data.reset_index()).fit(cov_type='cluster', cov_kwds={'groups': std_data.reset_index()['country']})
