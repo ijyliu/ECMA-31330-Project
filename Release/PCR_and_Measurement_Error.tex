@@ -462,13 +462,7 @@
             \input{../Output/Tables/indicators.tex}
         \end{table}
 
-        The results clearly demonstrate that all of the methods using multiple measures of the covariates produce noticably different coefficients for government health share. 
-        
-        % The univariate omitted variable bias formula yields that $\beta_{OLS} = \beta_{true} + \delta\gamma$ in expectation, where $\delta$ is the effect of GDP on the government share and $\gamma$ is the effect of GDP on life expectancy. In this case, it is likely that in truth $\beta_{true}, \delta, \gamma > 0$. In our model (2), where we include only a single mismeasured coefficient, mismeasurement leads to a $\gamma_{attenuated} < \gamma$ and hence an overly small $\beta_{OLS}$ coefficient. 
-        
-        Taking the mean of covariates appears to correct for this. 
-        
-        The principal components estimator and the usage of many economic indicators directly instead produce even smaller coefficients.
+        The results clearly demonstrate that all of the methods using multiple measures of the covariates produce noticably different coefficients for government health share. Taking the mean of covariates produces a larger coefficient. The principal components estimator and the usage of many economic indicators directly instead produce smaller coefficients.
 
         For results using fixed effects panel models, more principal components, and instrumental variables regression of using all the economic indicators as an instrument for GDP per capita, see Appendix Table \ref{additional_regs}. Fixed effects coefficients greatly reduce the magnitude of effects. Including more principal components and the instrumental variables technique produce coefifcients of moderate size close to that obtained by the single principal component.
 
