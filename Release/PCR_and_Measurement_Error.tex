@@ -278,51 +278,7 @@
 
         Clearly, both coefficients shows bias when the econometrician assumes a DGP with $X_i^*$: while there is attenuation bias on the coefficient of the covariate, the coefficient of the variable of interest is biased upward given that some of the effect of the covariates is ``omitted'' given this attenuation.
 
-    \subsection*{Instrumental Variables Regression as a Bias-Correction Method}
-
-        The classical solution for the measurement-error induced bias in econometrics has been the usage of instrumental variables. Suppose an instrument $Z_i$ that satisfies the relevance condition $\operatorname{E}(Z_i'X_i)\neq 0$ and $\operatorname{E}(Z_i't_i)\neq 0$, and also the exclusion restriction $\operatorname{E}(Z_i'\epsilon_i)=\operatorname{E}(Z_i'\zeta_i)=\operatorname{E}(Z_i'\eta_{i,k})=0$, for all $i$ and $k$. Then premultiplying by $Z_i$ we have
-        \begin{align}
-            Z_i'y_i =  Z_i'\gamma^* t_i +  Z_i'{X^{*}_i}' \beta^* +  Z_i'\zeta_i
-        \end{align}
-
-        and so
-        \begin{align}
-            \left(\begin{array}{l}
-        {\gamma}^{IV} \\
-        {\beta}^{IV}
-        \end{array}\right)
-        & =\left(\begin{array}{cc}
-        {\Sigma}_{Zt} & \Sigma_{ZX,Zt} \\
-        \Sigma_{Zt,ZX}& {\Sigma}_{ZX}+{\Sigma}_{Z\eta}
-        \end{array}\right)^{-1}\left(\begin{array}{cc}
-        {\Sigma}_{Zt} & \Sigma_{ZX,Zt} \\
-        \Sigma_{Zt,ZX} & {\Sigma}_{ZX}
-        \end{array}\right)\left(\begin{array}{l}
-        {\gamma} \\
-        {\beta}
-        \end{array}\right)\\
-        & =\left(\begin{array}{cc}
-        {\Sigma}_{Zt} & \Sigma_{ZX,Zt} \\
-        \Sigma_{Zt,ZX}& {\Sigma}_{ZX}
-        \end{array}\right)^{-1}\left(\begin{array}{cc}
-        {\Sigma}_{Zt} & \Sigma_{ZX,Zt} \\
-        \Sigma_{Zt,ZX} & {\Sigma}_{ZX}
-        \end{array}\right)\left(\begin{array}{l}
-        {\gamma} \\
-        {\beta}
-        \end{array}\right) \\
-        \left(\begin{array}{l}
-        {\gamma}^{IV} \\
-        {\beta}^{IV}
-        \end{array}\right)
-        & =\left(\begin{array}{l}
-        {\gamma} \\
-        {\beta}
-        \end{array}\right)
-        \end{align}
-
-        However, finding a reliable source of exogeneity is difficult, and it is impossible to conclusively prove a suitable exclusion restriction. The use of IV as a bias-correction method is thus often unfeasible.\\
-
+    
     \subsection*{Principal Component Regression as Bias-Correction Method}
 
         Alternatively, we propose an alternative bias-correction method for when there are several mismeasured variables for each covariate; that is, when we have more than one $x_{i,k}^*$ for every $x_{i,k}$. Given that in all the mismeasured variables the underlying value is the real value, one could think of extracting the underlying true $x_{i,k}$ through a linear combination of the different $x_{i,k}^*$. Then, we could treat all the $x_{i,k}^*$ as variables that share components as follows:
