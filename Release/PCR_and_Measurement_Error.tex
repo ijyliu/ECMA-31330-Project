@@ -462,14 +462,22 @@
             \input{../Output/Tables/indicators.tex}
         \end{table}
 
-        The results clearly demonstrate that all of the methods using multiple measures of the covariates produce noticably different coefficients for government health share. The univariate omitted variable bias formula yields that $\beta_{OLS} = \beta_{true} + \delta\gamma$ where $\delta$ is the effect of GDP on the government share and $\gamma$ is the effect of GDP on life expectancy. In this case, it is likely that in truth $\delta, \gamma > 0$. In our model (2), where we include only a single mismeasured coefficient, mismeasurement leads to an attenuated $\gamma$ and hence an overly large $\beta$ coefficient relative to the other models.
+        The results clearly demonstrate that all of the methods using multiple measures of the covariates produce noticably different coefficients for government health share. 
+        
+        % The univariate omitted variable bias formula yields that $\beta_{OLS} = \beta_{true} + \delta\gamma$ in expectation, where $\delta$ is the effect of GDP on the government share and $\gamma$ is the effect of GDP on life expectancy. In this case, it is likely that in truth $\beta_{true}, \delta, \gamma > 0$. In our model (2), where we include only a single mismeasured coefficient, mismeasurement leads to a $\gamma_{attenuated} < \gamma$ and hence an overly small $\beta_{OLS}$ coefficient. 
+        
+        Taking the mean of covariates appears to correct for this. 
+        
+        The principal components estimator and the usage of many economic indicators directly instead produce even smaller coefficients.
 
-        NOTE- I don't know what's going on with the mean and why it makes such a large coefficient... probably want to check my code at some point.
+        For results using fixed effects panel models, more principal components, and instrumental variables regression of using all the economic indicators as an instrument for GDP per capita, see Appendix Table \ref{additional_regs}. Fixed effects coefficients greatly reduce the magnitude of effects. Including more principal components and the instrumental variables technique produce coefifcients of moderate size close to that obtained by the single principal component.
 
         % Though the coefficients are not readily interpretable, they do differ from each other
         % ADD TEST to show coefficients differ? I think this also would not be easy to interpret since the independent variables are different...
 
     \section*{Conclusion}
+        
+        Discuss possible extensions
 
     \clearpage \newpage
 
