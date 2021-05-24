@@ -434,6 +434,27 @@
         We now examine the implications of the principal components estimator in an empirical setting with measurement error. One interesting question in public economics and public health is the comparison between publicly and privately funded healthcare systems and outcomes such as life expectancy. To measure the public or private nature of a healthcare system we use the continuous variable of the government's share of total health expenditure in a given country and year.
 
         TODO: Mini literature review on this question
+        %http://www.aijcrnet.com/journals/Vol_3_No_9_September_2013/2.pdf
+
+        %https://www.sciencedirect.com/science/article/pii/S0313592616300583?casa_token=Y4zMvBPlO8YAAAAA:P8Q7ScdxnW69LVlwM1-9epgEca7UYSf-QR1CFXTVx42aWb8Q04R2gI7b8wwr96A6dNQs2XFPprI
+        Linden and Ray focus on the relationship between life expectancy at birth and public and private health expenditures for 34 OECD countries from 1970-2012.
+        Topic studied in 'relatively few papers'
+
+        Cremieux 2005
+        Canadian provinces 1975-1998 focus on drugs spending
+        Private drug spending has a higher positive impact than public spending on life expectancy
+
+        Lichtenberg 2000
+        USA dynamic models from 1960-1997
+        public and private expenditures, GDP, and drug approvals
+        Positive effects for public expenditure, but not for private effects, particularly when lagged GDP is added to the model
+
+        Or 2000
+        %http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.411.6359&rep=rep1&type=pdf
+        Predict premature death in 21 OECD countries from 1970-1992
+        total HE and public share, along with pub health and environmental factors and GDP
+        Most closely related to our paper, likely.
+        Larger share of public spending is associated with lower rates of premature mortality for both males and females.
 
         In this regression it is important to account for the role of a country's level of economic development. There is an extensive literature linking economic development to life expectancy. cite gapminder etc. Somewhat less obvious is the linkage between government provision of healthcare and development. In general, public goods provision in fields such as healthcare has been linked to prosperity (cite)
 
@@ -464,9 +485,11 @@
 
         The results clearly demonstrate that all of the methods using multiple measures of the covariates produce noticably different coefficients for government health share. Taking the mean of covariates produces a larger coefficient. The principal components estimator and the usage of many economic indicators directly instead produce smaller coefficients.
 
-        For results using fixed effects panel models, more principal components, and instrumental variables regression of using all the economic indicators as an instrument for GDP per capita, see Appendix Table \ref{additional_regs}. Fixed effects coefficients greatly reduce the magnitude of effects. Including more principal components and the instrumental variables technique produce coefifcients of moderate size close to that obtained by the single principal component.
+        Results using fixed effects panel models, more principal components, and instrumental variables regression of using all the economic indicators as an instrument for GDP per capita, are in Table \ref{additional_regs}. Fixed effects coefficients greatly reduce the magnitude of effects. Including more principal components and the instrumental variables technique produce coefifcients of moderate size close to that obtained by the single principal component.
 
-        Let us consider equation (5).
+        \input{../Output/Tables/Additional_LE_Health_Econ_Regressions_combined.tex}
+
+        % Let us consider equation (5).
 
         % Though the coefficients are not readily interpretable, they do differ from each other
         % ADD TEST to show coefficients differ? I think this also would not be easy to interpret since the independent variables are different...
@@ -496,8 +519,6 @@
 
 
     \section*{Appendix 3}
-
-        \input{../Output/Tables/Additional_LE_Health_Econ_Regressions_combined.tex}
 
         \begin{figure}[h!]
             \centering
