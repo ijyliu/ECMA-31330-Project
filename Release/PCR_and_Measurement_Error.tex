@@ -415,6 +415,8 @@
         \input{../Output/Tables/sim_reg_results_p_2methods.tex}
 
         We can see that using PCA to extract the latent covariate driving the mismeasured covariates noticeably outperforms using a single mismeasured covariate across several values of $p$. Both the average coefficient on $\beta_1$ obtained when including the PCA output in the regression, and the mean absolute percentage error obtained on the 1,000 simulations are both much closer to the target values with the PCA-based regression than with the single measurement regression. Additionally, we can see that as $p$ increases the estimated $\beta_1^*$ coefficient in the PCA regression gets steadily closer to the true $\beta_1$ value of 1. Appendix 1 contains charts that show that this increase in performance is also true for different values of $\beta_1$ and $\beta_2$.\\
+\\
+talk about the range of ps and how we didn't do higher values because of its plausibility
         \\
         However, there are certain circumstances where the PCA method does not lead to more accurate estimates of $\beta_1^*$. Let's now look at the simulation results for different values of $\rho$ (the covariance between the main variable of interest $x_i$ and the true latent covariate $z_i$):
 
