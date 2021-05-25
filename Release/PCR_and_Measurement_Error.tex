@@ -40,6 +40,9 @@
 \def\w{\omega}
 \def\W{\Omega}
 
+\usepackage[autostyle, english = american]{csquotes}
+\MakeOuterQuote{"}
+
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 \usepackage{fancyhdr}
@@ -96,149 +99,88 @@
 
     \newpage \clearpage
 
-    % Introduction (no need for a section header for this)
-
         Many variables of interest in economics are not directly available as empirical data. Instead, economists often use other variables that are imperfect measurements of the true focus of their analysis. These available variables are known as \textit{proxies} or ``variables measured with error'', and, if they suffer from classical measurement error, their use causes \textit{attenuation bias} when they are used as independent variables in econometric estimation. Traditionally, instrumental variables are used as a shock of exogeneity to get rid of this bias, but finding truly exogenous variables that satisfy the exclusion restriction is difficult, and so this method can often not be feasibly applied.
 
         As an alternative to dealing with attenuation bias, we propose the use of Principal Component Analysis (PCA) over several variables measured with error. When there are multiple observed variables driven by a single ``true'' one, we propose to use PCA over these variables to extract the ``true'' variable. We then use this extracted value and use it in a standard OLS regression, thus providing a solution to attenuation bias that does not require the strong assumptions of instrumental variable analysis.
 
-        To show the properties and behaviour of our estimator on large samples under standard assumptions, we present a theoretical framework and a Monte-Carlo analysis. Additionally, we explore a basic empirical application to our method, by estimating the effect of economic development on life expectancy at birth. Since there is no consensus on how to measure economic development, we take a sample of different variables that may measure economic development with error (GDP per capita, GNI per capita, Household Income Per Capita, among others) over which we apply PCA to apply our identification strategy.
+        This estimator ties into earlier literature considering the intersection of factor models and principal components analysis and measurment error and latent variables problems. Somewhat similarly to our methods, (Nagasawa 2020) develops the use of a proxy variable to deal with unobserved heterogeneity in nuisance parameters and uses a partial effects method. Differing from our setting, (Schennach 2016) focuses on nonclassical measurement error and nonlinear cases and notes the usefulness of factor methods and some cases where they are of more use than instrumental variables. (Wegge) considers a setting in which measurement error regression models are factor analysis models, with the correct regressors being the factors. Latent factors are uncorrelated with the errors. Focusing on measurment error in the main regressor, (Schoefield) combines solutions from strucutral equations modelling and iterm response theory to deal with misestimation. Finally, (Heckman 2010) considers a situation similar to ours, except involving matching estimators. In this case, these estimators can be harmed by mismeasured conditioning variables. However, average treatment effects can be identified using factor proxies, and without need for normalization.
 
-    \section*{Literature}
+        In this paper, in order to show the properties and behaviour of our estimator on large samples under standard assumptions, we present a theoretical framework and a Monte-Carlo analysis. Additionally, we explore a basic empirical application to our method, by estimating the effect of economic development on life expectancy at birth. Since there is no consensus on how to measure economic development, we take a sample of different variables that may measure economic development with error (GDP per capita, GNI per capita, Household Income Per Capita, among others) over which we apply PCA to apply our identification strategy. Our estimator generally behaves as expected in this empirical setting, though it is unclear whether it performs any better or worse than other methods such as the direct inclusion of covariates or their averaging.
 
-        Nagasawa 2020 
-        %https://warwick.ac.uk/fac/soc/economics/staff/knagasawa/PartialEffects.pdf
-        theoretically develops the use of a proxy variable to deal with unobserved heterogeneity in line with the definitions in the measurement error literature
-        Uses an imperfect measurment of the error, the proxy
-        problem is in nuisance parameters
-        has a single proxy variable
-        nonparametric approach mentioned as having limited usefulness due to curse of dimensionality and restrictive common support
-        kernel first stage
-        new partial effects method of proxy
+\section*{Theoretical framework}
 
-        % https://www-annualreviews-org.proxy.uchicago.edu/doi/pdf/10.1146%2Fannurev-economics-080315-015058
-        Schennach 2016
-        focuses on nonclassical measurement error and nonlinear cases- classical cases 'uninteresting' because IV is very easy to use
-        relaxing common assumptions
-        origins and simple approaches
-        validation data or repeated measurements
-        proxies are related to the variable of interest but maybe nonlinearly... indicators may be instruments
-        time series and panel repetition
-        factor high and low dimensional relations
-        multivariate linear regresison- worse than attenuation bias... and nonlinear models lead IV to fail.
-        repeated measurments- old lemma. nonparametric density estimation
-        moments apporach and polynomials, basis and transforms, etc.
-        symmetric kernel smoothing
-        factor models- x is informed by factor loadings plus noise- latent
-        covariance identification. normalization is needed.
-        SEE HECKMAN 2010A
-        control variables- NO need for normalization
-        with the matrix known construct vectors of repeated measurment and decompose
-        nonlinear exxtension.
-        iv more general and can be biased... polynomial paramteric
-        identificaiton is difficult in this nonlinear situation
-        quantile regression possilbity
-        panel data- future values can give information.
+Consider a model where the outcome is denoted by $y_i$. This outcome depends on a variable of interest denoted by $t_i$ and a vector of covariates denoted by $X_i=(x_{i,1},x_{i,2},\dots x_{i,p})'$. Additionally, consider a vector of variables $X^*_i=(x^*_{i,1},x^*_{i,2},\dots x^*_{i,p})'$ that correspond to the covariates $X_i$ but observed with measurement error, where $x^*_{i,k}=x_{i,k}+\eta_{i,k}$ with $\eta_{i,k} \sim {iid}(0,\sigma^2_{\eta_k})$, $\operatorname{E}(x_{i,k}'\eta_{i,k})=0, \forall i$, $\operatorname{E}(x_{i,k}'\eta_{j,l})=0, \forall i\neq j$ and $k \neq l$, and $\operatorname{E}(\eta_{i,k}'\eta_{j,l})=0, \forall i\neq j$ and $k \neq l$. Therefore, each $x^*_{i,k}$ suffers classical measurement error. Note that $\operatorname{E}(x_{i,k})=\operatorname{E}(x^*_{i,k})=\mu_{x_k}$ and that $\operatorname{V}(x_{i,k})=\sigma^2_{x_k}$ while $\operatorname{V}(x^*_{i,k})=\sigma^2_{x_k}+\sigma^2_{\eta_k}\geq \sigma^2_{x_k}$.
 
-        %http://web.pdx.edu/~newsomj/semclass/ho_latent.pdf
-        latent variable models... are really basically mathematically the same as measurement error
-        simple and standard me explanation
-        reminder- standardized coefificetn is very similar to correlation coefficient
-        reminder that there is no impact of measurmeent error in y on unstandardized coeff
-        multiple regression- x1 coeff can indeed be biased, middle of p.2
-        lower statistical power
-        no bias in the mean of x
-        bad impact on the regression
-        use Structural Equation Modelling to estimate path coefficients among latent variables
-        need three or more measures to estimate a latent variable
-        in a footnote it mentions a case with only two indicators
-        not always me but sometimes uniqueness... really it's just items unaccounted for by the factor
-        latent variance is independent.. classical assumption
+\subsection*{Data Generation Process}
 
-        Wegge
-        %https://www.sciencedirect.com/science/article/pii/0304407694016763
-        measurment error regression models are factor analysis mdoels, with the correct regressors being the factors. indeed. but no common stat method, because true factors not known- no clear coeffiicent linkage. instead, grouping
-        dependent variables and latent factors uncorrelated with errors
-        counting rules
-        data grouping remedies- structural equations
-        grouped regression model- ivs and weighted averages of ivs
-        if there is very little credible info about the variance of measurment errors or the covariance of equation erros, factor loading restrictions are needed for identification
-        this paper is about identification and IVs really
+Assume that the outcome $y_i$ is determined by the following Data Generation Process (DGP):
+\begin{align}
+    y_i = \gamma t_i + X_i'\beta + \epsilon_i
+\end{align}
 
-        %https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4787301/
-        schoefield
-        mixed effects structural equations model
-        combine structural equations and item response theory
-        attenuation, or nonclassical bias in any direction
-        clear misestimation consequences
-        solutions in IV or nonparametric bounds. here IRT
-        error structure assumed by IV often violated
-        bayesian structural framework and model
-        this paper is focused on ME in the main regressor
+where $\g$ is the parameter of the variable of interest $t_i$, $\b=(\b_1,\b_2,\dots \b_p)'$ is the vector of the parameters of the covariates $X_i$ including a constant and $\epsilon_i \sim \operatorname{iid}(0,\sigma^2_\epsilon)$. Under this specification, the coefficients are such that:
+\begin{align}
+    \left(\begin{array}{l}
+{\gamma} \\
+{\beta}
+\end{array}\right)=\left(\begin{array}{cc}
+{\sigma}^2_{t} & \Sigma_{tX} \\
+\Sigma_{Xt} & {\Sigma}_{X}
+\end{array}\right)^{-1}\left(\begin{array}{c}
+\Sigma_{yt} \\
+\Sigma_{yX}
+\end{array}\right)
+\end{align}
 
-        %http://jenni.uchicago.edu/econ374/papers/Heckman_Schennach_Williams_2011_lin_lin_matching_2011-10-03a_cji.pdf
-        heckman 2010
-        the abstract makes it very clear that this is a paper in a similar situation, except involving matching
-        it is incomplete, however
-        matching estimators can be harmed by mismeasured conditioning variables
-        however, average treatment effects can be identified using factor models with quality proxies
-        there often is not a need for normalization
+Suppose that the econometrician has access to $t_i$ but, instead of $X_i$ she observes $X^*_i$. Then, she specifies the following linear model
+\begin{align}
+    y_i = \gamma^* t_i + {X^{*}_i}' \beta^* + \zeta_i
+\end{align}
 
-        *perhaps note somewhere that governmnet spending is less likely to have measurement error because it's an official statistic... though health spending in the denominator could have error... ow.
+the coefficients would be such that
+\begin{align}
+    \left(\begin{array}{l}
+{\gamma}^* \\
+{\beta}^*
+\end{array}\right)&=\left(\begin{array}{cc}
+{\sigma}^2_{t} & \Sigma_{tX^*} \\
+\Sigma_{X^*t} & {\Sigma}_{X^*}
+\end{array}\right)^{-1}\left(\begin{array}{c}
+\Sigma_{yt} \\
+\Sigma_{yX^*}
+\end{array}\right) \\
+& =\left(\begin{array}{cc}
+{\sigma}^2_{t} & \Sigma_{tX} \\
+\Sigma_{Xt} & {\Sigma}_{X}+{\Sigma}_{\eta}
+\end{array}\right)^{-1}\left(\begin{array}{cc}
+{\sigma}^2_{t} & \Sigma_{tX} \\
+\Sigma_{Xt} & {\Sigma}_{X}
+\end{array}\right)\left(\begin{array}{l}
+{\gamma} \\
+{\beta}
+\end{array}\right)
+\end{align}
 
-    \section*{Theoretical framework}
+Without loss of generality, assume that the abovementioned GDP consists only of two variables as follows
 
-        Consider a model where the outcome is denoted by $y_i$. This outcome depends on a variable of interest denoted by $t_i$ and a vector of covariates denoted by $X_i=(x_{i,1},x_{i,2},\dots x_{i,p})'$. Additionally, consider a vector of variables $X^*_i=(x^*_{i,1},x^*_{i,2},\dots x^*_{i,p})'$ that correspond to the covariates $X_i$ but observed with measurement error, where $x^*_{i,k}=x_{i,k}+\eta_{i,k}$ with $\eta_{i,k} \sim {iid}(0,\sigma^2_{\eta_k})$, $\operatorname{E}(x_{i,k}'\eta_{i,k})=0, \forall i$, $\operatorname{E}(x_{i,k}'\eta_{j,l})=0, \forall i\neq j$ and $k \neq l$, and $\operatorname{E}(\eta_{i,k}'\eta_{j,l})=0, \forall i\neq j$ and $k \neq l$. Therefore, each $x^*_{i,k}$ suffers from classical measurement error. Note that $\operatorname{E}(x_{i,k})=\operatorname{E}(x^*_{i,k})=\mu_{x_k}$ and that $\operatorname{V}(x_{i,k})=\sigma^2_{x_k}$ while $\operatorname{V}(x^*_{i,k})=\sigma^2_{x_k}+\sigma^2_{\eta_k}\geq \sigma^2_{x_k}$.
-
-    \subsection*{Data Generating Process}
-
-        Assume that the outcome $y_i$ is determined by the following Data Generation Process (DGP):
-        \begin{align}
-            y_i = \gamma t_i + X_i'\beta + \epsilon_i
+	 \begin{align}
+            y_i = \gamma^* t_i +  \beta^*x_i* + \zeta_i
         \end{align}
 
-        where $\g$ is the parameter of the variable of interest $t_i$, $\b=(\b_1,\b_2,\dots \b_p)'$ is the vector of the parameters of the covariates $X_i$ including a constant and $\epsilon_i \sim \operatorname{iid}(0,\sigma^2_\epsilon)$. Under this specification, the coefficients are such that:
-        \begin{align}
-            \left(\begin{array}{l}
-        {\gamma} \\
-        {\beta}
-        \end{array}\right)=\left(\begin{array}{cc}
-        {\sigma}^2_{t} & \Sigma_{tX} \\
-        \Sigma_{Xt} & {\Sigma}_{X}
-        \end{array}\right)^{-1}\left(\begin{array}{c}
-        \Sigma_{yt} \\
-        \Sigma_{yX}
-        \end{array}\right)
-        \end{align}
-
-        Suppose that the econometrician has access to $t_i$ but, instead of $X_i$ she observes $X^*_i$. Then, she specifies the following linear model
-        \begin{align}
-            y_i = \gamma^* t_i + {X^{*}_i}' \beta^* + \zeta_i
-        \end{align}
-
-        the coefficients would be such that
-        \begin{align}
+	Then, equations $(4)$ and $(5)$ will be such that
+	\begin{align}
             \left(\begin{array}{l}
         {\gamma}^* \\
         {\beta}^*
         \end{array}\right)&=\left(\begin{array}{cc}
-        {\sigma}^2_{t} & \Sigma_{tX^*} \\
-        \Sigma_{X^*t} & {\Sigma}_{X^*}
+        {\sigma}^2_{t} & \operatorname{cov}({t,x^*}) \\
+        \operatorname{cov}({x^*,t}) & {\sigma}_{x^*}^2
         \end{array}\right)^{-1}\left(\begin{array}{c}
-        \Sigma_{yt} \\
-        \Sigma_{yX^*}
+        \operatorname{cov}{(y,t)} \\
+        \operatorname{cov}{(y,x^*)}
         \end{array}\right) \\
-        & =\left(\begin{array}{cc}
-        {\sigma}^2_{t} & \Sigma_{tX} \\
-        \Sigma_{Xt} & {\Sigma}_{X}+{\Sigma}_{\eta}
-        \end{array}\right)^{-1}\left(\begin{array}{cc}
-        {\sigma}^2_{t} & \Sigma_{tX} \\
-        \Sigma_{Xt} & {\Sigma}_{X}
-        \end{array}\right)\left(\begin{array}{l}
-        {\gamma} \\
-        {\beta}
-        \end{array}\right)
         \end{align}
+<<<<<<< HEAD
 
 	Without loss of generality, assume that the abovementioned GDP consists only of two variables as follows
 
@@ -259,6 +201,8 @@
         \operatorname{cov}{(y,x^*)}
         \end{array}\right) \\
         \end{align}
+=======
+>>>>>>> 5a34fa94c20f60fb8872147c40d789ba110ff14c
 	
 	Thus, the coefficient of our variable of interest will be
 	\begin{align}
@@ -270,9 +214,15 @@ And then
     \gamma^* = \gamma + \beta\frac{\operatorname{cov}(t,x)(\sigma^2_{x^*}-\sigma^2_x)}{\sigma_{t}^2\sigma_{x^*}^2-\operatorname{cov}({t,x})^2}
 \end{align}
 
+<<<<<<< HEAD
 From $(10)$ it is clear that when $\operatorname{cov}(t,x)\neq 0$ and that $x$ is measure with error (i.e $\sigma_{x^*}^2>\sigma_x^2)$, the coefficient of our variable of interest is biased. If $t$ and $x$ are independent, then measurement error in $x^*$ does not cause any bias. If there is no measurement error in $x^*$, then $\sigma^2_{x^*}=\sigma^2_x$ and so we would not be facing any kind of bias, as one would expect.\\
 
 Equation $(10)$ also allows us to know the direction of the bias. Given that we are facing measurement error in the covariate, $\sigma^2_{x^*}>\sigma^2_x$ which implies $\sigma^2_{x^*}-\sigma^2_x>0$. Also, it follows from \textit{Cuachy-Schwarz} inequality that the denominator is also positive. Then, the direction of the bias will depend on the sign of $\beta$ and the covariance of $t$ and $x$, as Table one illustrates.
+=======
+From $(10)$ it is clear that when $\operatorname{cov}(t,x)\neq 0$ and that $x$ is measured with error (i.e $\sigma_{x^*}^2>\sigma_x^2)$, the coefficient of our variable of interest is biased. If $t$ and $x$ are independent, then measurement error in $x^*$ does not cause any bias. If there is no measurement error in $x^*$, then $\sigma^2_{x^*}=\sigma^2_x$ and so we would not be facing any kind of bias, as one would expect.\\
+
+Equation $(10)$ also allows us to know the direction of the bias. Given that we are facing measurement error in the covariate, $\sigma^2_{x^*}>\sigma^2_x$ which implies $\sigma^2_{x^*}-\sigma^2_x>0$. Also, it follows from the \textit{Cauchy-Schwarz} inequality that the denominator is also positive. Then, the direction of the bias will depend on the sign of $\beta$ and the covariance of $t$ and $x$, as Table one illustrates.
+>>>>>>> 5a34fa94c20f60fb8872147c40d789ba110ff14c
 
 \begin{table}[h!]
     \centering
@@ -285,6 +235,7 @@ Equation $(10)$ also allows us to know the direction of the bias. Given that we 
     \label{tab:my_label}
 \end{table}
 
+<<<<<<< HEAD
 \break
 
  For a more concrete example, consider a simple case where the DGP depends only of the variable of interest and a covariate such that:
@@ -392,6 +343,157 @@ Equation $(10)$ also allows us to know the direction of the bias. Given that we 
         \end{align}
 
         where the last equality comes from $(13)$.
+=======
+ For a more concrete example, consider a simple case where the DGP depends only of the variable of interest and a covariate such that:
+
+\begin{align}
+    \left(\begin{array}{l}
+{\gamma} \\
+{\beta}
+\end{array}\right)=\left(\begin{array}{l}
+1 \\
+1
+\end{array}\right)
+\end{align}
+
+and with $\sigma^2_t=\Sigma_X=\Sigma_\eta=1$ while $\Sigma_{Xt}=0.6$. Then
+\begin{align*}
+    \left(\begin{array}{l}
+{\gamma}^* \\
+{\beta}^*
+\end{array}\right)& =\left(\begin{array}{cc}
+1 & 0.6 \\
+0.6 & 2
+\end{array}\right)^{-1}\left(\begin{array}{cc}
+1 & 0.6 \\
+0.6 & 1
+\end{array}\right)\left(\begin{array}{l}
+1\\
+1
+\end{array}\right) \\
+\left(\begin{array}{l}
+{\gamma}^* \\
+{\beta}^*
+\end{array}\right)&=\left(\begin{array}{l}
+1.37 \\
+0.39
+\end{array}\right)
+\end{align*}
+
+Clearly, both coefficients shows bias when the econometrician assumes a DGP with $X_i^*$: while there is attenuation bias on the coefficient of the covariate, the coefficient of the variable of interest is biased upward given that both variable have positive correlation.
+
+\subsection*{Principal Component Regression as bias-correction method}
+
+The classical solution for the measurement-error induced bias in econometrics has been the usage of instrumental variables. However, finding reliable source of exogeneity is difficult, as is proving the exclusion condition. Therefore, the use of IV as a bias-correction method should be taken with care given that its feasibilty is hard.\\
+
+Alternatively, we propose an alternative bias-correction method when there are several missmeasured variables for each covariate, that is when we have more than one $x_{i,k}^*$ for every $x_{i,k}$. Given that in all the miss-measured variables the underlying value is the real value, one could think of extracting the underlying true $x_{i,k}$ through a linear combination of the different $x_{i,k}^*$. Then, we could treat all the $x_{i,k}^*$ as variables that share compononents as follows
+\begin{align}
+   h_{j}=\underset{h^{\prime} h=1, h^{\prime} h_{1}=0, \ldots, h^{\prime} h_{j-1}=0}{\operatorname{argmax}} \operatorname{var}\left[h^{\prime} X^*_k\right]  
+\end{align}
+
+
+where $h_j$ is the eigenvector of $\Sigma$ associated with the $j^{t h}$ ordered eigenvalue $\lambda_{j}$ of $\Sigma_{X^*_k}$, and the principal components of $X^*_k$ are $U_{j}=h_{j}^{\prime} X^*_k$, where $h_{j}$ is the eigenvector of $\Sigma$ associated with the $j^{t h}$ ordered eigenvalue $\lambda_{j}$ of $\Sigma$.\\
+
+Under our assumptions, the vector of missmeasured values $X^*_k$ of $x_{i,k}$, share only one principal component which is precisely $x_{i,k}$. Then, we only have one principal component, $x_{i,k}$, and so the $x_{i,k}$ is such that
+\begin{align}
+    x_{i,k}=h_{k}^{\prime} X^*_k
+\end{align}
+
+Finally, we could then retrieve the vector of true variables $X_i$
+\begin{align}
+    X_i=HX^*_i
+\end{align}
+
+where $H$ is a matrix such that
+\begin{align*}
+    H=\left(\begin{array}{ccccc}
+h_1 & 0 & 0 & \dots & 0 \\
+0 & h_2 & 0 & \dots & 0 \\
+\vdots & \ddots & h_3 & \ddots & \vdots \\
+0 & \dots & \dots & \dots \ddots & h_p
+\end{array}\right)
+\end{align*}
+
+and $h_k$ is the vector of eigenvalues for the variable $x_{i,k}$.
+
+Our new linear model then would be
+\begin{align}
+    y_i = \gamma^{PCR} t_i + H{X^*_i}'\beta^{PCR} + \epsilon_i
+\end{align}
+
+where the coefficients are as follows
+\begin{align}
+    \left(\begin{array}{l}
+{\gamma}^{PCR} \\
+{\beta}^{PCR}
+\end{array}\right)&=\left(\begin{array}{cc}
+{\sigma}^2_{t} & \Sigma_{t,HX^*} \\
+\Sigma_{HX^*,t} & {\Sigma}_{HX^*}
+\end{array}\right)^{-1}\left(\begin{array}{c}
+\Sigma_{yt} \\
+\Sigma_{y,HX^*}
+\end{array}\right)\\
+&=\left(\begin{array}{cc}
+{\sigma}^2_{t} & \Sigma_{t,HX^*} \\
+\Sigma_{HX^*,t} & {\Sigma}_{HX^*}
+\end{array}\right)^{-1}\left(\begin{array}{cc}
+{\sigma}^2_{t} & \Sigma_{tX} \\
+\Sigma_{Xt} & {\Sigma}_{X}
+\end{array}\right)\left(\begin{array}{l}
+{\gamma} \\
+{\beta}
+\end{array}\right)\\
+&=\left(\begin{array}{l}
+{\gamma} \\
+{\beta}
+\end{array}\right)
+\end{align}
+
+where the last equality comes from $(13)$.
+
+\section*{Estimation of the Principal Component Regression}
+
+Recall that the missmeasured variables are such that $x^*_{i,k}=x_{i,k}+\eta_{i,k}$. Then for every $i$, $X_i^*$ can we get
+\begin{align}
+    X_i^* = X_i +\mu
+\end{align}
+
+and so we could interpret the vector of missmeasured variables $X^*_i$ as a factor model, in which the common factor is the vector of true variables $X_i$. This way, we could rewrite the model as follows
+\begin{align}
+    y_i &= \gamma t_i + X_i'\beta + \epsilon_i \\
+    X_i^* &= X_i +\mu
+\end{align}
+
+Which is a factor-augmented regression model in which the common ``factors'' between the missmeasured variables of $x_{i,k}$ is in fact $x_{i,k}$. We estimate the model following two-stages. First, we estimate $X_i$ by factor regression. Then, the first-stage is the principal-components estimation
+\begin{align}
+    \hat{X_i}=\hat{D}^{-1}X_i^*
+\end{align}
+
+Second step is to regress $Y_i$ on the estimated $\hat X_i$. Then, the coefficients would be
+\begin{align}
+    \left(\begin{array}{l}
+\hat{\gamma}^{F} \\
+\hat{\beta}^{F}
+\end{array}\right)&=\left(\begin{array}{cc}
+\hat{\sigma}^2_{t} & \hat\Sigma_{t,\hat X} \\
+\hat \Sigma_{\hat X,t} & \hat {\Sigma}_{\hat X}
+\end{array}\right)^{-1}\left(\begin{array}{c}
+\hat \Sigma_{yt} \\
+\hat \Sigma_{y,\hat X}
+\end{array}\right)
+\end{align}
+
+Using the \textit{Frisch-Waugh-Lowell} decomposition
+\begin{align}
+    \hat{\g}^F & = ((M_{\hat{X}}t)'M_{\hat{X}}t)^{-1}(M_{\hat{X}}t)'M_{\hat{X}}y
+\end{align}
+
+Where $M_{\hat{X}}=I-\hat{X}(\hat{X}'\hat{X})^{-1}\hat{X}'$. Then
+\begin{align}
+     \hat{\g}^F & = ((M_{\hat{X}}t)'M_{\hat{X}}t)^{-1}(M_{\hat{X}}t)'M_{\hat{X}}(t\gamma  + X\beta + \epsilon) \\
+     &=\gamma +((M_{\hat{X}}t)'M_{\hat{X}}t)^{-1}(M_{\hat{X}}t)'M_{\hat{X}}X\beta+((M_{\hat{X}}t)'M_{\hat{X}}t)^{-1}(M_{\hat{X}}t)'M_{\hat{X}}\epsilon
+\end{align}
+>>>>>>> 5a34fa94c20f60fb8872147c40d789ba110ff14c
 
 \section*{Estimation of the Principal Component Regression}
 
@@ -442,21 +544,27 @@ Where $M_{\hat{X}}=I-\hat{X}(\hat{X}'\hat{X})^{-1}\hat{X}'$. Then
 
         $$y_i = \beta_1 x_i + \beta_2 z_i + u_i$$
 
-        where $x_i$ and $z_i$ are single variables drawn from $\mathcal{N}(\begin{bmatrix} 0\\ 0 \end{bmatrix}, \begin{bmatrix} 1 & \rho\\ \rho & 1\end{bmatrix})$, where $\rho$ is some covariance between our main variable of interest ($x_i$) and the covariate ($z_i$). The $u_i$ is drawn from a white noise distribution($\mathcal{N}(0,1)$) that is uncorrelated with both $x_i$ and $z_i$. We then assume (as with the theoretical analysis) that $z_i$ is not directly observable and instead the researchers only have access to $p$ many measurements $z_{i,j}^*$ where $z_{i,j}^* = z_i + \eta_j$ where $\eta_j$ is drawn from a white noise distribution $\mathcal{N}(\mathbf{0},\Sigma)$ where $\mathbf{0}$ is a p-vector and $\Sigma$ is a diagonal p by p matrix with only 1s on the diagonal.\\
-        \\
-        In our simulations, we assume default values of $\rho = 0.5$, $\beta_1 = \beta_2 = 1$, and $p=5$. We then vary each factor while holding the others fixed, and perform 1,000 simulations of the DGP followed by an OLS regression on either the PCA value from the p measurements of the true $z_i$, or on a single one of the measurements of $z_i$. For each simulation, we generate 100 observations of $y_i,x_i$,etc. Below are the results for different values of $p$:
+        where $x_i$ and $z_i$ are single variables drawn from $\mathcal{N}(\begin{bmatrix} 0\\ 0 \end{bmatrix}, \begin{bmatrix} 1 & \rho\\ \rho & 1\end{bmatrix})$, where $\rho$ is some covariance between our main variable of interest ($x_i$) and the covariate ($z_i$). The $u_i$ is drawn from a white noise distribution ($\mathcal{N}(0,1)$) that is uncorrelated with both $x_i$ and $z_i$. We then assume (as with the theoretical analysis) that $z_i$ is not directly observable and instead the researchers only have access to $p$ many measurements $z_{i,j}^*$ where $z_{i,j}^* = z_i + \eta_j$ where $\eta_j$ is drawn from a white noise distribution $\mathcal{N}(\mathbf{0},\Sigma)$ where $\mathbf{0}$ is a p-vector and $\Sigma$ is a diagonal p by p matrix with only 1s on the diagonal.\\
+        
+        In our simulations, we assume default values of $\rho = 0.5$, $\beta_1 = \beta_2 = 1$, and $p=5$. We then vary each factor while holding the others fixed, and perform 1,000 simulations of the DGP followed by an OLS regression on either the PCA value from the p measurements of the true $z_i$, or on a single one of the measurements of $z_i$. For each simulation, we generate 100 observations of $y_i,x_i$,etc. Table \ref{sim_p_2} shows the results for different values of $p$.
+
+        \clearpage
 
         \input{../Output/Tables/sim_reg_results_p_2methods.tex}
 
         We can see that using PCA to extract the latent covariate driving the mismeasured covariates noticeably outperforms using a single mismeasured covariate across several values of $p$. Both the average coefficient on $\beta_1$ obtained when including the PCA output in the regression, and the mean absolute percentage error obtained on the 1,000 simulations are both much closer to the target values with the PCA-based regression than with the single measurement regression. Additionally, we can see that as $p$ increases the estimated $\beta_1^*$ coefficient in the PCA regression gets steadily closer to the true $\beta_1$ value of 1. This trend could well continue as $p \to \infty$, but we did not simulate values greater than $p = 50$ due to the seeming implausibility of having more than 50 measurements of the same single covariate. Appendix 1 contains charts that show that this increase in performance is also true for different values of $\beta_1$ and $\beta_2$.\\
-\\
-        However, there are certain circumstances where the PCA method does not lead to more accurate estimates of $\beta_1^*$. Let's now look at the simulation results for different values of $\rho$ (the covariance between the main variable of interest $x_i$ and the true latent covariate $z_i$):
+
+        However, there are certain circumstances where the PCA method does not lead to more accurate estimates of $\beta_1^*$. Table \ref{sim_rho_2} contains the simulation results for different values of $\rho$ (the covariance between the main variable of interest $x_i$ and the true latent covariate $z_i$):
+
+        \clearpage
 
         \input{../Output/Tables/sim_reg_results_rho_2methods.tex}
 
-        We first note that when $\rho = 0.5$ then the coefficient on the variable of interest is artificially inflated when we use a single mismeasurement as a covariate (on average, 1.28 instead of the true value of 1). Similarly, when $\rho = -0.5$ then the coefficient is artificially deflated. Using the PCA value as the covariate reduces this bias for both directions, and brings the main coefficient closer to its true value of zero. These results are consistent with our theoretical section, where we argued that a positive covariance between the main variable and the true covariate will lead to an inflation on the main coefficient, while a negative covariance will lead to a deflation of the coefficient. Separately, when the covariance between $x_i$ and $z_i$ is equal to $0, -1$, or $1$ then there is no notable improvement from using the PCA-extracted latent variable (and notice that since the variances of $x_i$ and $z_i$ are 1, this means that the covariance is equal to the correlation in these simulations). These simulation results suggest that so long as the correlation between $x_i$ and $z_i$ is not close to $-1$,$0$, or $1$, there are noticeable performance gains from using PCA to extract the true covariate from a collection of observed variables that try to measure that true covariate.\\
-        \\
-        However, the performance advantages that we see from using PCA could be driven by the benefit of having multiple measurements of our true covariate of interest, as opposed to any special advantages from PCA specifically. We test this question by comparing the estimated $\beta_1^*$ in our PCA regressions with the estimated $\beta_1^*$ when we include all $p$ measurements as separate covariates in the regression, and the $\beta_1^*$ obtained when the covariate is the mean of all $p$ measurements of the true covariate. The results from these regressions for different values of $p$ is shown below:
+        We first note that when $\rho = 0.5$ then the coefficient on the variable of interest is artificially inflated when we use a single mismeasurement as a covariate (on average, 1.28 instead of the true value of 1). Conversely, when $\rho = -0.5$ then the coefficient is artificially deflated. Using the PCA value as the covariate reduces this bias for both directions, and brings the main coefficient closer to its true value of 1.0. These results are consistent with our theoretical section, where we argued that a positive covariance between the main variable and the true covariate will lead to an inflation on the main coefficient, while a negative covariance will lead to a deflation of the coefficient. Separately, there is very little bias when $\rho = 0$, as predicted in the theory section. Since there is hardly any bias to correct, we do not see gains from using the PCA covariate method for that particular $\rho$ value. Also, when $\rho = -1$ or $1$, there is no notable improvement from using the PCA-extracted latent variable (and notice that since the variances of $x_i$ and $z_i$ are 1, this means that the covariance is equal to the correlation in these simulations). These simulation results suggest that so long as the correlation between $x_i$ and $z_i$ is not close to $-1$, $0$, or $1$, there are noticeable performance gains from using PCA to extract the true covariate from a collection of observed variables that try to measure that true covariate.\\
+        
+        However, the performance advantages that we see from using PCA could be driven by the benefit of having multiple measurements of our true covariate of interest, as opposed to any special advantages from PCA specifically. We test this question by comparing the estimated $\beta_1^*$ in our PCA regressions with the estimated $\beta_1^*$ when we include all $p$ measurements as separate covariates in the regression, and the $\beta_1^*$ obtained when the covariate is the mean of all $p$ measurements of the true covariate. The results from these regressions for different values of $p$ are shown in Table \ref{sim_p_3}.
+
+        \clearpage
 
         \input{../Output/Tables/sim_reg_results_p_3methods.tex}
 
@@ -465,60 +573,16 @@ Where $M_{\hat{X}}=I-\hat{X}(\hat{X}'\hat{X})^{-1}\hat{X}'$. Then
 
     \section*{Application: Government Share of Healthcare Spending and Life Expectancy}
 
-        We now examine the implications of the principal components estimator in an empirical setting with measurement error. One interesting question in public economics and public health is the comparison between publicly and privately funded healthcare systems and outcomes such as life expectancy. To measure the public or private nature of a healthcare system we use the continuous variable of the government's share of total health expenditure in a given country and year.
+        We now examine the implications of the principal components estimator in an empirical setting with measurement error. One interesting question in public economics and public health is the study of the effect of publicly and privately funded healthcare systems on outcomes such as life expectancy. To measure the public or private nature of a healthcare system we use the continuous variable of the government's share of total health expenditure in a given country and year.
 
-        TODO: Mini literature review on this question
+        Some previous work has covered this relationship. Considering that this topic has been studied in "relatively few papers," (Linden and Ray) focus on the relationship between life expectancy at birth and public and private health expenditures for 34 OECD countries from 1970-2012 and find that both public and private health spending are important to life expectancy and are associatied with each other. Other studies find a variety of effects; considering developing nations in Africa, (Novignon) finds a larger impact for public spending while (Fillmer) finds no impact; in the developed US and Canada, (Lichtenberg) finds an impact only for public spending on outcomes when controlling for lagged GDP, while (Cremieux) finds private spending on drugs is more effective. In the most similar work to ours, (Or 2000) predicts premature death in 21 OECD countries from 1970-1992, considering the public share of health expenditure, environmental factors, and GDP. He finds that a larger share of public spending is associated with lower rates of premature mortality for both males and females, and that controlling for GDP is important; it is also associated with less premature mortality. This work also demonstrates the importance of our methods of reducing the number of covariates considered, as it includes many economic variables and fixed effects but examines only several hundred observations; the estimators used may be subject to an important amount of variance.
 
-        econ and life expectancy
-        Ling et al Malaysia
-        Acemoglu -reverse item, life expectancy leads to less growth... or no relation
-        econ and government share of health expenditure
+        In this regression it is important to account for the role of a country's level of economic development. There is an extensive literature documenting the relationship between economic development and life expectancy. (Ling et al) finds that economic growth is associated with increased life expectancy in Malaysia, while considering the reversed causal direction (Acemoglu) finds improvements in life expectancy lead to little or no growth. Somewhat less obvious is the linkage between government provision of healthcare and development. In general, public goods provision and government spending, including in fields such as healthcare, has been linked to prosperity; low income countries may remain in such a state due to inefficient governments and inferior institutions (Wu).
 
-        %https://www.sciencedirect.com/science/article/pii/S0313592616300583?casa_token=Y4zMvBPlO8YAAAAA:P8Q7ScdxnW69LVlwM1-9epgEca7UYSf-QR1CFXTVx42aWb8Q04R2gI7b8wwr96A6dNQs2XFPprI
-        Linden and Ray focus on the relationship between life expectancy at birth and public and private health expenditures for 34 OECD countries from 1970-2012.
-        Topic studied in 'relatively few papers'
-        %
+        However, economic development is liable to be measured with error. GDP measurements usually rely on company surveys, and the methodology within a country and for comparisons between countries through exchange rates or PPP adjustments may vary (Grishin). Other sources of error include the presence of the informal economy and non-monetary but productive work, and the challenge of accurately measuring the value of digital services which often do not have visible prices (Charmes, Ahmad).\footnote{Due to differences in statistical capacity and the larger relative size of the informal economy, it is possible that mismeasurement of economic development is particularly severe in developing countries. On the other hand, the presence of the digital economy may mean mismeasurement is larger in developed nations. This would constitute the presence of non-classical measurement error, but we only consider classical measurement error in this paper.} Hence, this setup, with a covariate in regression subject to measurement error, fits the situation described in the theory and simulations in the previous sections. In this case, we aim to to reduce possible bias in the coefficient of the government's share of health spending by making appropriate use of multiple measures of economic development.
 
-        Novignon
+        Our data on all measures comes from the World Bank, though we also make usage of OECD government health share data to fill in missing years, and average World Bank and OECD measurements when both are available (World Bank, OECD). We standardize all variables by subtracting the mean and dividing by the standard deviation, linearly interpolate data between known observations, and remove country-years with missing values for any of the economic indicators.
 
-        Fillmer
-
-        Cremieux 2005
-        Canadian provinces 1975-1998 focus on drugs spending
-        Private drug spending has a higher positive impact than public spending on life expectancy
-
-        Lichtenberg 2000
-        USA dynamic models from 1960-1997
-        public and private expenditures, GDP, and drug approvals
-        Positive effects for public expenditure, but not for private effects, particularly when lagged GDP is added to the model
-
-        Or 2000
-        %http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.411.6359&rep=rep1&type=pdf
-        Predict premature death in 21 OECD countries from 1970-1992
-        total HE and public share, along with pub health and environmental factors and GDP
-        Most closely related to our paper, likely.
-        Larger share of public spending is associated with lower rates of premature mortality for both males and females.
-        GDP also associated with less premature mortality
-        Many, many variables and fixed effects - like 30 ish but only 483 observations.
-
-        In this regression it is important to account for the role of a country's level of economic development. There is an extensive literature linking economic development to life expectancy. cite gapminder etc. Somewhat less obvious is the linkage between government provision of healthcare and development. In general, public goods provision in fields such as healthcare has been linked to prosperity (cite)
-
-        However, economic development as it is often conceptualized using GDP is liable to be measured with error.
-        GDP measurements rely on surveys
-        Informal economy and non-monetary but productive work
-        Particularly in developing economies subject (nonclassical problem?)
-        Hence, this setup, with a covariate in regression subject to measurement error, fits the situation described in the theory and simulations in the previous sections. In this case, we aim to to reduce possible bias in the coefficient of the government's share of health spending by reducing bias in the coefficients for development indicators.
-
-        % Go into more detail on what particular simulation parameters we envision
-
-        %It is very difficult to find an instrumental variable for economic development which satisfies a reasonable exclusion restriction.
-
-        Our data on all measures comes from the World Bank, though we also make usage of OECD government health share data to fill in missing years, and average World Bank and OECD measurements when both are available. We standardize all variables by subtracting the mean and dividing by the standard deviation, linearly interpolate data between known observations, and remove country-years with missing values for any of the economic indicators.
-
-        % need to compile stats in terms of what country years are missing in WB versus OECD
-        % does the averaging do anything? seems kind of sketchy because it's like measurement error in the variable of interest as well!
-
-        % Add \ref to the following table?
         In Table \ref{main_regs} below we begin with a univariate OLS regression, which produces a large and significant coeffcient indicating a one standard deviation increase in the government share of health expenditure is linked to a 0.56 standard deviation increase in life expectancy. Next we include the potentially mismeasured covariate of GDP per capita, which greatly reduces the size of the coefficient on the governments share. After this we include a full set of economic covariates listed in Table \ref{Econ_Indicators}, again reducing the size of the coefficient. However, this result is then adjusted upwards again in the last two columns, where use the mean of the mismeasured covariates, and the first principal component.
 
         \input{../Output/Tables/LE_Health_Econ_Regressions_combined.tex}
@@ -530,14 +594,11 @@ Where $M_{\hat{X}}=I-\hat{X}(\hat{X}'\hat{X})^{-1}\hat{X}'$. Then
 
         The results clearly demonstrate that all of the methods using multiple measures of the covariates produce noticably different coefficients for government health share. Taking the mean of covariates produces a larger coefficient. The principal components estimator and the usage of many economic indicators directly instead produce smaller coefficients.
 
-        Results using fixed effects panel models, more principal components, and instrumental variables regression of using all the economic indicators as an instrument for GDP per capita, are in Table \ref{additional_regs}. Fixed effects coefficients greatly reduce the magnitude of effects. Including more principal components and the instrumental variables technique produce coefifcients of moderate size close to that obtained by the single principal component.
+        Moreover, these different coefficients behave in a manner similar to that predicted by our theoretical development and simulations. In Table \ref{sim_rho_2}, we saw the impact of variation in $\rho$, the correlation between measurements for a value of $p = 5$ and $\beta = 1$ for 100 observations. In the empirical setting it is difficult to tell what is a reasonable value of $\beta$, and we instead have nearly 2000 observations. Nevertheless, we see that for a positive $\rho$ value between 0 and 1 (as is likely to be the case in light the correlation between GDP and the government share of health spending and overall public goods), the coefficient obtained from using a single measurement is inflated relative to that from PCA, and presumably other methods combining multiple measures as in columns (3), (4), and (5) of Table \ref{Econ_Indicators}.
+
+        Results using fixed effects panel models (with country clustered standard errors), more principal components, and instrumental variables regression of using all the economic indicators as an instrument for GDP per capita, are in Table \ref{additional_regs}. Fixed effects coefficients greatly reduce the magnitude of effects. Including more principal components and the instrumental variables technique produce coefficients of moderate size close to that obtained by the single principal component. The results in column (3) and (4) also show reductions in the inflation of coefficients relative to column (2) of Table \ref{Econ_Indicators}.
 
         \input{../Output/Tables/Additional_LE_Health_Econ_Regressions_combined.tex}
-
-        % Let us consider equation (5).
-
-        % Though the coefficients are not readily interpretable, they do differ from each other
-        % ADD TEST to show coefficients differ? I think this also would not be easy to interpret since the independent variables are different...
 
     \section*{Conclusion}
         
@@ -551,15 +612,15 @@ Where $M_{\hat{X}}=I-\hat{X}(\hat{X}'\hat{X})^{-1}\hat{X}'$. Then
 
         \input{../Output/Tables/sim_reg_results_beta1_2methods.tex}
         \input{../Output/Tables/sim_reg_results_beta2_2methods.tex}
-        \input{../Output/Tables/sim_reg_results_p_2methods.tex}
-        \input{../Output/Tables/sim_reg_results_rho_2methods.tex}
+        %\input{../Output/Tables/sim_reg_results_p_2methods.tex}
+        %\input{../Output/Tables/sim_reg_results_rho_2methods.tex}
         
     \section*{Appendix 2}
 
 
         \input{../Output/Tables/sim_reg_results_beta1_3methods.tex}
         \input{../Output/Tables/sim_reg_results_beta2_3methods.tex}
-        \input{../Output/Tables/sim_reg_results_p_3methods.tex}
+        %\input{../Output/Tables/sim_reg_results_p_3methods.tex}
         \input{../Output/Tables/sim_reg_results_rho_3methods.tex}
 
 
