@@ -99,8 +99,6 @@
 
     \newpage \clearpage
 
-    % Introduction (no need for a section header for this)
-
         Many variables of interest in economics are not directly available as empirical data. Instead, economists often use other variables that are imperfect measurements of the true focus of their analysis. These available variables are known as \textit{proxies} or ``variables measured with error'', and, if they suffer from classical measurement error, their use causes \textit{attenuation bias} when they are used as independent variables in econometric estimation. Traditionally, instrumental variables are used as a shock of exogeneity to get rid of this bias, but finding truly exogenous variables that satisfy the exclusion restriction is difficult, and so this method can often not be feasibly applied.
 
         As an alternative to dealing with attenuation bias, we propose the use of Principal Component Analysis (PCA) over several variables measured with error. When there are multiple observed variables driven by a single ``true'' one, we propose to use PCA over these variables to extract the ``true'' variable. We then use this extracted value and use it in a standard OLS regression, thus providing a solution to attenuation bias that does not require the strong assumptions of instrumental variable analysis.
@@ -329,7 +327,6 @@
 
         We can see that using PCA to extract the latent covariate driving the mismeasured covariates noticeably outperforms using a single mismeasured covariate across several values of $p$. Both the average coefficient on $\beta_1$ obtained when including the PCA output in the regression, and the mean absolute percentage error obtained on the 1,000 simulations are both much closer to the target values with the PCA-based regression than with the single measurement regression. Additionally, we can see that as $p$ increases the estimated $\beta_1^*$ coefficient in the PCA regression gets steadily closer to the true $\beta_1$ value of 1. This trend could well continue as $p \to \infty$, but we did not simulate values greater than $p = 50$ due to the seeming implausibility of having more than 50 measurements of the same single covariate. Appendix 1 contains charts that show that this increase in performance is also true for different values of $\beta_1$ and $\beta_2$.\\
 
-        % NOTE: would be nice to reference the tables discussed with \ref
         However, there are certain circumstances where the PCA method does not lead to more accurate estimates of $\beta_1^*$. Table \ref{sim_rho_2} contains the simulation results for different values of $\rho$ (the covariance between the main variable of interest $x_i$ and the true latent covariate $z_i$).
 
         \clearpage
@@ -357,14 +354,8 @@
 
         However, economic development as it is often conceptualized using GDP is liable to be measured with error. GDP measurements usually rely on company surveys, and the methodology within a country and for comparisons between countries through exchange rates or PPP adjustments may vary (Grishin). Other sources of error include the presence of the informal economy and non-monetary but productive work, and the challenge of accurately measuring the value of digital services which often do not have visible prices (Charmes, Ahmad).\footnote{Due to differences in statistical capacity and the larger relative size of the informal economy, it is possible that mismeasurement of economic development is particularly severe in developing countries. On the other hand, the presence of the digital economy may mean mismeasurement is larger in developed nations. This would constitute the presence of non-classical measurement error, but we only consider classical measurement error in this paper.} Hence, this setup, with a covariate in regression subject to measurement error, fits the situation described in the theory and simulations in the previous sections. In this case, we aim to to reduce possible bias in the coefficient of the government's share of health spending by making appropriate use of multiple measures of economic development.
 
-        % Go into more detail on what particular simulation parameters we envision
-
         Our data on all measures comes from the World Bank, though we also make usage of OECD government health share data to fill in missing years, and average World Bank and OECD measurements when both are available (World Bank, OECD). We standardize all variables by subtracting the mean and dividing by the standard deviation, linearly interpolate data between known observations, and remove country-years with missing values for any of the economic indicators.
 
-        % need to compile stats in terms of what country years are missing in WB versus OECD
-        % does the averaging do anything? seems kind of sketchy because it's like measurement error in the variable of interest as well!
-
-        % Add \ref to the following table?
         In Table \ref{main_regs} below we begin with a univariate OLS regression, which produces a large and significant coeffcient indicating a one standard deviation increase in the government share of health expenditure is linked to a 0.56 standard deviation increase in life expectancy. Next we include the potentially mismeasured covariate of GDP per capita, which greatly reduces the size of the coefficient on the governments share. After this we include a full set of economic covariates listed in Table \ref{Econ_Indicators}, again reducing the size of the coefficient. However, this result is then adjusted upwards again in the last two columns, where use the mean of the mismeasured covariates, and the first principal component.
 
         \input{../Output/Tables/LE_Health_Econ_Regressions_combined.tex}
