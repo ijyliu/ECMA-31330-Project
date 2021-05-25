@@ -40,6 +40,9 @@
 \def\w{\omega}
 \def\W{\Omega}
 
+\usepackage[autostyle, english = american]{csquotes}
+\MakeOuterQuote{"}
+
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 \usepackage{fancyhdr}
@@ -104,87 +107,11 @@
 
         To show the properties and behaviour of our estimator on large samples under standard assumptions, we present a theoretical framework and a Monte-Carlo analysis. Additionally, we explore a basic empirical application to our method, by estimating the effect of economic development on life expectancy at birth. Since there is no consensus on how to measure economic development, we take a sample of different variables that may measure economic development with error (GDP per capita, GNI per capita, Household Income Per Capita, among others) over which we apply PCA to apply our identification strategy.
 
+        Summarize Findings
+
     \section*{Literature}
 
-        Nagasawa 2020 
-        %https://warwick.ac.uk/fac/soc/economics/staff/knagasawa/PartialEffects.pdf
-        theoretically develops the use of a proxy variable to deal with unobserved heterogeneity in line with the definitions in the measurement error literature
-        Uses an imperfect measurment of the error, the proxy
-        problem is in nuisance parameters
-        has a single proxy variable
-        nonparametric approach mentioned as having limited usefulness due to curse of dimensionality and restrictive common support
-        kernel first stage
-        new partial effects method of proxy
-
-        % https://www-annualreviews-org.proxy.uchicago.edu/doi/pdf/10.1146%2Fannurev-economics-080315-015058
-        Schennach 2016
-        focuses on nonclassical measurement error and nonlinear cases- classical cases 'uninteresting' because IV is very easy to use
-        relaxing common assumptions
-        origins and simple approaches
-        validation data or repeated measurements
-        proxies are related to the variable of interest but maybe nonlinearly... indicators may be instruments
-        time series and panel repetition
-        factor high and low dimensional relations
-        multivariate linear regresison- worse than attenuation bias... and nonlinear models lead IV to fail.
-        repeated measurments- old lemma. nonparametric density estimation
-        moments apporach and polynomials, basis and transforms, etc.
-        symmetric kernel smoothing
-        factor models- x is informed by factor loadings plus noise- latent
-        covariance identification. normalization is needed.
-        SEE HECKMAN 2010A
-        control variables- NO need for normalization
-        with the matrix known construct vectors of repeated measurment and decompose
-        nonlinear exxtension.
-        iv more general and can be biased... polynomial paramteric
-        identificaiton is difficult in this nonlinear situation
-        quantile regression possilbity
-        panel data- future values can give information.
-
-        %http://web.pdx.edu/~newsomj/semclass/ho_latent.pdf
-        latent variable models... are really basically mathematically the same as measurement error
-        simple and standard me explanation
-        reminder- standardized coefificetn is very similar to correlation coefficient
-        reminder that there is no impact of measurmeent error in y on unstandardized coeff
-        multiple regression- x1 coeff can indeed be biased, middle of p.2
-        lower statistical power
-        no bias in the mean of x
-        bad impact on the regression
-        use Structural Equation Modelling to estimate path coefficients among latent variables
-        need three or more measures to estimate a latent variable
-        in a footnote it mentions a case with only two indicators
-        not always me but sometimes uniqueness... really it's just items unaccounted for by the factor
-        latent variance is independent.. classical assumption
-
-        Wegge
-        %https://www.sciencedirect.com/science/article/pii/0304407694016763
-        measurment error regression models are factor analysis mdoels, with the correct regressors being the factors. indeed. but no common stat method, because true factors not known- no clear coeffiicent linkage. instead, grouping
-        dependent variables and latent factors uncorrelated with errors
-        counting rules
-        data grouping remedies- structural equations
-        grouped regression model- ivs and weighted averages of ivs
-        if there is very little credible info about the variance of measurment errors or the covariance of equation erros, factor loading restrictions are needed for identification
-        this paper is about identification and IVs really
-
-        %https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4787301/
-        schoefield
-        mixed effects structural equations model
-        combine structural equations and item response theory
-        attenuation, or nonclassical bias in any direction
-        clear misestimation consequences
-        solutions in IV or nonparametric bounds. here IRT
-        error structure assumed by IV often violated
-        bayesian structural framework and model
-        this paper is focused on ME in the main regressor
-
-        %http://jenni.uchicago.edu/econ374/papers/Heckman_Schennach_Williams_2011_lin_lin_matching_2011-10-03a_cji.pdf
-        heckman 2010
-        the abstract makes it very clear that this is a paper in a similar situation, except involving matching
-        it is incomplete, however
-        matching estimators can be harmed by mismeasured conditioning variables
-        however, average treatment effects can be identified using factor models with quality proxies
-        there often is not a need for normalization
-
-        *perhaps note somewhere that governmnet spending is less likely to have measurement error because it's an official statistic... though health spending in the denominator could have error... ow.
+        Somewhat similarly to our methods, (Nagasawa 2020) develops the use of a proxy variable to deal with unobserved heterogeneity in nuisance parameters and uses a partial effects method. Differing from our setting, (Schennach 2016) focuses on nonclassical measurement error and nonlinear cases and notes the usefulness of factor methods and some cases where they are of more use than instrumental variables. (Wegge) considers a setting in which measurement error regression models are factor analysis models, with the correct regressors being the factors. Latent factors are uncorrelated with the errors. Focusing on measurment error in the main regressor, (Schoefield) combines solutions from strucutral equations modelling and iterm response theory to deal with misestimation. Finally, (Heckman 2010) considers a situation similar to ours, except involving matching estimators. In this case, these estimators can be harmed by mismeasured conditioning variables. However, average treatment effects can be identified using factor proxies, and without need for normalization.
 
     \section*{Theoretical framework}
 
@@ -428,8 +355,6 @@
         However, economic development as it is often conceptualized using GDP is liable to be measured with error. GDP measurements usually rely on company surveys, and the methodology within a country and for comparisons between countries through exchange rates or PPP adjustments may vary (Grishin). Other sources of error include the presence of the informal economy and non-monetary but productive work, and the challenge of accurately measuring the value of digital services which often do not have visible prices (Charmes, Ahmad).\footnote{Due to differences in statistical capacity and the larger relative size of the informal economy, it is possible that mismeasurement of economic development is particularly severe in developing countries. On the other hand, the presence of the digital economy may mean mismeasurement is larger in developed nations. This would constitute the presence of non-classical measurement error, but we only consider classical measurement error in this paper.} Hence, this setup, with a covariate in regression subject to measurement error, fits the situation described in the theory and simulations in the previous sections. In this case, we aim to to reduce possible bias in the coefficient of the government's share of health spending by making appropriate use of multiple measures of economic development.
 
         % Go into more detail on what particular simulation parameters we envision
-
-        %It is very difficult to find an instrumental variable for economic development which satisfies a reasonable exclusion restriction.
 
         Our data on all measures comes from the World Bank, though we also make usage of OECD government health share data to fill in missing years, and average World Bank and OECD measurements when both are available (World Bank, OECD). We standardize all variables by subtracting the mean and dividing by the standard deviation, linearly interpolate data between known observations, and remove country-years with missing values for any of the economic indicators.
 
