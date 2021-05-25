@@ -99,6 +99,7 @@
 
     \newpage \clearpage
 
+\section*{Introduction}
         Many variables of interest in economics are not directly available as empirical data. Instead, economists often use other variables that are imperfect measurements of the true focus of their analysis. These available variables are known as \textit{proxies} or ``variables measured with error'', and, if they suffer from classical measurement error, their use causes \textit{attenuation bias} when they are used as independent variables in econometric estimation. Traditionally, instrumental variables are used as a shock of exogeneity to get rid of this bias, but finding truly exogenous variables that satisfy the exclusion restriction is difficult, and so this method can often not be feasibly applied.
 
         As an alternative to dealing with attenuation bias, we propose the use of Principal Component Analysis (PCA) over several variables measured with error. When there are multiple observed variables driven by a single ``true'' one, we propose to use PCA over these variables to extract the ``true'' variable. We then use this extracted value and use it in a standard OLS regression, thus providing a solution to attenuation bias that does not require the strong assumptions of instrumental variable analysis.
@@ -371,49 +372,6 @@ Where $M_{\hat{X}}=I-\hat{X}(\hat{X}'\hat{X})^{-1}\hat{X}'$. Then
      &=\gamma +((M_{\hat{X}}t)'M_{\hat{X}}t)^{-1}(M_{\hat{X}}t)'M_{\hat{X}}X\beta+((M_{\hat{X}}t)'M_{\hat{X}}t)^{-1}(M_{\hat{X}}t)'M_{\hat{X}}\epsilon
 \end{align}
 
-\section*{Estimation of the Principal Component Regression}
-
-Recall that the missmeasured variables are such that $x^*_{i,k}=x_{i,k}+\eta_{i,k}$. Then for every $i$, $X_i^*$ can we get
-\begin{align}
-    X_i^* = X_i +\mu
-\end{align}
-
-and so we could interpret the vector of missmeasured variables $X^*_i$ as a factor model, in which the common factor is the vector of true variables $X_i$. This way, we could rewrite the model as follows
-\begin{align}
-    y_i &= \gamma t_i + X_i'\beta + \epsilon_i \\
-    X_i^* &= X_i +\mu
-\end{align}
-
-Which is a factor-augmented regression model in which the common ``factors'' between the missmeasured variables of $x_{i,k}$ is in fact $x_{i,k}$. We estimate the model following two-stages. First, we estimate $X_i$ by factor regression. Then, the first-stage is the principal-components estimation
-\begin{align}
-    \hat{X_i}=\hat{D}^{-1}X_i^*
-\end{align}
-
-Second step is to regress $Y_i$ on the estimated $\hat X_i$. Then, the coefficients would be
-\begin{align}
-    \left(\begin{array}{l}
-\hat{\gamma}^{F} \\
-\hat{\beta}^{F}
-\end{array}\right)&=\left(\begin{array}{cc}
-\hat{\sigma}^2_{t} & \hat\Sigma_{t,\hat X} \\
-\hat \Sigma_{\hat X,t} & \hat {\Sigma}_{\hat X}
-\end{array}\right)^{-1}\left(\begin{array}{c}
-\hat \Sigma_{yt} \\
-\hat \Sigma_{y,\hat X}
-\end{array}\right)
-\end{align}
-
-Using the \textit{Frisch-Waugh-Lowell} decomposition
-\begin{align}
-    \hat{\g}^F & = ((M_{\hat{X}}t)'M_{\hat{X}}t)^{-1}(M_{\hat{X}}t)'M_{\hat{X}}y
-\end{align}
-
-Where $M_{\hat{X}}=I-\hat{X}(\hat{X}'\hat{X})^{-1}\hat{X}'$. Then
-\begin{align}
-     \hat{\g}^F & = ((M_{\hat{X}}t)'M_{\hat{X}}t)^{-1}(M_{\hat{X}}t)'M_{\hat{X}}(t\gamma  + X\beta + \epsilon) \\
-     &=\gamma +((M_{\hat{X}}t)'M_{\hat{X}}t)^{-1}(M_{\hat{X}}t)'M_{\hat{X}}X\beta+((M_{\hat{X}}t)'M_{\hat{X}}t)^{-1}(M_{\hat{X}}t)'M_{\hat{X}}\epsilon
-\end{align}
-
     \section*{Properties of the Estimator: Monte Carlo Simulations}
 
         We then complement our theoretical analysis by using Monte Carlo Simulation to analyze the effects of using Principal Components Regression as a method of bias correction. For these simulations, we assume that the true DGP for the data is:
@@ -424,23 +382,17 @@ Where $M_{\hat{X}}=I-\hat{X}(\hat{X}'\hat{X})^{-1}\hat{X}'$. Then
         
         In our simulations, we assume default values of $\rho = 0.5$, $\beta_1 = \beta_2 = 1$, and $p=5$. We then vary each factor while holding the others fixed, and perform 1,000 simulations of the DGP followed by an OLS regression on either the PCA value from the p measurements of the true $z_i$, or on a single one of the measurements of $z_i$. For each simulation, we generate 100 observations of $y_i,x_i$,etc. Table \ref{sim_p_2} shows the results for different values of $p$.
 
-        \clearpage
-
         \input{../Output/Tables/sim_reg_results_p_2methods.tex}
 
         We can see that using PCA to extract the latent covariate driving the mismeasured covariates noticeably outperforms using a single mismeasured covariate across several values of $p$. Both the average coefficient on $\beta_1$ obtained when including the PCA output in the regression, and the mean absolute percentage error obtained on the 1,000 simulations are both much closer to the target values with the PCA-based regression than with the single measurement regression. Additionally, we can see that as $p$ increases the estimated $\beta_1^*$ coefficient in the PCA regression gets steadily closer to the true $\beta_1$ value of 1. This trend could well continue as $p \to \infty$, but we did not simulate values greater than $p = 50$ due to the seeming implausibility of having more than 50 measurements of the same single covariate. Appendix 1 contains charts that show that this increase in performance is also true for different values of $\beta_1$ and $\beta_2$.\\
 
         However, there are certain circumstances where the PCA method does not lead to more accurate estimates of $\beta_1^*$. Table \ref{sim_rho_2} contains the simulation results for different values of $\rho$ (the covariance between the main variable of interest $x_i$ and the true latent covariate $z_i$):
 
-        \clearpage
-
         \input{../Output/Tables/sim_reg_results_rho_2methods.tex}
 
         We first note that when $\rho = 0.5$ then the coefficient on the variable of interest is artificially inflated when we use a single mismeasurement as a covariate (on average, 1.28 instead of the true value of 1). Conversely, when $\rho = -0.5$ then the coefficient is artificially deflated. Using the PCA value as the covariate reduces this bias for both directions, and brings the main coefficient closer to its true value of 1.0. These results are consistent with our theoretical section, where we argued that a positive covariance between the main variable and the true covariate will lead to an inflation on the main coefficient, while a negative covariance will lead to a deflation of the coefficient. Separately, there is very little bias when $\rho = 0$, as predicted in the theory section. Since there is hardly any bias to correct, we do not see gains from using the PCA covariate method for that particular $\rho$ value. Also, when $\rho = -1$ or $1$, there is no notable improvement from using the PCA-extracted latent variable (and notice that since the variances of $x_i$ and $z_i$ are 1, this means that the covariance is equal to the correlation in these simulations). These simulation results suggest that so long as the correlation between $x_i$ and $z_i$ is not close to $-1$, $0$, or $1$, there are noticeable performance gains from using PCA to extract the true covariate from a collection of observed variables that try to measure that true covariate.\\
         
         However, the performance advantages that we see from using PCA could be driven by the benefit of having multiple measurements of our true covariate of interest, as opposed to any special advantages from PCA specifically. We test this question by comparing the estimated $\beta_1^*$ in our PCA regressions with the estimated $\beta_1^*$ when we include all $p$ measurements as separate covariates in the regression, and the $\beta_1^*$ obtained when the covariate is the mean of all $p$ measurements of the true covariate. The results from these regressions for different values of $p$ are shown in Table \ref{sim_p_3}.
-
-        \clearpage
 
         \input{../Output/Tables/sim_reg_results_p_3methods.tex}
 
