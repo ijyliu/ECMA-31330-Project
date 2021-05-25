@@ -421,50 +421,17 @@
 
         We now examine the implications of the principal components estimator in an empirical setting with measurement error. One interesting question in public economics and public health is the comparison between publicly and privately funded healthcare systems and outcomes such as life expectancy. To measure the public or private nature of a healthcare system we use the continuous variable of the government's share of total health expenditure in a given country and year.
 
-        Some previous work has covered this relationship. Considerig that this topic has been studied in "relatively few papers," (Linden and Ray) focus on the relationship between life expectancy at birth and public and private health expenditures for 34 OECD countries from 1970-2012 and find that both public and private health spending are important to life expectancy and are associatied with each other.
+        Some previous work has covered this relationship. Considerig that this topic has been studied in "relatively few papers," (Linden and Ray) focus on the relationship between life expectancy at birth and public and private health expenditures for 34 OECD countries from 1970-2012 and find that both public and private health spending are important to life expectancy and are associatied with each other. Other studies find a variety of effects; considering developing nations in Africa, (Novignon) finds a larger impact for public spending while (Fillmer) finds no impact; in the developed US and Canada, (Lichtenberg) finds an impact only for public spending on outcomes when controlling for lagged GDP, while (Cremieux) finds private spending on drugs is more effective. In the most similar work to ours, (Or 2000) predicts premature death in 21 OECD countries from 1970-1992, considering the public share of health expenditure, environmental factors, and GDP. He finds that a larger share of public spending is associated with lower rates of premature mortality for both males and females, and that controlling for GDP is important; it is also associated with less premature mortality. This work also demonstrates the importance of our methods of reducing the number of covariates considered, as it includes many economic variables and fixed effects but examines only several hundred observations; the estimators used may be subject to an important amount of variance.
 
-        Novignon 2012
-        both public and private spending has impacts in sub saharan africa but public spending had higher impact
+        In this regression it is important to account for the role of a country's level of economic development. There is an extensive literature documenting the relationship between economic development and life expectancy. (Ling et al) finds that economic growth is associated with increased life expectancy in Malaysia, while considering the reversed causal direction (Acemoglu) finds improvements in life expectancy lead to little or no growth. Somewhat less obvious is the linkage between government provision of healthcare and development. In general, public goods provision and government spending, including in fields such as healthcare has been linked to prosperity; low income countries may be remain in such a state due to inefficient govenrments and inferior institutions (Wu).
 
-        Fillmer 1999
-        public spending not very effective in developing countries
-
-        Cremieux 2005
-        Canadian provinces 1975-1998 focus on drugs spending
-        Private drug spending has a higher positive impact than public spending on life expectancy
-
-        Lichtenberg 2000
-        USA dynamic models from 1960-1997
-        public and private expenditures, GDP, and drug approvals
-        Positive effects for public expenditure, but not for private effects, particularly when lagged GDP is added to the model
-
-        Or 2000
-        %http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.411.6359&rep=rep1&type=pdf
-        Predict premature death in 21 OECD countries from 1970-1992
-        total HE and public share, along with pub health and environmental factors and GDP
-        Most closely related to our paper, likely.
-        Larger share of public spending is associated with lower rates of premature mortality for both males and females.
-        GDP also associated with less premature mortality
-        Many, many variables and fixed effects - like 30 ish but only 483 observations.
-
-        In this regression it is important to account for the role of a country's level of economic development. There is an extensive literature linking economic development to life expectancy. cite gapminder etc. Somewhat less obvious is the linkage between government provision of healthcare and development. In general, public goods provision in fields such as healthcare has been linked to prosperity (cite)
-
-        econ and life expectancy
-        Ling et al Malaysia- economic growth increases life expectancy
-        Acemoglu -reverse item, life expectancy leads to less growth... or no relation
-
-        econ and government share of health expenditure
-        %https://www.sciencedirect.com/science/article/pii/S0161893810000463
-        Wu 2010- positive association between government spending and GDP
-        spending helps, and low income countries have are dragged down by inefficient governments and inferior institutions
-
-        However, economic development as it is often conceptualized using GDP is liable to be measured with error. GDP measurements usually rely on company surveys, and the methodology within a country and for comparisons between countries through exchange rates or PPP adjustments may vary (Grishin). Other sources of error include the presence of the informal economy and non-monetary but productive work, and the challenge of accurately measuring the value of digital services which often do not have visible prices (Charmes, Ahmad). \footnote{Due to differences in statistical capacity and the larger relative size of the informal economy, it is possible that mismeasurement of economic development is particularly severe in developing countries. On the other hand, the presence of the digital economy may mean mismeasurement is larger in developed nations. This would constitute the presence of non-classical measurement error, but we only consider classical measurement error in this paper.}Hence, this setup, with a covariate in regression subject to measurement error, fits the situation described in the theory and simulations in the previous sections. In this case, we aim to to reduce possible bias in the coefficient of the government's share of health spending by making appropriate use of multiple measures of economic development.
+        However, economic development as it is often conceptualized using GDP is liable to be measured with error. GDP measurements usually rely on company surveys, and the methodology within a country and for comparisons between countries through exchange rates or PPP adjustments may vary (Grishin). Other sources of error include the presence of the informal economy and non-monetary but productive work, and the challenge of accurately measuring the value of digital services which often do not have visible prices (Charmes, Ahmad).\footnote{Due to differences in statistical capacity and the larger relative size of the informal economy, it is possible that mismeasurement of economic development is particularly severe in developing countries. On the other hand, the presence of the digital economy may mean mismeasurement is larger in developed nations. This would constitute the presence of non-classical measurement error, but we only consider classical measurement error in this paper.} Hence, this setup, with a covariate in regression subject to measurement error, fits the situation described in the theory and simulations in the previous sections. In this case, we aim to to reduce possible bias in the coefficient of the government's share of health spending by making appropriate use of multiple measures of economic development.
 
         % Go into more detail on what particular simulation parameters we envision
 
         %It is very difficult to find an instrumental variable for economic development which satisfies a reasonable exclusion restriction.
 
-        Our data on all measures comes from the World Bank, though we also make usage of OECD government health share data to fill in missing years, and average World Bank and OECD measurements when both are available. We standardize all variables by subtracting the mean and dividing by the standard deviation, linearly interpolate data between known observations, and remove country-years with missing values for any of the economic indicators.
+        Our data on all measures comes from the World Bank, though we also make usage of OECD government health share data to fill in missing years, and average World Bank and OECD measurements when both are available (World Bank, OECD). We standardize all variables by subtracting the mean and dividing by the standard deviation, linearly interpolate data between known observations, and remove country-years with missing values for any of the economic indicators.
 
         % need to compile stats in terms of what country years are missing in WB versus OECD
         % does the averaging do anything? seems kind of sketchy because it's like measurement error in the variable of interest as well!
