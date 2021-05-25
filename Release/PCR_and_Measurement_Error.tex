@@ -161,7 +161,7 @@ the coefficients would be such that
 \end{array}\right)
 \end{align}
 
-Without loss of generality, assume that the abovementioned GDP consists only of two variables as follows
+Without loss of generality, assume that the abovementioned DGP consists only of two variables as follows
 
 	 \begin{align}
             y_i = \gamma^* t_i +  \beta^*x_i* + \zeta_i
@@ -180,29 +180,6 @@ Without loss of generality, assume that the abovementioned GDP consists only of 
         \operatorname{cov}{(y,x^*)}
         \end{array}\right) \\
         \end{align}
-<<<<<<< HEAD
-
-	Without loss of generality, assume that the abovementioned GDP consists only of two variables as follows
-
-	 \begin{align}
-            y_i = \gamma^* t_i +  \beta^*x_i* + \zeta_i
-        \end{align}
-
-	Then, equations $(4)$ and $(5)$ will be such that
-	\begin{align}
-            \left(\begin{array}{l}
-        {\gamma}^* \\
-        {\beta}^*
-        \end{array}\right)&=\left(\begin{array}{cc}
-        {\sigma}^2_{t} & \operatorname{cov}({t,x^*}) \\
-        \operatorname{cov}({x^*,t}) & {\sigma}_{x^*}^2
-        \end{array}\right)^{-1}\left(\begin{array}{c}
-        \operatorname{cov}{(y,t)} \\
-        \operatorname{cov}{(y,x^*)}
-        \end{array}\right) \\
-        \end{align}
-=======
->>>>>>> 5a34fa94c20f60fb8872147c40d789ba110ff14c
 	
 	Thus, the coefficient of our variable of interest will be
 	\begin{align}
@@ -214,15 +191,9 @@ And then
     \gamma^* = \gamma + \beta\frac{\operatorname{cov}(t,x)(\sigma^2_{x^*}-\sigma^2_x)}{\sigma_{t}^2\sigma_{x^*}^2-\operatorname{cov}({t,x})^2}
 \end{align}
 
-<<<<<<< HEAD
-From $(10)$ it is clear that when $\operatorname{cov}(t,x)\neq 0$ and that $x$ is measure with error (i.e $\sigma_{x^*}^2>\sigma_x^2)$, the coefficient of our variable of interest is biased. If $t$ and $x$ are independent, then measurement error in $x^*$ does not cause any bias. If there is no measurement error in $x^*$, then $\sigma^2_{x^*}=\sigma^2_x$ and so we would not be facing any kind of bias, as one would expect.\\
-
-Equation $(10)$ also allows us to know the direction of the bias. Given that we are facing measurement error in the covariate, $\sigma^2_{x^*}>\sigma^2_x$ which implies $\sigma^2_{x^*}-\sigma^2_x>0$. Also, it follows from \textit{Cuachy-Schwarz} inequality that the denominator is also positive. Then, the direction of the bias will depend on the sign of $\beta$ and the covariance of $t$ and $x$, as Table one illustrates.
-=======
 From $(10)$ it is clear that when $\operatorname{cov}(t,x)\neq 0$ and that $x$ is measured with error (i.e $\sigma_{x^*}^2>\sigma_x^2)$, the coefficient of our variable of interest is biased. If $t$ and $x$ are independent, then measurement error in $x^*$ does not cause any bias. If there is no measurement error in $x^*$, then $\sigma^2_{x^*}=\sigma^2_x$ and so we would not be facing any kind of bias, as one would expect.\\
 
 Equation $(10)$ also allows us to know the direction of the bias. Given that we are facing measurement error in the covariate, $\sigma^2_{x^*}>\sigma^2_x$ which implies $\sigma^2_{x^*}-\sigma^2_x>0$. Also, it follows from the \textit{Cauchy-Schwarz} inequality that the denominator is also positive. Then, the direction of the bias will depend on the sign of $\beta$ and the covariance of $t$ and $x$, as Table one illustrates.
->>>>>>> 5a34fa94c20f60fb8872147c40d789ba110ff14c
 
 \begin{table}[h!]
     \centering
@@ -235,115 +206,6 @@ Equation $(10)$ also allows us to know the direction of the bias. Given that we 
     \label{tab:my_label}
 \end{table}
 
-<<<<<<< HEAD
-\break
-
- For a more concrete example, consider a simple case where the DGP depends only of the variable of interest and a covariate such that:
-
-        \begin{align}
-            \left(\begin{array}{l}
-        {\gamma} \\
-        {\beta}
-        \end{array}\right)=\left(\begin{array}{l}
-        1 \\
-        1
-        \end{array}\right)
-        \end{align}
-
-        and with $\sigma^2_t=\Sigma_X=\Sigma_\eta=1$ while $\Sigma_{Xt}=0.6$. Then
-        \begin{align*}
-            \left(\begin{array}{l}
-        {\gamma}^* \\
-        {\beta}^*
-        \end{array}\right)& =\left(\begin{array}{cc}
-        1 & 0.6 \\
-        0.6 & 2
-        \end{array}\right)^{-1}\left(\begin{array}{cc}
-        1 & 0.6 \\
-        0.6 & 1
-        \end{array}\right)\left(\begin{array}{l}
-        1\\
-        1
-        \end{array}\right) \\
-        \left(\begin{array}{l}
-        {\gamma}^* \\
-        {\beta}^*
-        \end{array}\right)&=\left(\begin{array}{l}
-        1.37 \\
-        0.39
-        \end{array}\right)
-        \end{align*}
-
-        Clearly, both coefficients shows bias when the econometrician assumes a DGP with $X_i^*$: while there is attenuation bias on the coefficient of the covariate, the coefficient of the variable of interest is biased upward given that some of the effect of the covariates is ``omitted'' given this attenuation.
-
-    
-    \subsection*{Principal Component Regression as Bias-Correction Method}
-
-        Alternatively, we propose an alternative bias-correction method for when there are several mismeasured variables for each covariate; that is, when we have more than one $x_{i,k}^*$ for every $x_{i,k}$. Given that in all the mismeasured variables the underlying value is the real value, one could think of extracting the underlying true $x_{i,k}$ through a linear combination of the different $x_{i,k}^*$. Then, we could treat all the $x_{i,k}^*$ as variables that share components as follows:
-        \begin{align}
-        h_{j}=\underset{h^{\prime} h=1, h^{\prime} h_{1}=0, \ldots, h^{\prime} h_{j-1}=0}{\operatorname{argmax}} \operatorname{var}\left[h^{\prime} X^*_k\right]  
-        \end{align}
-
-
-        where $h_j$ is the eigenvector of $\Sigma$ associated with the $j^{t h}$ ordered eigenvalue $\lambda_{j}$ of $\Sigma_{X^*_k}$, and the principal components of $X^*_k$ are $U_{j}=h_{j}^{\prime} X^*_k$, where $h_{j}$ is the eigenvector of $\Sigma$ associated with the $j^{t h}$ ordered eigenvalue $\lambda_{j}$ of $\Sigma$.\\
-
-        Under our assumptions, the vector of mismeasured values $X^*_k$ of $x_{i,k}$, share only one principal component which is precisely $x_{i,k}$. Then, we only have one principal component, $x_{i,k}$, and so the $x_{i,k}$ is such that
-        \begin{align}
-            x_{i,k}=h_{k}^{\prime} X^*_k
-        \end{align}
-
-        Finally, we could then retrieve the vector of true variables $X_i$
-        \begin{align}
-            X_i=HX^*_i
-        \end{align}
-
-        where $H$ is a matrix such that
-        \begin{align*}
-            H=\left(\begin{array}{ccccc}
-            h_1 & 0 & 0 & \dots & 0 \\
-            0 & h_2 & 0 & \dots & 0 \\
-            \vdots & \ddots & h_3 & \ddots & \vdots \\
-            0 & \dots & \dots & \dots \ddots & h_p
-            \end{array}\right)
-        \end{align*}
-
-        and $h_k$ is the vector of eigenvalues for the variable $x_{i,k}$.
-
-        Our new linear model then becomes
-        \begin{align}
-            y_i = \gamma^{PCR} t_i + H{X^*_i}'\beta^{PCR} + \epsilon_i
-        \end{align}
-
-        where the coefficients are as follows
-        \begin{align}
-            \left(\begin{array}{l}
-            {\gamma}^{PCR} \\
-            {\beta}^{PCR}
-            \end{array}\right)&=\left(\begin{array}{cc}
-            {\sigma}^2_{t} & \Sigma_{t,HX^*} \\
-            \Sigma_{HX^*,t} & {\Sigma}_{HX^*}
-            \end{array}\right)^{-1}\left(\begin{array}{c}
-            \Sigma_{yt} \\
-            \Sigma_{y,HX^*}
-            \end{array}\right)\\
-            &=\left(\begin{array}{cc}
-            {\sigma}^2_{t} & \Sigma_{t,HX^*} \\
-            \Sigma_{HX^*,t} & {\Sigma}_{HX^*}
-            \end{array}\right)^{-1}\left(\begin{array}{cc}
-            {\sigma}^2_{t} & \Sigma_{tX} \\
-            \Sigma_{Xt} & {\Sigma}_{X}
-            \end{array}\right)\left(\begin{array}{l}
-            {\gamma} \\
-            {\beta}
-            \end{array}\right)\\
-            &=\left(\begin{array}{l}
-            {\gamma} \\
-            {\beta}
-            \end{array}\right)
-        \end{align}
-
-        where the last equality comes from $(13)$.
-=======
  For a more concrete example, consider a simple case where the DGP depends only of the variable of interest and a covariate such that:
 
 \begin{align}
@@ -508,7 +370,6 @@ Where $M_{\hat{X}}=I-\hat{X}(\hat{X}'\hat{X})^{-1}\hat{X}'$. Then
      \hat{\g}^F & = ((M_{\hat{X}}t)'M_{\hat{X}}t)^{-1}(M_{\hat{X}}t)'M_{\hat{X}}(t\gamma  + X\beta + \epsilon) \\
      &=\gamma +((M_{\hat{X}}t)'M_{\hat{X}}t)^{-1}(M_{\hat{X}}t)'M_{\hat{X}}X\beta+((M_{\hat{X}}t)'M_{\hat{X}}t)^{-1}(M_{\hat{X}}t)'M_{\hat{X}}\epsilon
 \end{align}
->>>>>>> 5a34fa94c20f60fb8872147c40d789ba110ff14c
 
 \section*{Estimation of the Principal Component Regression}
 
