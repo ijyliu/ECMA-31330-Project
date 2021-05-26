@@ -47,7 +47,7 @@ short_covariates_list = ["gdp_pc_ppp" if item == "NY.GDP.PCAP.PP.CD" else item f
 short_covariates_list = [var_name.replace('.', '_') for var_name in short_covariates_list]
 
 # Dictionary for linking column names/variables to nice/written out version
-variables_mapped_to_long = {"gdp_pc_ppp":"GDP Per Capita PPP (Current International $)", "NY_GDP_PCAP_CD":"GDP Per Capita (Current USD)", "NY_GNP_PCAP_PP_CD":"GNP Per Capita PPP (Current International $)", "NY_GNP_PCAP_CD":"GNP Per Capita (Current USD)", "SL_GDP_PCAP_EM_KD":"ILO GDP Per Person Employed", "life_exp":"Life Expectancy", "govt_health_share":"Government Share of Health Expenditure"}
+variables_mapped_to_long = {"gdp_pc_ppp":"GDP Per Capita PPP (Current International $)", "NY_GDP_PCAP_CD":"GDP Per Capita (Current USD)", "NY_GNP_PCAP_PP_CD":"GNP Per Capita PPP (Current International $)", "NY_GNP_PCAP_CD":"GNP Per Capita (Current USD)", "SL_GDP_PCAP_EM_KD":"ILO GDP Per Person Employed", "life_exp":"Life Expectancy at Birth (All Population)", "govt_health_share":"Government Share of Health Expenditure"}
 
 # Flip sign on poverty and ODA measures
 cols = np.logical_or(wb_data.columns.str.contains('POV'), wb_data.columns.str.contains('ODA'))
@@ -106,7 +106,10 @@ def run_empirical_analysis(data, name, covariates):
     sum_stats = (data.describe()
                      .transpose()
                      .reset_index()
-                     .rename(columns = {"index":"Variable", "count":"Obs", "mean":"Mean", "std":"SD", "min":"Min", "25%":"25th Percentile", "50%":"50th Percentile", "75%":"75th Percentile", "max":"Max"}))
+                     .drop(columns = ['25%', '75%'])
+                     .round(2)
+                     .astype({'count': 'int32'})
+                     .rename(columns = {"index":"Variable", "count":"Obs", "mean":"Mean", "std":"SD", "min":"Min", "50%":"Med", "max":"Max"}))
     # Ensure entire strings/columns get printed
     with pd.option_context('display.max_colwidth', -1):
         sum_stats.to_latex(tables_dir + '/sum_stats_' + name + '.tex', index = False)
