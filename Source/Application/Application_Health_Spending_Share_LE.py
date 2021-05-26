@@ -166,7 +166,7 @@ def run_empirical_analysis(data, name, covariates):
     reg_table.covariate_order(['govt_health_share'])
     reg_table.rename_covariates({"govt_health_share":"Govt. Share of Health Exp."})
     # Fixed effects indicator
-    reg_table.add_line('Covariates', ['None', 'GDP PC', 'Econ Indicators', 'Mean', 'PC 1'])
+    reg_table.add_line('Covariates', ['None', 'GDP PC PPP', 'Econ Indicators', 'Mean', 'PC 1'])
     reg_table.show_degrees_of_freedom(False)
     #reg_table.add_custom_notes(["All variables are standardized. All columns make use of robust standard errors."])
 
