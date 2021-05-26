@@ -24,6 +24,7 @@ indicators_list = get_wb_ind_list()
 # Create a list of covariates
 # For some reason net foreign assets pc doesn't read in correctly
 covariates_list = [variable for variable in indicators_list if variable != "SP.DYN.LE00.IN" and variable != "SH.XPD.GHED.CH.ZS" and variable != "NW.NFA.PC" and variable != "SH.XPD.CHEX.GD.ZS"]
+short_covariates_list = ['NY.GDP.PCAP.PP.CD', 'NY.GDP.PCAP.CD', 'NY.GNP.PCAP.PP.CD', 'NY.GNP.PCAP.CD', 'SL.GDP.PCAP.EM.KD']
 
 # Load in the WB data
 wb_data = (pd.read_csv(apps_dir + "/WB_Data.csv", index_col=['economy', 'series'])
@@ -42,6 +43,8 @@ wb_data = (pd.read_csv(apps_dir + "/WB_Data.csv", index_col=['economy', 'series'
 covariates_list = ["gdp_pc_ppp" if item == "NY.GDP.PCAP.PP.CD" else item for item in covariates_list]
 # Also get rid of problematic periods and replace with underscores
 covariates_list = [var_name.replace('.', '_') for var_name in covariates_list]
+short_covariates_list = ["gdp_pc_ppp" if item == "NY.GDP.PCAP.PP.CD" else item for item in short_covariates_list]
+short_covariates_list = [var_name.replace('.', '_') for var_name in short_covariates_list]
 
 # Flip sign on poverty and ODA measures
 cols = np.logical_or(wb_data.columns.str.contains('POV'), wb_data.columns.str.contains('ODA'))
@@ -82,7 +85,7 @@ oecd_only_data = (merged_data.assign(govt_health_share = merged_data['govt_healt
 
 # Run the empirical analysis for dataset
 # This could be using both the World Bank and OECD data or just the World Bank Data
-def run_empirical_analysis(data, name):
+def run_empirical_analysis(data, name, covariates):
 
     # First, sort, interpolate and fill
     filled_data = (data.sort_index(level=['country', 'year'])
@@ -96,7 +99,7 @@ def run_empirical_analysis(data, name):
     std_data = pd.DataFrame(StandardScaler().fit_transform(filled_data), index=filled_data.index, columns=filled_data.columns)
 
     # Calculate the 'averaged' covariate measure, now that the standardization is done
-    std_data['covariates_mean'] =  std_data[covariates_list].mean(axis = 1)
+    std_data['covariates_mean'] =  std_data[covariates].mean(axis = 1)
 
     # Basic time series plot
     plt.figure(figsize=(15,15))
@@ -120,9 +123,9 @@ def run_empirical_analysis(data, name):
 
     # Many covariate OLS
     # String format of covariates for patsy formulas
-    covariates_formula_string = covariates_list[0]
-    for i in range(1, len(covariates_list)):
-        covariates_formula_string += " + " + covariates_list[i]
+    covariates_formula_string = covariates[0]
+    for i in range(1, len(covariates)):
+        covariates_formula_string += " + " + covariates[i]
     ols_many_covariates = smf.ols("life_exp ~ govt_health_share + " + covariates_formula_string, data = std_data.reset_index()).fit()
 
     # Mean of standardized covariates OLS
@@ -130,7 +133,7 @@ def run_empirical_analysis(data, name):
 
     # Decompose into matrix for PCA analysis
     # This contains only the economic covariates
-    X = std_data[covariates_list].to_numpy()
+    X = std_data[covariates].to_numpy()
 
     # Perform the factor analysis
     pca_model = pca()
@@ -179,8 +182,11 @@ def run_empirical_analysis(data, name):
     fixed_effects_results = smf.ols("life_exp ~ govt_health_share + " + covariates_formula_string + " + C(year) + C(country)", data = std_data.reset_index()).fit(cov_type='cluster', cov_kwds={'groups': std_data.reset_index()['country']})
     # PCR with fixed effects
     pc_fixed_effects_results = smf.ols("life_exp ~ govt_health_share + PC1 + C(year) + C(country)", data = std_data.reset_index()).fit(cov_type='cluster', cov_kwds={'groups': std_data.reset_index()['country']})
-    # Use first 7 principal components (this gets at a large share of the variance)
-    more_pcs_results = smf.ols("life_exp ~ govt_health_share + PC1 + PC2 + PC3 + PC4 + PC5 + PC6 + PC7", data = std_data).fit()
+    # Use more principal components (this gets at a large share of the variance)
+    if covariates == covariates_list:
+        more_pcs_results = smf.ols("life_exp ~ govt_health_share + PC1 + PC2 + PC3 + PC4 + PC5 + PC6 + PC7", data = std_data).fit()
+    else:
+        more_pcs_results = smf.ols("life_exp ~ govt_health_share + PC1 + PC2", data = std_data).fit()
     # Instrumental variables- instrument GDP per capita (probably mismeasured) on all the other development indicators
     iv_instruments_string = covariates_formula_string.replace('gdp_pc_ppp + ', '')
     # Create the predicted value of gdp_pc_ppp
@@ -194,7 +200,10 @@ def run_empirical_analysis(data, name):
     additional_reg_table.covariate_order(['govt_health_share'])
     additional_reg_table.rename_covariates({"govt_health_share":"Govt. Share of Health Exp."})
     # Fixed effects indicator
-    additional_reg_table.add_line('Covariates', ['None', 'PC 1', 'PC 1-7', 'GDP PC (IV)'])
+    if covariates == covariates_list:
+        additional_reg_table.add_line('Covariates', ['None', 'PC 1', 'PC 1-7', 'GDP PC (IV)'])
+    else:
+        additional_reg_table.add_line('Covariates', ['None', 'PC 1', 'PC 1-2', 'GDP PC (IV)'])
     additional_reg_table.add_line('Fixed Effects', ['Yes', 'Yes', 'No', 'No'])
     additional_reg_table.show_degrees_of_freedom(False)
     #additional_reg_table.add_custom_notes(["All variables are standardized. \nFixed effects columns make use of country clustered standard errors: \nothers use robust standard errors."])
@@ -205,9 +214,12 @@ def run_empirical_analysis(data, name):
         f.write(corrected_table)
 
 # Do the analysis on the two datasets
-run_empirical_analysis(data = combined_data, name = "combined")
-run_empirical_analysis(data = wb_only_data, name = "wb_only")
-run_empirical_analysis(data = oecd_only_data, name = "oecd_only")
+run_empirical_analysis(data = combined_data, name = "combined_full", covariates=covariates_list)
+run_empirical_analysis(data = wb_only_data, name = "wb_only_full", covariates=covariates_list)
+run_empirical_analysis(data = oecd_only_data, name = "oecd_only_full", covariates=covariates_list)
+run_empirical_analysis(data = combined_data, name = "combined_short", covariates=short_covariates_list)
+run_empirical_analysis(data = wb_only_data, name = "wb_only_short", covariates=short_covariates_list)
+run_empirical_analysis(data = oecd_only_data, name = "oecd_only_short", covariates=short_covariates_list)
 
 # For reference, produce a full table of covariates
 covariates_fullnames = (pd.read_csv(input_dir + '/wb_indicators_list.csv')
