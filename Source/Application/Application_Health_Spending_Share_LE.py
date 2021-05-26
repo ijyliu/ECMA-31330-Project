@@ -24,7 +24,7 @@ indicators_list = get_wb_ind_list()
 # Create a list of covariates
 # For some reason net foreign assets pc doesn't read in correctly
 covariates_list = [variable for variable in indicators_list if variable != "SP.DYN.LE00.IN" and variable != "SH.XPD.GHED.CH.ZS" and variable != "NW.NFA.PC" and variable != "SH.XPD.CHEX.GD.ZS"]
-short_covariates_list = ['NY.GDP.PCAP.PP.CD', 'NY.GDP.PCAP.CD', 'NY.GNP.PCAP.PP.CD', 'NY.GNP.PCAP.CD', 'SL.GDP.PCAP.EM.KD']
+raw_short_covariates_list = ['NY.GDP.PCAP.PP.CD', 'NY.GDP.PCAP.CD', 'NY.GNP.PCAP.PP.CD', 'NY.GNP.PCAP.CD', 'SL.GDP.PCAP.EM.KD']
 
 # Load in the WB data
 wb_data = (pd.read_csv(apps_dir + "/WB_Data.csv", index_col=['economy', 'series'])
@@ -43,7 +43,7 @@ wb_data = (pd.read_csv(apps_dir + "/WB_Data.csv", index_col=['economy', 'series'
 covariates_list = ["gdp_pc_ppp" if item == "NY.GDP.PCAP.PP.CD" else item for item in covariates_list]
 # Also get rid of problematic periods and replace with underscores
 covariates_list = [var_name.replace('.', '_') for var_name in covariates_list]
-short_covariates_list = ["gdp_pc_ppp" if item == "NY.GDP.PCAP.PP.CD" else item for item in short_covariates_list]
+short_covariates_list = ["gdp_pc_ppp" if item == "NY.GDP.PCAP.PP.CD" else item for item in raw_short_covariates_list]
 short_covariates_list = [var_name.replace('.', '_') for var_name in short_covariates_list]
 
 # Flip sign on poverty and ODA measures
@@ -223,13 +223,20 @@ run_empirical_analysis(data = oecd_only_data, name = "oecd_only_short", covariat
 
 # For reference, produce a full table of covariates
 covariates_fullnames = (pd.read_csv(input_dir + '/wb_indicators_list.csv')
-                .query('Indicator_Code != "SH.XPD.CHEX.GD.ZS"')
-                .query('Indicator_Code != "SP.DYN.LE00.IN"')
-                .query('Indicator_Code != "NY.GDP.PCAP.PP.CD"')
-                .drop(columns = 'Indicator_Code')
-                .rename(columns = {"Indicator_Name":"Indicator Name"})
-                .reset_index(drop = True))
+                          .query('Indicator_Code != "SH.XPD.CHEX.GD.ZS"')
+                          .query('Indicator_Code != "SP.DYN.LE00.IN"')
+                          .query('Indicator_Code != "NY.GDP.PCAP.PP.CD"')
+                          .drop(columns = 'Indicator_Code')
+                          .rename(columns = {"Indicator_Name":"Indicator Name"})
+                          .reset_index(drop = True))
+
+print(raw_short_covariates_list)
+short_covariates_fullnames = (pd.read_csv(input_dir + '/wb_indicators_list.csv')
+                          .query('Indicator_Code == "NY.GDP.PCAP.PP.CD" | Indicator_Code == "NY.GDP.PCAP.CD" | Indicator_Code == "NY.GNP.PCAP.CD" | Indicator_Code == "NY.GNP.PCAP.PP.CD" | Indicator_Code == "SL.GDP.PCAP.EM.KD"')
+                          .drop(columns = 'Indicator_Code')
+                          .rename(columns = {"Indicator_Name":"Indicator Name"})
+                          .reset_index(drop = True))
 
 # Ensure entire strings/columns get printed
 with pd.option_context('display.max_colwidth', -1):
-    covariates_fullnames.to_latex(tables_dir + '/indicators.tex', index = False)
+    short_covariates_fullnames.to_latex(tables_dir + '/short_indicators.tex', index = False)
