@@ -112,7 +112,7 @@ def run_empirical_analysis(data, name, covariates):
                      .rename(columns = {"index":"Variable", "count":"Obs", "mean":"Mean", "std":"SD", "min":"Min", "50%":"Med", "max":"Max"}))
     # Ensure entire strings/columns get printed
     with pd.option_context('display.max_colwidth', -1):
-        sum_stats.to_latex(tables_dir + '/sum_stats_' + name + '.tex', index = False, caption = "Summary Statistics", label = "Sum_Stats")
+        sum_stats.to_latex(tables_dir + '/sum_stats_' + name + '.tex', index = False, caption = "Summary Statistics", label = "Sum_Stats", column_format = 'l' + 'c'*(len(sum_stats.columns) - 1))
 
     # Standardize all variables
     # https://stackoverflow.com/questions/35723472/how-to-use-sklearn-fit-transform-with-pandas-and-return-dataframe-instead-of-num
