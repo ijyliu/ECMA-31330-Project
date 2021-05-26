@@ -424,13 +424,13 @@ Where $M_{\hat{X}}=I-\hat{X}(\hat{X}'\hat{X})^{-1}\hat{X}'$. Then
 
         Our data on all measures comes from the World Bank, though we also make usage of OECD government health share data to fill in missing years, and average World Bank and OECD measurements when both are available \citep{the_world_bank_indicators_2021,oecd_oecd_2021}. We standardize all variables by subtracting the mean and dividing by the standard deviation, linearly interpolate data between known observations, and remove country-years with missing values for any of the economic indicators.
 
-        In Table \ref{main_regs} below we begin with a univariate OLS regression, which produces a large and significant coeffcient indicating a one standard deviation increase in the government share of health expenditure is linked to a 0.56 standard deviation increase in life expectancy. Next we include the potentially mismeasured covariate of GDP per capita, which greatly reduces the size of the coefficient on the governments share. After this we include a full set of economic covariates listed in Table \ref{Econ_Indicators}, again reducing the size of the coefficient. However, this result is then adjusted upwards again in the last two columns, where use the mean of the mismeasured covariates, and the first principal component.
+        In Table \ref{main_regs} below we begin with a univariate OLS regression, which produces a large and significant coeffcient indicating a one standard deviation increase in the government share of health expenditure is linked to a 0.56 standard deviation increase in life expectancy. Next we include the potentially mismeasured covariate of GDP per capita, which greatly reduces the size of the coefficient on the governments share. After this we include a full set of economic covariates listed in Table \ref{Sum_Stats}, again reducing the size of the coefficient. However, this result is then adjusted upwards again in the last two columns, where use the mean of the mismeasured covariates, and the first principal component.
 
         \input{../Output/Tables/LE_Health_Econ_Regressions_combined_short.tex}
 
         \begin{table}[!htbp] \centering
-            \caption{Econ Indicators \label{Econ_Indicators}}
-            \input{../Output/Tables/short_indicators.tex}
+            \caption{Summary Statistics \label{Sum_Stats}}
+            \input{../Output/Tables/sum_stats_combined_short.tex}
         \end{table}
 
         The results clearly demonstrate that all of the methods using multiple measures of the covariates produce noticably different coefficients for government health share. The usage of many economic indicators directly, the mean, and the principal components estimator each produce smaller coefficients.
