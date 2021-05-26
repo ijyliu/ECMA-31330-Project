@@ -108,8 +108,13 @@ def run_empirical_analysis(data, name, covariates):
     plt.close()
 
     # Exploring correlations between the variables
+    if covariates == short_covariates_list:
+        std_data_for_corr = (std_data.filter(short_covariates_list + ['life_exp', 'govt_health_share'])
+                                     .rename(columns = {"gdp_pc_ppp":"GDP Per Capita PPP (Current International $)", "NY_GDP_PCAP_CD":"GDP Per Capita (Current USD)", "NY_GNP_PCAP_PP_CD":"GNP Per Capita PPP (Current International $)", "NY_GNP_PCAP_CD":"GNP Per Capita (Current USD)", "SL_GDP_PCAP_EM_KD":"ILO GDP Per Person Employed", "life_exp":"Life Expectancy", "govt_health_share":"Government Share of Health Expenditure"}))
+    else:
+        std_data_for_corr = std_data
     sns.set(font_scale=0.25)
-    sns.heatmap(std_data.corr())
+    sns.heatmap(std_data_for_corr.corr())
     plt.yticks(rotation=0)
     plt.xticks(rotation=90)
     plt.savefig(figures_dir + "/LE_Health_Econ_Correlations_" + name + ".pdf")
