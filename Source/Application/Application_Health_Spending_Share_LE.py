@@ -106,6 +106,7 @@ def run_empirical_analysis(data, name, covariates):
 
     # Summary statistics table
     sum_stats = (data.describe()
+                     .rename(columns = variables_mapped_to_long)
                      .transpose()
                      .reset_index()
                      .drop(columns = ['25%', '75%'])
