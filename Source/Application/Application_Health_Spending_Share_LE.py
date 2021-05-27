@@ -90,17 +90,19 @@ oecd_only_data = (merged_data.assign(govt_health_share = merged_data['govt_healt
 # This could be using both the World Bank and OECD data or just the World Bank Data
 def run_empirical_analysis(data, name, covariates):
 
-    # First, sort, interpolate and fill
-    filled_data = (data.sort_index(level=['country', 'year'])
-                       .interpolate(limit_area='inside')
-                       .drop(columns=['govt_health_share_wb', 'govt_health_share_oecd'])
-                       .dropna()
-                       .set_index(['year', 'country']))
-
     # Exploring correlations between the variables
     if covariates == short_covariates_list:
-        data = (data.filter(short_covariates_list + ['life_exp', 'govt_health_share'])
-                    .rename(columns = variables_mapped_to_long))
+        data = data.filter(short_covariates_list + ['country', 'year', 'life_exp', 'govt_health_share', 'govt_health_share_wb', 'govt_health_share_oecd'])
+
+    # Sort, interpolate and fill
+    data = (data.sort_index(level=['country', 'year'])
+                .interpolate(limit_area='inside')
+                .drop(columns=['govt_health_share_wb', 'govt_health_share_oecd'])
+                .dropna()
+                .set_index(['year', 'country']))
+
+    print(name)
+    print(data.apply(lambda x: x.count()))
 
     # Summary statistics table
     sum_stats = (data.describe()
@@ -116,7 +118,7 @@ def run_empirical_analysis(data, name, covariates):
 
     # Standardize all variables
     # https://stackoverflow.com/questions/35723472/how-to-use-sklearn-fit-transform-with-pandas-and-return-dataframe-instead-of-num
-    std_data = pd.DataFrame(StandardScaler().fit_transform(filled_data), index=filled_data.index, columns=filled_data.columns)
+    std_data = pd.DataFrame(StandardScaler().fit_transform(data), index=data.index, columns=data.columns)
 
     # Calculate the 'averaged' covariate measure, now that the standardization is done
     std_data['covariates_mean'] =  std_data[covariates].mean(axis = 1)
@@ -129,7 +131,7 @@ def run_empirical_analysis(data, name, covariates):
 
     # Correlations map
     sns.set(font_scale=0.25)
-    sns.heatmap(std_data.corr())
+    sns.heatmap(std_data.rename(columns = variables_mapped_to_long).corr())
     plt.yticks(rotation=0)
     plt.xticks(rotation=90)
     plt.savefig(figures_dir + "/LE_Health_Econ_Correlations_" + name + ".pdf")
