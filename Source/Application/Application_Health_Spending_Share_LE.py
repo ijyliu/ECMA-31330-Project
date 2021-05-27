@@ -46,6 +46,9 @@ covariates_list = [var_name.replace('.', '_') for var_name in covariates_list]
 short_covariates_list = ["gdp_pc_ppp" if item == "NY.GDP.PCAP.PP.CD" else item for item in raw_short_covariates_list]
 short_covariates_list = [var_name.replace('.', '_') for var_name in short_covariates_list]
 
+# Dictionary for linking column names/variables to nice/written out version
+variables_mapped_to_long = {"gdp_pc_ppp":"GDP Per Capita PPP (Current International $)", "NY_GDP_PCAP_CD":"GDP Per Capita (Current USD)", "NY_GNP_PCAP_PP_CD":"GNP Per Capita PPP (Current International $)", "NY_GNP_PCAP_CD":"GNP Per Capita (Current USD)", "SL_GDP_PCAP_EM_KD":"ILO GDP Per Person Employed", "life_exp":"Life Expectancy at Birth (All Population)", "govt_health_share":"Government Share of Health Expenditure"}
+
 # Flip sign on poverty and ODA measures
 cols = np.logical_or(wb_data.columns.str.contains('POV'), wb_data.columns.str.contains('ODA'))
 wb_data.loc[:, cols] = wb_data.loc[:, cols].mul(-1)
@@ -94,6 +97,23 @@ def run_empirical_analysis(data, name, covariates):
                        .dropna()
                        .set_index(['year', 'country']))
 
+    # Exploring correlations between the variables
+    if covariates == short_covariates_list:
+        data = (data.filter(short_covariates_list + ['life_exp', 'govt_health_share'])
+                    .rename(columns = variables_mapped_to_long))
+
+    # Summary statistics table
+    sum_stats = (data.describe()
+                     .transpose()
+                     .reset_index()
+                     .drop(columns = ['25%', '75%'])
+                     .round(2)
+                     .astype({'count': 'int32'})
+                     .rename(columns = {"index":"Variable", "count":"Obs", "mean":"Mean", "std":"SD", "min":"Min", "50%":"Med", "max":"Max"}))
+    # Ensure entire strings/columns get printed
+    with pd.option_context('display.max_colwidth', -1):
+        sum_stats.to_latex(tables_dir + '/sum_stats_' + name + '.tex', index = False, caption = "Summary Statistics", label = "Sum_Stats", column_format = 'l' + 'c'*(len(sum_stats.columns) - 1))
+
     # Standardize all variables
     # https://stackoverflow.com/questions/35723472/how-to-use-sklearn-fit-transform-with-pandas-and-return-dataframe-instead-of-num
     std_data = pd.DataFrame(StandardScaler().fit_transform(filled_data), index=filled_data.index, columns=filled_data.columns)
@@ -107,7 +127,7 @@ def run_empirical_analysis(data, name, covariates):
     plt.savefig(figures_dir + "/Govt_Health_Share_Time_Series_" + name + ".pdf")
     plt.close()
 
-    # Exploring correlations between the variables
+    # Correlations map
     sns.set(font_scale=0.25)
     sns.heatmap(std_data.corr())
     plt.yticks(rotation=0)
@@ -213,30 +233,10 @@ def run_empirical_analysis(data, name, covariates):
         corrected_table = re.sub('\\cline{[0-9\-]+}', '', additional_reg_table.render_latex())
         f.write(corrected_table)
 
-# Do the analysis on the two datasets
+# Do the analysis on the two datasets and all the covariates combos
 run_empirical_analysis(data = combined_data, name = "combined_full", covariates=covariates_list)
 run_empirical_analysis(data = wb_only_data, name = "wb_only_full", covariates=covariates_list)
 run_empirical_analysis(data = oecd_only_data, name = "oecd_only_full", covariates=covariates_list)
 run_empirical_analysis(data = combined_data, name = "combined_short", covariates=short_covariates_list)
 run_empirical_analysis(data = wb_only_data, name = "wb_only_short", covariates=short_covariates_list)
 run_empirical_analysis(data = oecd_only_data, name = "oecd_only_short", covariates=short_covariates_list)
-
-# For reference, produce a full table of covariates
-covariates_fullnames = (pd.read_csv(input_dir + '/wb_indicators_list.csv')
-                          .query('Indicator_Code != "SH.XPD.CHEX.GD.ZS"')
-                          .query('Indicator_Code != "SP.DYN.LE00.IN"')
-                          .query('Indicator_Code != "NY.GDP.PCAP.PP.CD"')
-                          .drop(columns = 'Indicator_Code')
-                          .rename(columns = {"Indicator_Name":"Indicator Name"})
-                          .reset_index(drop = True))
-
-print(raw_short_covariates_list)
-short_covariates_fullnames = (pd.read_csv(input_dir + '/wb_indicators_list.csv')
-                          .query('Indicator_Code == "NY.GDP.PCAP.PP.CD" | Indicator_Code == "NY.GDP.PCAP.CD" | Indicator_Code == "NY.GNP.PCAP.CD" | Indicator_Code == "NY.GNP.PCAP.PP.CD" | Indicator_Code == "SL.GDP.PCAP.EM.KD"')
-                          .drop(columns = 'Indicator_Code')
-                          .rename(columns = {"Indicator_Name":"Indicator Name"})
-                          .reset_index(drop = True))
-
-# Ensure entire strings/columns get printed
-with pd.option_context('display.max_colwidth', -1):
-    short_covariates_fullnames.to_latex(tables_dir + '/short_indicators.tex', index = False)
