@@ -464,16 +464,18 @@ We first note that when $\rho = 0.5$ or $0.9$ then the coefficient on the variab
 
 However, the performance advantages that we see from using PCA could be driven by the benefit of having multiple measurements of our true covariate of interest, as opposed to any special advantages from PCA specifically. We test this question by comparing the estimated $\beta_1$ in our PCA regressions with the estimated $\beta_1$ when we include all $p$ measurements as separate covariates in the regression, and the $\beta_1$ obtained when the covariate is the mean of all $p$ measurements of the true covariate. We also show the results for an instrumental variables regression where we use other measurements of the true covariate as an instrument for a single measurement of the covariate. The results from these regressions for different values of $p$ are shown in Table \ref{sim_p_4_noexp}.
 
+As one can see from these results (and results for different values of $\beta_1$, $\beta_2$, and $\rho$ in Appendix 1), there does not seem to be a noticeable difference between the first three regression methods, with the instrumental variable regression performing slightly worse. Thus, our simulations suggest that there are major benefits to having multiple measurements of a latent covariate of interest, but under our first framework, using PCA, taking the average of these measurements, and including all measurements as separate covariates seem to give similar benefits to the performance of the regression.
+
 \clearpage
 \input{../Output/Tables/sim_reg_results_p_4methods_noexp.tex}
 
-As one can see from these results (and results for different values of $\beta_1$, $\beta_2$, and $\rho$ in Appendix 1), there does not seem to be a noticeable difference between the first three regression methods, with the instrumental variable regression performing slightly worse. Thus, our simulations suggest that there are major benefits to having multiple measurements of a latent covariate of interest, but under our first framework, using PCA, taking the average of these measurements, and including all measurements as separate covariates seem to give similar benefits to the performance of the regression.
-
 However, we wanted to see if our results differed under a different framework of measurement error. For the following regressions (and those in Appendix 2) we transformed half of the covariate measurements by taking the $z_{i,j}^*$ value from before and transforming it so that the new $z_{i,j}'$ value was equal to $z_{i,j}' = e^{z_{i,j}^*}$. This allows us to analyze the performance of our different techniques in a situation where the measurements of the true covariate are on different scales from one another (this is often the case; for example, one could measure income inequality through a Gini coefficient and the percent of income that goes to the top 1\% of income-earners, but these variables are on totally different scales from one another). Table \ref{sim_p_5_exp} shows the results of our five techniques in this new context.
 
-\input{../Output/Tables/sim_reg_results_p_5methods_exp.tex}
-
 We can see that taking the average of the covariate measurements now performs notably worse than PCA or using all measurements as separate covariates. Additionally, IV techniques seem to perform better in this paradigm and attains results consistent with those for the PCA and all measurements techniques. As can be seen in Appendix 2, these findings hold for other values of $\beta_1$, $\beta_2$, and $\rho$.
+
+Thus, these Monte Carlo simulations tell us that using PCR provides significant performance benefits relative to using a single mismeasured covariate of the true latent covariate in a regression. When the measurements of the true covariate have the same scale and only have Gaussian measurement error, then PCR performs about as well as taking the average of all covariate measurements or as using all measurements as separate covariates in an OLS regression. When we took the exponential of half of the measurements, then PCR outperformed taking the average of the covariate measurements and performed in line with using all measurements as covariates or using an IV technique. These simulations thus tell us that PCR is a useful way of reducing measurement error-caused bias in OLS regression with a latent covariate, and that the performance of this technique is in line with, or better than, other techniques for reducing that bias.
+
+\input{../Output/Tables/sim_reg_results_p_5methods_exp.tex}
 
     \section*{Application: Government Share of Healthcare Spending and Life Expectancy}
 
@@ -503,7 +505,7 @@ We can see that taking the average of the covariate measurements now performs no
 
     \section*{Conclusion}
         
-        Discuss possible extensions
+In this paper, we have 
 
     \clearpage \newpage
 
