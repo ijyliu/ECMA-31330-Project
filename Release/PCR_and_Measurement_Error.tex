@@ -123,17 +123,17 @@
 
         In this paper, in order to show the properties and behaviour of our estimator on large samples under standard assumptions, we present a theoretical framework and a Monte-Carlo analysis. Additionally, we explore a basic empirical application to our method, by estimating the effect of economic development on life expectancy at birth. Since there is no consensus on how to measure economic development, we take a sample of different variables that may measure economic development with error (GDP per capita, GNI per capita, Household Income Per Capita, among others) over which we apply PCA to apply our identification strategy. Our estimator generally behaves as expected in this empirical setting, though it is unclear whether it performs any better or worse than other methods such as the direct inclusion of covariates or their averaging.
 
-    \section*{Theoretical framework}
+        \section*{Theoretical framework}
 
         Consider a model where the outcome is denoted by $y_i$. This outcome depends on a variable of interest denoted by $t_i$ and a vector of covariates denoted by $X_i=(x_{i,1},x_{i,2},\dots x_{i,p})'$. Additionally, consider a vector of variables $X^*_i=(x^*_{i,1},x^*_{i,2},\dots x^*_{i,p})'$ that correspond to the covariates $X_i$ but observed with measurement error, where $x^*_{i,k}=x_{i,k}+\eta_{i,k}$ with $\eta_{i,k} \sim {iid}(0,\sigma^2_{\eta_k})$, $\operatorname{E}(x_{i,k}'\eta_{i,k})=0, \forall i$, $\operatorname{E}(x_{i,k}'\eta_{j,l})=0, \forall i\neq j$ and $k \neq l$, and $\operatorname{E}(\eta_{i,k}'\eta_{j,l})=0, \forall i\neq j$ and $k \neq l$. Therefore, each $x^*_{i,k}$ suffers classical measurement error. Note that $\operatorname{E}(x_{i,k})=\operatorname{E}(x^*_{i,k})=\mu_{x_k}$ and that $\operatorname{V}(x_{i,k})=\sigma^2_{x_k}$ while $\operatorname{V}(x^*_{i,k})=\sigma^2_{x_k}+\sigma^2_{\eta_k}\geq \sigma^2_{x_k}$.
-
-    \subsection*{Data Generation Process}
-
+        
+        \subsection*{Data Generation Process}
+        
         Assume that the outcome $y_i$ is determined by the following Data Generation Process (DGP):
         \begin{align}
             y_i = \gamma t_i + X_i'\beta + \epsilon_i
         \end{align}
-
+        
         where $\g$ is the parameter of the variable of interest $t_i$, $\b=(\b_1,\b_2,\dots \b_p)'$ is the vector of the parameters of the covariates $X_i$ including a constant and $\epsilon_i \sim \operatorname{iid}(0,\sigma^2_\epsilon)$. Under this specification, the coefficients are such that:
         \begin{align}
             \left(\begin{array}{l}
@@ -147,12 +147,12 @@
         \Sigma_{yX}
         \end{array}\right)
         \end{align}
-
+        
         Suppose that the econometrician has access to $t_i$ but, instead of $X_i$ she observes $X^*_i$. Then, she specifies the following linear model
         \begin{align}
             y_i = \gamma^* t_i + {X^{*}_i}' \beta^* + \zeta_i
         \end{align}
-
+        
         the coefficients would be such that
         \begin{align}
             \left(\begin{array}{l}
@@ -176,13 +176,13 @@
         {\beta}
         \end{array}\right)
         \end{align}
-
-        Without loss of generality, assume that the abovementioned DGP consists only of two variables as follows
-
-            \begin{align}
+        
+        Without loss of generality, assume that the abovementioned GDP consists only of two variables as follows
+        
+             \begin{align}
                     y_i = \gamma^* t_i +  \beta^*x_i* + \zeta_i
                 \end{align}
-
+        
             Then, equations $(4)$ and $(5)$ will be such that
             \begin{align}
                     \left(\begin{array}{l}
@@ -201,29 +201,29 @@
             \begin{align}
             {\gamma}^* =\frac{\sigma_{x^*}^2\operatorname{cov}{(y,t)}-\operatorname{cov}({t,x^*})\operatorname{cov}{(y,x^*)}}{\sigma_{t}^2\sigma_{x^*}^2-\operatorname{cov}({t,x^*})^2}
         \end{align}
-
+        
         And then
         \begin{align}
             \gamma^* = \gamma + \beta\frac{\operatorname{cov}(t,x)(\sigma^2_{x^*}-\sigma^2_x)}{\sigma_{t}^2\sigma_{x^*}^2-\operatorname{cov}({t,x})^2}
         \end{align}
-
+        
         From $(10)$ it is clear that when $\operatorname{cov}(t,x)\neq 0$ and that $x$ is measured with error (i.e $\sigma_{x^*}^2>\sigma_x^2)$, the coefficient of our variable of interest is biased. If $t$ and $x$ are independent, then measurement error in $x^*$ does not cause any bias. If there is no measurement error in $x^*$, then $\sigma^2_{x^*}=\sigma^2_x$ and so we would not be facing any kind of bias, as one would expect.\\
-
+        
         Equation $(10)$ also allows us to know the direction of the bias. Given that we are facing measurement error in the covariate, $\sigma^2_{x^*}>\sigma^2_x$ which implies $\sigma^2_{x^*}-\sigma^2_x>0$. Also, it follows from the \textit{Cauchy-Schwarz} inequality that the denominator is also positive. Then, the direction of the bias will depend on the sign of $\beta$ and the covariance of $t$ and $x$, as Table one illustrates.
-
+        
         \begin{table}[h!]
             \centering
             \begin{tabular}{|c|c|c|}\hline \hline
-            & $\b>0$  & $\b<0$ \\ \hline
-            $\operatorname{cov}(t,x)>0$ & upward-biased & downward-biased \\ \hline
-            $\operatorname{cov}(t,x)<0$ & downward-biased & upward-biased \\ \hline
+              & $\b>0$  & $\b<0$ \\ \hline
+             $\operatorname{cov}(t,x)>0$ & upward-biased & downward-biased \\ \hline
+             $\operatorname{cov}(t,x)<0$ & downward-biased & upward-biased \\ \hline
             \end{tabular} 
             \caption{Direction of the Bias due to Measurement Error in the Covariate}
             \label{tab:my_label}
         \end{table}
-
-        For a more concrete example, consider a simple case where the DGP depends only of the variable of interest and a covariate such that:
-
+        
+         For a more concrete example, consider a simple case where the DGP depends only of the variable of interest and a covariate such that:
+        
         \begin{align}
             \left(\begin{array}{l}
         {\gamma} \\
@@ -233,7 +233,7 @@
         1
         \end{array}\right)
         \end{align}
-
+        
         and with $\sigma^2_t=\Sigma_X=\Sigma_\eta=1$ while $\Sigma_{Xt}=0.6$. Then
         \begin{align*}
             \left(\begin{array}{l}
@@ -257,31 +257,87 @@
         0.39
         \end{array}\right)
         \end{align*}
-
+        
         Clearly, both coefficients shows bias when the econometrician assumes a DGP with $X_i^*$: while there is attenuation bias on the coefficient of the covariate, the coefficient of the variable of interest is biased upward given that both variable have positive correlation.
-
-    \subsection*{Principal Component Regression as bias-correction method}
-
-        The classical solution for the measurement-error induced bias in econometrics has been the usage of instrumental variables. However, finding reliable source of exogeneity is difficult, as is arguing for a suitable exclusion condition. Therefore, the use of IV as a bias-correction method should be taken with care given that its feasibilty is hard.\\
-
-        Alternatively, we propose an alternative bias-correction method when there are several mismeasured variables for each covariate, that is when we have more than one $x_{i,k}^*$ for every $x_{i,k}$. Given that in all the miss-measured variables the underlying value is the real value, one could think of extracting the underlying true $x_{i,k}$ through a linear combination of the different $x_{i,k}^*$. Then, we could treat all the $x_{i,k}^*$ as variables that share compononents as follows
+        
+        \subsection*{Principal Component Regression as bias-correction method}
+        
+        The classical solution for the measurement-error induced bias in econometrics has been the usage of instrumental variables. Suppose an instrument $Z_i$ that satisfies the relevance condition $\operatorname{E}(Z_i'X_i)\neq 0$ and $\operatorname{E}(Z_i't_i)\neq 0$, and also the exclusion restriction $\operatorname{E}(Z_i'\epsilon_i)=\operatorname{E}(Z_i'\zeta_i)=\operatorname{E}(Z_i'\eta_{i,k})=0$, for all $i$ and $k$. Then premultiplying by $Z_i$ we have
         \begin{align}
-        h_{j}=\underset{h^{\prime} h=1, h^{\prime} h_{1}=0, \ldots, h^{\prime} h_{j-1}=0}{\operatorname{argmax}} \operatorname{var}\left[h^{\prime} X^*_k\right]  
+            Z_i'y_i =  Z_i'\gamma^* t_i +  Z_i'{X^{*}_i}' \beta^* +  Z_i'\zeta_i
         \end{align}
-
-
+        
+        and so
+        \begin{align}
+            \left(\begin{array}{l}
+        {\gamma}^{IV} \\
+        {\beta}^{IV}
+        \end{array}\right)
+        & =\left(\begin{array}{cc}
+        {\Sigma}_{Zt} & \Sigma_{ZX,Zt} \\
+        \Sigma_{Zt,ZX}& {\Sigma}_{ZX}+{\Sigma}_{Z\eta}
+        \end{array}\right)^{-1}\left(\begin{array}{cc}
+        {\Sigma}_{Zt} & \Sigma_{ZX,Zt} \\
+        \Sigma_{Zt,ZX} & {\Sigma}_{ZX}
+        \end{array}\right)\left(\begin{array}{l}
+        {\gamma} \\
+        {\beta}
+        \end{array}\right)\\
+        & =\left(\begin{array}{cc}
+        {\Sigma}_{Zt} & \Sigma_{ZX,Zt} \\
+        \Sigma_{Zt,ZX}& {\Sigma}_{ZX}
+        \end{array}\right)^{-1}\left(\begin{array}{cc}
+        {\Sigma}_{Zt} & \Sigma_{ZX,Zt} \\
+        \Sigma_{Zt,ZX} & {\Sigma}_{ZX}
+        \end{array}\right)\left(\begin{array}{l}
+        {\gamma} \\
+        {\beta}
+        \end{array}\right) \\
+        \left(\begin{array}{l}
+        {\gamma}^{IV} \\
+        {\beta}^{IV}
+        \end{array}\right)
+        & =\left(\begin{array}{l}
+        {\gamma} \\
+        {\beta}
+        \end{array}\right)
+        \end{align}
+        
+        However, finding reliable source of exogeneity is difficult, as is proving the exclusion condition. Therefore, the use of IV as a bias-correction method should be taken with care given that its feasibilty is hard.\\
+        
+        Suppose now that as instrument we have another measure of $X_i$ so that
+        \begin{align}
+            Z_i=X_i+\omega_i
+        \end{align}
+        
+        where $\operatorname{E}(\omega_i)=0$, $\operatorname{Cov}(\epsilon_i,\omega_i)=0$ and that $\omega_i$ brings new information so that $\operatorname{Cov}(\eta_i,\omega_i)=0$. Then, if $Z_i$ satisfies exogeneity and relevance we will be able to identify the parameters without any bias as shown in equations $(13)$ to $(15)$. In fact:
+        \begin{align}
+            \operatorname{E}(Z_i\zeta_i)&=\operatorname{E}(Z_i(\epsilon_i-\eta_i\b)\\
+            &=\operatorname{E}(Z_i\epsilon_i)-\operatorname{E}(Z_i\eta_i)\b\\
+           &= \operatorname{E}((X_i+\omega_i)\epsilon_i)-\operatorname{E}((X_i+\omega_i)\eta_i)\b \\
+           &=\operatorname{E}(X_i\epsilon_i) + \operatorname{E}(\omega_i\epsilon_i)-(\operatorname{E}(X_i\eta_i)+\operatorname{E}(\omega_i\eta_i))\b
+        \end{align}
+        
+        And so $Z_i$ is exogenous. Given $(16)$ it is clear that $\operatorname{E}(Z_iX_i)\neq0$ and so relevance is also satisfied. Thus, $\gamma$ and $\b$ may be identifies using this kind of instrument.\\
+        
+        Alternatively, we propose an alternative bias-correction method when there are several missmeasured variables for each covariate, that is when we have more than one $x_{i,k}^*$ for every $x_{i,k}$. Given that in all the miss-measured variables the underlying value is the real value, one could think of extracting the underlying true $x_{i,k}$ through a linear combination of the different $x_{i,k}^*$. Then, we could treat all the $x_{i,k}^*$ as variables that share compononents as follows
+        \begin{align}
+           h_{j}=\underset{h^{\prime} h=1, h^{\prime} h_{1}=0, \ldots, h^{\prime} h_{j-1}=0}{\operatorname{argmax}} \operatorname{var}\left[h^{\prime} X^*_k\right]  
+        \end{align}
+        
+        
         where $h_j$ is the eigenvector of $\Sigma$ associated with the $j^{t h}$ ordered eigenvalue $\lambda_{j}$ of $\Sigma_{X^*_k}$, and the principal components of $X^*_k$ are $U_{j}=h_{j}^{\prime} X^*_k$, where $h_{j}$ is the eigenvector of $\Sigma$ associated with the $j^{t h}$ ordered eigenvalue $\lambda_{j}$ of $\Sigma$.\\
-
-        Under our assumptions, the vector of mismeasured values $X^*_k$ of $x_{i,k}$, share only one principal component which is precisely $x_{i,k}$. Then, we only have one principal component, $x_{i,k}$, and so the $x_{i,k}$ is such that
+        
+        Under our assumptions, the vector of missmeasured values $X^*_k$ of $x_{i,k}$, share only one principal component which is precisely $x_{i,k}$. Then, we only have one principal component, $x_{i,k}$, and so the $x_{i,k}$ is such that
         \begin{align}
             x_{i,k}=h_{k}^{\prime} X^*_k
         \end{align}
-
+        
         Finally, we could then retrieve the vector of true variables $X_i$
         \begin{align}
             X_i=HX^*_i
         \end{align}
-
+        
         where $H$ is a matrix such that
         \begin{align*}
             H=\left(\begin{array}{ccccc}
@@ -291,14 +347,14 @@
         0 & \dots & \dots & \dots \ddots & h_p
         \end{array}\right)
         \end{align*}
-
+        
         and $h_k$ is the vector of eigenvalues for the variable $x_{i,k}$.
-
+        
         Our new linear model then would be
         \begin{align}
             y_i = \gamma^{PCR} t_i + H{X^*_i}'\beta^{PCR} + \epsilon_i
         \end{align}
-
+        
         where the coefficients are as follows
         \begin{align}
             \left(\begin{array}{l}
@@ -326,10 +382,10 @@
         {\beta}
         \end{array}\right)
         \end{align}
-
-        where the last equality comes from $(13)$.
-
-        Note that according to equation $(17)$, the true variable $x_{i,k}$ is a linear combination of the mismeasured variables that the researcher may have, were the weights are such that equation $(16)$ is satisfied. This allows us to think about other linear combination that could be used as a bias-correction method. In particular, take the case in which $h_k='(\frac{1}{n},\frac{1}{n},\dots,\frac{1}{n})$, where $h_k$ is a row vector of dimension $(1\times J)$, and $J$ is the amount of mismeasured variables for $x_{i,k}$. Then, equation $(17)$ will be
+        
+        where the last equality comes from $(13)$.\\
+        
+        Note that according to equation $(17)$, the true variable $x_{i,k}$ is a linear combination of the missmeasured variables that the researcher may have, were the weights are such that equation $(16)$ is satisfied. This allows us to think about other linear combination that could be used as a bias-correction method. In particular, take the case in which $h_k='(\frac{1}{n},\frac{1}{n},\dots,\frac{1}{n})$, where $h_k$ is a row vector of dimension $(1\times J)$, and $J$ is the amount of missmeasured variables for $x_{i,k}$. Then, equation $(17)$ will be
         \begin{align}
             \Tilde{x_{i,k}}&=\left(\begin{array}{cccc}
         \frac{1}{n} & \frac{1}{n} & \dots &\frac{1}{n} 
@@ -341,27 +397,28 @@
         \end{array}\right)\\
         &=\frac{1}{n}\sum_{j=1}^J x^*_{i,j}
         \end{align}
-
-        That is, the average of the mismeasured variables for $x_{i,k}$ is a feasible linear combination that may correct for the missmeasuremnet bias problem.
-
-    \section*{Estimation of the Principal Component Regression}
-
-        Recall that the mismeasured variables are such that $x^*_{i,k}=x_{i,k}+\eta_{i,k}$. Then for every $i$, $X_i^*$ can we get
+        
+        That is, the average of the missmeasured variables for $x_{i,k}$ is a feasible linear combination that may correct for the missmeasuremnet bias problem.
+        
+        \section*{Estimation of the Principal Component Regression}
+        
+        Recall that the missmeasured variables are such that $x^*_{i,k}=x_{i,k}+\eta_{i,k}$. Then for every $i$, $X_i^*$ can we get
         \begin{align}
             X_i^* = X_i +\mu
         \end{align}
-
-        and so we could interpret the vector of mismeasured variables $X^*_i$ as a factor model, in which the common factor is the vector of true variables $X_i$. This way, we could rewrite the model as follows
+        
+        and so we could interpret the vector of missmeasured variables $X^*_i$ as a factor model, in which the common factor is the vector of true variables $X_i$. This way, we could rewrite the model as follows
         \begin{align}
             y_i &= \gamma t_i + X_i'\beta + \epsilon_i \\
             X_i^* &= X_i +\mu
         \end{align}
-
-        which is a factor-augmented regression model in which the common ``factors'' between the mismeasured variables of $x_{i,k}$ is in fact $x_{i,k}$. We estimate the model following two-stages. First, we estimate $X_i$ by factor regression. Then, the first-stage is the principal-components estimation
+        
+        Which is a factor-augmented regression model in which the common ``factors'' between the missmeasured variables of $x_{i,k}$ is in fact $x_{i,k}$. We estimate the model following two-stages. First, we estimate $X_i$ by factor regression. Then, the first-stage is the principal-components estimation
         \begin{align}
             \hat{X_i}=\hat{D}^{-1}X_i^*
         \end{align}
-        The second step is to regress $Y_i$ on the estimated $\hat X_i$. Then, the coefficients would be
+        
+        Second step is to regress $Y_i$ on the estimated $\hat X_i$. Then, the coefficients would be
         \begin{align}
             \left(\begin{array}{l}
         \hat{\gamma}^{F} \\
@@ -374,16 +431,16 @@
         \hat \Sigma_{y,\hat X}
         \end{array}\right)
         \end{align}
-
+        
         Using the \textit{Frisch-Waugh-Lowell} decomposition
         \begin{align}
             \hat{\g}^F & = ((M_{\hat{X}}t)'M_{\hat{X}}t)^{-1}(M_{\hat{X}}t)'M_{\hat{X}}y
         \end{align}
-
+        
         Where $M_{\hat{X}}=I-\hat{X}(\hat{X}'\hat{X})^{-1}\hat{X}'$. Then
         \begin{align}
-            \hat{\g}^F & = ((M_{\hat{X}}t)'M_{\hat{X}}t)^{-1}(M_{\hat{X}}t)'M_{\hat{X}}(t\gamma  + X\beta + \epsilon) \\
-            &=\gamma +((M_{\hat{X}}t)'M_{\hat{X}}t)^{-1}(M_{\hat{X}}t)'M_{\hat{X}}X\beta+((M_{\hat{X}}t)'M_{\hat{X}}t)^{-1}(M_{\hat{X}}t)'M_{\hat{X}}\epsilon
+             \hat{\g}^F & = ((M_{\hat{X}}t)'M_{\hat{X}}t)^{-1}(M_{\hat{X}}t)'M_{\hat{X}}(t\gamma  + X\beta + \epsilon) \\
+             &=\gamma +((M_{\hat{X}}t)'M_{\hat{X}}t)^{-1}(M_{\hat{X}}t)'M_{\hat{X}}X\beta+((M_{\hat{X}}t)'M_{\hat{X}}t)^{-1}(M_{\hat{X}}t)'M_{\hat{X}}\epsilon
         \end{align}
 
     \section*{Properties of the Estimator: Monte Carlo Simulations}
