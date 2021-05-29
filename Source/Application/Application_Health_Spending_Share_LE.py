@@ -17,6 +17,7 @@ matplotlib.use('pdf')
 import matplotlib.pyplot as plt
 import seaborn as sns
 import statsmodels.formula.api as smf
+from statsmodels.sandbox.regression.gmm import IV2SLS 
 import regex as re
 
 # # Font settings for plots
@@ -237,12 +238,26 @@ def run_empirical_analysis(data, name, covariates):
     else:
         more_pcs_results = smf.ols("life_exp ~ govt_health_share + PC1 + PC2", data = std_data).fit()
     # Instrumental variables- instrument GDP per capita (probably mismeasured) on all the other development indicators
-    iv_instruments_string = covariates_formula_string.replace('gdp_pc_ppp + ', '')
+    #iv_instruments_string = covariates_formula_string.replace('gdp_pc_ppp + ', '')
     # Create the predicted value of gdp_pc_ppp
-    std_data['pred_gdp_pc_ppp'] = smf.ols("gdp_pc_ppp ~ " + iv_instruments_string, data = std_data).fit().predict()
-    iv_results = smf.ols("life_exp ~ govt_health_share + pred_gdp_pc_ppp", data = std_data.reset_index()).fit()
+    #std_data['pred_gdp_pc_ppp'] = smf.ols("gdp_pc_ppp ~ " + iv_instruments_string, data = std_data).fit().predict()
+    #iv_results = smf.ols("life_exp ~ govt_health_share + pred_gdp_pc_ppp", data = std_data.reset_index()).fit()
+    iv_no_gdp = [item for item in covariates if item != 'gdp_pc_ppp']
+    iv_no_gdp.append('govt_health_share')
+    # print(std_data.columns)
+    # print(covariates)
+    # print(std_data['life_exp'])
+    # print(std_data[covariates])
+    # print(std_data[iv_exog])
+    # ugh, so confusing: https://stackoverflow.com/questions/37012110/how-to-do-2sls-iv-regression-using-statsmodels-python
+    iv_results = IV2SLS(endog = std_data['life_exp'], exog = std_data[['govt_health_share', 'gdp_pc_ppp']], instrument = std_data[iv_no_gdp]).fit()
 
     # Regression table settings
+    print(more_pcs_results.summary())
+    print(iv_results.summary())
+    print(iv_results.params)
+    print(iv_results.cov_type)
+    print(iv_results.bse)
     additional_reg_table = Stargazer([fixed_effects_results, pc_fixed_effects_results, more_pcs_results, iv_results])
     additional_reg_table.title("Additional Regressions \label{additional_regs}")
     additional_reg_table.dependent_variable_name("Life Expectancy at Birth (Years)")
@@ -260,6 +275,8 @@ def run_empirical_analysis(data, name, covariates):
     # Write regression table to LaTeX
     with open(tables_dir + "/Additional_LE_Health_Econ_Regressions_" + name + ".tex", "w") as f:
         corrected_table = re.sub('\\cline{[0-9\-]+}', '', additional_reg_table.render_latex())
+        #corrected_table_added_iv_coeff = re.sub(pattern = r'& \\', repl = '& '+ str(iv_results.params['govt_health_share']) + r' \\', string = corrected_table, count = 0)
+        #corrected_table_added_iv = re.sub(pattern = r'& \\', repl = '& ('+ str(iv_results.bse['govt_health_share']) + r') \\', string = corrected_table_added_iv_coeff, count = 0)
         f.write(corrected_table)
 
 # Do the analysis on the two datasets and all the covariates combos
