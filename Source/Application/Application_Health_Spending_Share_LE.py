@@ -217,7 +217,11 @@ def run_empirical_analysis(data, name, covariates):
     reg_table.rename_covariates({"govt_health_share":"Govt. Share of Health Exp."})
     # Fixed effects indicator
     reg_table.add_line('Covariates', ['None', 'GDP PC PPP', 'Econ Indicators', 'Mean', 'PC 1'])
-    reg_table.show_degrees_of_freedom(False)
+    reg_table.show_degrees_of_freedom = False
+    reg_table.show_r2 = False
+    reg_table.show_adj_r2 = False
+    reg_table.show_residual_std_err = False
+    reg_table.show_f_statistic = False
     #reg_table.add_custom_notes(["All variables are standardized. All columns make use of robust standard errors."])
 
     # Write regression table to LaTeX
@@ -271,6 +275,10 @@ def run_empirical_analysis(data, name, covariates):
         additional_reg_table.add_line('Covariates', ['None', 'PC 1', 'PC 1-2', 'GDP PC (IV)'])
     additional_reg_table.add_line('Fixed Effects', ['Yes', 'Yes', 'No', 'No'])
     additional_reg_table.show_degrees_of_freedom(False)
+    additional_reg_table.show_r2 = False 
+    additional_reg_table.show_adj_r2 = False
+    additional_reg_table.show_residual_std_err = False
+    additional_reg_table.show_f_statistic = False
     #additional_reg_table.add_custom_notes(["All variables are standardized. \nFixed effects columns make use of country clustered standard errors: \nothers use robust standard errors."])
 
     # Write regression table to LaTeX
