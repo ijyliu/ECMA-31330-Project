@@ -19,6 +19,18 @@ import seaborn as sns
 import statsmodels.formula.api as smf
 import regex as re
 
+# # Font settings for plots
+# SMALL_SIZE = 8
+# MEDIUM_SIZE = 10
+# BIGGER_SIZE = 12
+# plt.rc('font', size=SMALL_SIZE)          # controls default text sizes
+# plt.rc('axes', titlesize=SMALL_SIZE)     # fontsize of the axes title
+# plt.rc('axes', labelsize=MEDIUM_SIZE)    # fontsize of the x and y labels
+# plt.rc('xtick', labelsize=SMALL_SIZE)    # fontsize of the tick labels
+# plt.rc('ytick', labelsize=SMALL_SIZE)    # fontsize of the tick labels
+# plt.rc('legend', fontsize=SMALL_SIZE)    # legend fontsize
+# plt.rc('figure', titlesize=BIGGER_SIZE)  # fontsize of the figure title
+
 # Get the list of indicators
 indicators_list = get_wb_ind_list()
 # Create a list of covariates
@@ -48,6 +60,7 @@ short_covariates_list = [var_name.replace('.', '_') for var_name in short_covari
 
 # Dictionary for linking column names/variables to nice/written out version
 variables_mapped_to_long = {"gdp_pc_ppp":"GDP Per Capita PPP (Current International $)", "NY_GDP_PCAP_CD":"GDP Per Capita (Current USD)", "NY_GNP_PCAP_PP_CD":"GNP Per Capita PPP (Current International $)", "NY_GNP_PCAP_CD":"GNP Per Capita (Current USD)", "SL_GDP_PCAP_EM_KD":"ILO GDP Per Person Employed", "life_exp":"Life Expectancy at Birth (All Population)", "govt_health_share":"Government Share of Health Expenditure"}
+variables_mapped_to_short = {"gdp_pc_ppp":"GDP PC PPP", "NY_GDP_PCAP_CD":"GDP PC USD", "NY_GNP_PCAP_PP_CD":"GNP PC PPP", "NY_GNP_PCAP_CD":"GNP PC USD", "SL_GDP_PCAP_EM_KD":"ILO GDP Per Emp", "life_exp":"Life Expectancy", "govt_health_share":"Gov Health Share"}
 
 # Flip sign on poverty and ODA measures
 cols = np.logical_or(wb_data.columns.str.contains('POV'), wb_data.columns.str.contains('ODA'))
@@ -125,14 +138,17 @@ def run_empirical_analysis(data, name, covariates):
     std_data['covariates_mean'] =  std_data[covariates].mean(axis = 1)
 
     # Basic time series plot
-    plt.figure(figsize=(15,15))
-    plt.plot(std_data.reset_index().set_index('year')['govt_health_share'])
-    plt.savefig(figures_dir + "/Govt_Health_Share_Time_Series_" + name + ".pdf")
-    plt.close()
+    #plt.figure(figsize=(15,15))
+    #plt.rc('font', size=8) 
+    #plt.plot(std_data.reset_index().set_index('year')['govt_health_share'])
+    #plt.savefig(figures_dir + "/Govt_Health_Share_Time_Series_" + name + ".pdf")
+    #plt.close()
 
     # Correlations map
-    sns.set(font_scale=0.25)
-    sns.heatmap(std_data.rename(columns = variables_mapped_to_long).corr())
+    sns.set(font_scale=0.8)
+    plt.subplots(figsize=(12, 10))
+    sns.heatmap(std_data.rename(columns = variables_mapped_to_short).drop(columns = 'covariates_mean').corr())
+    #plt.rc('font', size=2) 
     plt.yticks(rotation=0)
     plt.xticks(rotation=90)
     plt.savefig(figures_dir + "/LE_Health_Econ_Correlations_" + name + ".pdf")
@@ -170,12 +186,22 @@ def run_empirical_analysis(data, name, covariates):
     std_data = pd.concat([std_data.reset_index(), pca_results['PC'].reset_index(drop = True)], axis = 1, names = [std_data.columns, PC_names])
 
     # Plot the loadings
-    sns.heatmap(pca_results['loadings'], cmap='YlGnBu')
+    sns.set(font_scale=0.85)
+    plt.subplots(figsize=(12, 10))
+    loadings = pca_results['loadings']
+    loadings.columns = [variables_mapped_to_short[item] for item in covariates]
+    sns.heatmap(loadings, cmap='YlGnBu')
+    plt.yticks(rotation=0)
+    #plt.xticks(rotation=90)
     plt.savefig(figures_dir + "/Econ_Indicator_Loadings_" + name + ".pdf")
     plt.close()
 
     # Scree plot
     pca_model.plot()
+    plt.rc('font', size=12)
+    plt.title('')
+    plt.ylabel('Share of Variance Explained, Cumulative Share of Variance Explained')
+    plt.xlabel('Principal Component')
     plt.savefig(figures_dir + "/Econ_Indicator_Share_Explained_" + name + ".pdf")
     plt.close()
 
@@ -237,9 +263,9 @@ def run_empirical_analysis(data, name, covariates):
         f.write(corrected_table)
 
 # Do the analysis on the two datasets and all the covariates combos
-run_empirical_analysis(data = combined_data, name = "combined_full", covariates=covariates_list)
-run_empirical_analysis(data = wb_only_data, name = "wb_only_full", covariates=covariates_list)
-run_empirical_analysis(data = oecd_only_data, name = "oecd_only_full", covariates=covariates_list)
+#run_empirical_analysis(data = combined_data, name = "combined_full", covariates=covariates_list)
+#run_empirical_analysis(data = wb_only_data, name = "wb_only_full", covariates=covariates_list)
+#run_empirical_analysis(data = oecd_only_data, name = "oecd_only_full", covariates=covariates_list)
 run_empirical_analysis(data = combined_data, name = "combined_short", covariates=short_covariates_list)
 run_empirical_analysis(data = wb_only_data, name = "wb_only_short", covariates=short_covariates_list)
 run_empirical_analysis(data = oecd_only_data, name = "oecd_only_short", covariates=short_covariates_list)
