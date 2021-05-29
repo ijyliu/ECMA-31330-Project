@@ -184,6 +184,7 @@
         
 	Then, the the coefficient of our variable of interest will be biased.
 	\begin{claim}
+	\label{claim:one}
 	Under measurement error in the covariates, the coefficient is such that:
 	\begin{align}
             \gamma^* = \gamma + \beta\frac{\operatorname{cov}(t,x)(\sigma^2_{x^*}-\sigma^2_x)}{\sigma_{t}^2\sigma_{x^*}^2-\operatorname{cov}({t,x})^2}
@@ -212,63 +213,23 @@
          
         \subsection*{Principal Component Regression as bias-correction method}
         
-        The classical solution for the measurement-error induced bias in econometrics has been the usage of instrumental variables. Suppose an instrument $Z_i$ that satisfies the relevance condition $\operatorname{E}(Z_i'X_i)\neq 0$ and $\operatorname{E}(Z_i't_i)\neq 0$, and also the exclusion restriction $\operatorname{E}(Z_i'\epsilon_i)=\operatorname{E}(Z_i'\zeta_i)=\operatorname{E}(Z_i'\eta_{i,k})=0$, for all $i$ and $k$. Then premultiplying by $Z_i$ we have
-        \begin{align}
-            Z_i'y_i =  Z_i'\gamma^* t_i +  Z_i'{X^{*}_i}' \beta^* +  Z_i'\zeta_i
-        \end{align}
-        
-        and so
-        \begin{align}
-            \left(\begin{array}{l}
-        {\gamma}^{IV} \\
-        {\beta}^{IV}
-        \end{array}\right)
-        & =\left(\begin{array}{cc}
-        {\Sigma}_{Zt} & \Sigma_{ZX,Zt} \\
-        \Sigma_{Zt,ZX}& {\Sigma}_{ZX}+{\Sigma}_{Z\eta}
-        \end{array}\right)^{-1}\left(\begin{array}{cc}
-        {\Sigma}_{Zt} & \Sigma_{ZX,Zt} \\
-        \Sigma_{Zt,ZX} & {\Sigma}_{ZX}
-        \end{array}\right)\left(\begin{array}{l}
-        {\gamma} \\
-        {\beta}
-        \end{array}\right)\\
-        & =\left(\begin{array}{cc}
-        {\Sigma}_{Zt} & \Sigma_{ZX,Zt} \\
-        \Sigma_{Zt,ZX}& {\Sigma}_{ZX}
-        \end{array}\right)^{-1}\left(\begin{array}{cc}
-        {\Sigma}_{Zt} & \Sigma_{ZX,Zt} \\
-        \Sigma_{Zt,ZX} & {\Sigma}_{ZX}
-        \end{array}\right)\left(\begin{array}{l}
-        {\gamma} \\
-        {\beta}
-        \end{array}\right) \\
-        \left(\begin{array}{l}
-        {\gamma}^{IV} \\
-        {\beta}^{IV}
-        \end{array}\right)
-        & =\left(\begin{array}{l}
-        {\gamma} \\
-        {\beta}
-        \end{array}\right)
-        \end{align}
-        
-        However, finding reliable source of exogeneity is difficult, as is proving the exclusion condition. Therefore, the use of IV as a bias-correction method should be taken with care given that its feasibilty is hard.\\
-        
-        Suppose now that as instrument we have another measure of $X_i$ so that
+        The classical solution for the measurement-error induced bias in econometrics has been the usage of instrumental variables. Suppose we use as an instrument $Z_i$ another measure of $X_i$ so that
         \begin{align}
             Z_i=X_i+\omega_i
         \end{align}
         
-        where $\operatorname{E}(\omega_i)=0$, $\operatorname{Cov}(\epsilon_i,\omega_i)=0$ and that $\omega_i$ brings new information so that $\operatorname{Cov}(\eta_i,\omega_i)=0$. Then, if $Z_i$ satisfies exogeneity and relevance we will be able to identify the parameters without any bias as shown in equations $(13)$ to $(15)$. In fact:
-        \begin{align}
-            \operatorname{E}(Z_i\zeta_i)&=\operatorname{E}(Z_i(\epsilon_i-\eta_i\b)\\
-            &=\operatorname{E}(Z_i\epsilon_i)-\operatorname{E}(Z_i\eta_i)\b\\
-           &= \operatorname{E}((X_i+\omega_i)\epsilon_i)-\operatorname{E}((X_i+\omega_i)\eta_i)\b \\
-           &=\operatorname{E}(X_i\epsilon_i) + \operatorname{E}(\omega_i\epsilon_i)-(\operatorname{E}(X_i\eta_i)+\operatorname{E}(\omega_i\eta_i))\b
-        \end{align}
-        
-        And so $Z_i$ is exogenous. Given $(16)$ it is clear that $\operatorname{E}(Z_iX_i)\neq0$ and so relevance is also satisfied. Thus, $\gamma$ and $\b$ may be identifies using this kind of instrument.\\
+        where $\operatorname{E}(\omega_i)=0$, $\operatorname{Cov}(\epsilon_i,\omega_i)=0$ and that $\omega_i$ brings new information so that $\operatorname{Cov}(\eta_i,\omega_i)=0$.  Under these conditions, $Z_i$ is a valid instrument
+\begin{claim}
+Suppose $ Z_i=X_i+\omega_i$. If $\operatorname{E}(\omega_i)=0$, $\operatorname{Cov}(\epsilon_i,\omega_i)=0$ and $\operatorname{Cov}(\eta_i,\omega_i)=0$. Then
+\begin{align}
+\operatorname{E}(Z_i\zeta_i)=0 \ \text{and} \  \operatorname{E}(Z_iX_i)\neq0
+\end{align}
+And so $\gamma$ can be identified through IV regression.
+\end{claim}
+
+\begin{claimproof}
+See Appendix \#4
+\end{claimproof}
         
         Alternatively, we propose an alternative bias-correction method when there are several missmeasured variables for each covariate, that is when we have more than one $x_{i,k}^*$ for every $x_{i,k}$. Given that in all the miss-measured variables the underlying value is the real value, one could think of extracting the underlying true $x_{i,k}$ through a linear combination of the different $x_{i,k}^*$. Then, we could treat all the $x_{i,k}^*$ as variables that share compononents as follows
         \begin{align}
@@ -512,6 +473,9 @@ Thus, these Monte Carlo simulations tell us that using PCR provides significant 
 	\section*{Appendix 4}
 	\subsection*{Short Proofs}
 
+\setcounter{claim}{0}
+\setcounter{claimproof}{0}
+
 	\begin{claim}
 	Under measurement error in the covariates, the coefficient is such that:
 	\begin{align}
@@ -519,7 +483,7 @@ Thus, these Monte Carlo simulations tell us that using PCR provides significant 
         \end{align}
 	\end{claim}
 	
-\begin{claimproof}
+\begin{claimproof}[\ref{claim:one}]
 
 Then, equations $(4)$ and $(5)$ will be such that
             \begin{align}
@@ -537,13 +501,74 @@ Then, equations $(4)$ and $(5)$ will be such that
            
 \end{claimproof}	
  
-            Thus, the coefficient of our variable of interest will be
-            \begin{align}
-            {\gamma}^* =\frac{\sigma_{x^*}^2\operatorname{cov}{(y,t)}-\operatorname{cov}({t,x^*})\operatorname{cov}{(y,x^*)}}{\sigma_{t}^2\sigma_{x^*}^2-\operatorname{cov}({t,x^*})^2}
+
+\begin{claim}
+Suppose $ Z_i=X_i+\omega_i$. If $\operatorname{E}(\omega_i)=0$, $\operatorname{Cov}(\epsilon_i,\omega_i)=0$ and $\operatorname{Cov}(\eta_i,\omega_i)=0$. Then
+\begin{align}
+\operatorname{E}(Z_i\zeta_i)=0 \ \text{and} \  \operatorname{E}(Z_iX_i)\neq0
+\end{align}
+And so $\gamma$ can be identified through IV regression.
+\end{claim}
+\begin{claimproof}
+
+Suppose an instrument $Z_i$ that satisfies the relevance condition $\operatorname{E}(Z_i'X_i)\neq 0$ and $\operatorname{E}(Z_i't_i)\neq 0$, and also the exclusion restriction $\operatorname{E}(Z_i'\epsilon_i)=\operatorname{E}(Z_i'\zeta_i)=\operatorname{E}(Z_i'\eta_{i,k})=0$, for all $i$ and $k$. Then premultiplying by $Z_i$ we have
+        \begin{align}
+            Z_i'y_i =  Z_i'\gamma^* t_i +  Z_i'{X^{*}_i}' \beta^* +  Z_i'\zeta_i
         \end{align}
+        
+        and so
+        \begin{align}
+            \left(\begin{array}{l}
+        {\gamma}^{IV} \\
+        {\beta}^{IV}
+        \end{array}\right)
+        & =\left(\begin{array}{cc}
+        {\Sigma}_{Zt} & \Sigma_{ZX,Zt} \\
+        \Sigma_{Zt,ZX}& {\Sigma}_{ZX}+{\Sigma}_{Z\eta}
+        \end{array}\right)^{-1}\left(\begin{array}{cc}
+        {\Sigma}_{Zt} & \Sigma_{ZX,Zt} \\
+        \Sigma_{Zt,ZX} & {\Sigma}_{ZX}
+        \end{array}\right)\left(\begin{array}{l}
+        {\gamma} \\
+        {\beta}
+        \end{array}\right)\\
+        & =\left(\begin{array}{cc}
+        {\Sigma}_{Zt} & \Sigma_{ZX,Zt} \\
+        \Sigma_{Zt,ZX}& {\Sigma}_{ZX}
+        \end{array}\right)^{-1}\left(\begin{array}{cc}
+        {\Sigma}_{Zt} & \Sigma_{ZX,Zt} \\
+        \Sigma_{Zt,ZX} & {\Sigma}_{ZX}
+        \end{array}\right)\left(\begin{array}{l}
+        {\gamma} \\
+        {\beta}
+        \end{array}\right) \\
+        \left(\begin{array}{l}
+        {\gamma}^{IV} \\
+        {\beta}^{IV}
+        \end{array}\right)
+        & =\left(\begin{array}{l}
+        {\gamma} \\
+        {\beta}
+        \end{array}\right)
+        \end{align}
+        
+        However, finding reliable source of exogeneity is difficult, as is proving the exclusion condition. Therefore, the use of IV as a bias-correction method should be taken with care given that its feasibilty is hard.\\
+        
+        Suppose now that as instrument we have another measure of $X_i$ so that
+        \begin{align}
+            Z_i=X_i+\omega_i
+        \end{align}
+        
+        where $\operatorname{E}(\omega_i)=0$, $\operatorname{Cov}(\epsilon_i,\omega_i)=0$ and that $\omega_i$ brings new information so that $\operatorname{Cov}(\eta_i,\omega_i)=0$. Then, if $Z_i$ satisfies exogeneity and relevance we will be able to identify the parameters without any bias as shown in equations $(13)$ to $(15)$. In fact:
+        \begin{align}
+            \operatorname{E}(Z_i\zeta_i)&=\operatorname{E}(Z_i(\epsilon_i-\eta_i\b)\\
+            &=\operatorname{E}(Z_i\epsilon_i)-\operatorname{E}(Z_i\eta_i)\b\\
+           &= \operatorname{E}((X_i+\omega_i)\epsilon_i)-\operatorname{E}((X_i+\omega_i)\eta_i)\b \\
+           &=\operatorname{E}(X_i\epsilon_i) + \operatorname{E}(\omega_i\epsilon_i)-(\operatorname{E}(X_i\eta_i)+\operatorname{E}(\omega_i\eta_i))\b
+        \end{align}
+        
+        And so $Z_i$ is exogenous. Given $(16)$ it is clear that $\operatorname{E}(Z_iX_i)\neq0$ and so relevance is also satisfied. Thus, $\gamma$ and $\b$ may be identifies using this kind of instrument.\\
 
-
-
-
+\end{claimproof}
 
 \end{document}
