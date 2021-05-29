@@ -226,44 +226,7 @@
             \label{tab:my_label}
         \end{table}
         
-         For a more concrete example, consider a simple case where the DGP depends only of the variable of interest and a covariate such that:
-        
-        \begin{align}
-            \left(\begin{array}{l}
-        {\gamma} \\
-        {\beta}
-        \end{array}\right)=\left(\begin{array}{l}
-        1 \\
-        1
-        \end{array}\right)
-        \end{align}
-        
-        and with $\sigma^2_t=\Sigma_X=\Sigma_\eta=1$ while $\Sigma_{Xt}=0.6$. Then
-        \begin{align*}
-            \left(\begin{array}{l}
-        {\gamma}^* \\
-        {\beta}^*
-        \end{array}\right)& =\left(\begin{array}{cc}
-        1 & 0.6 \\
-        0.6 & 2
-        \end{array}\right)^{-1}\left(\begin{array}{cc}
-        1 & 0.6 \\
-        0.6 & 1
-        \end{array}\right)\left(\begin{array}{l}
-        1\\
-        1
-        \end{array}\right) \\
-        \left(\begin{array}{l}
-        {\gamma}^* \\
-        {\beta}^*
-        \end{array}\right)&=\left(\begin{array}{l}
-        1.37 \\
-        0.39
-        \end{array}\right)
-        \end{align*}
-        
-        Clearly, both coefficients shows bias when the econometrician assumes a DGP with $X_i^*$: while there is attenuation bias on the coefficient of the covariate, the coefficient of the variable of interest is biased upward given that both variable have positive correlation.
-        
+         
         \subsection*{Principal Component Regression as bias-correction method}
         
         The classical solution for the measurement-error induced bias in econometrics has been the usage of instrumental variables. Suppose an instrument $Z_i$ that satisfies the relevance condition $\operatorname{E}(Z_i'X_i)\neq 0$ and $\operatorname{E}(Z_i't_i)\neq 0$, and also the exclusion restriction $\operatorname{E}(Z_i'\epsilon_i)=\operatorname{E}(Z_i'\zeta_i)=\operatorname{E}(Z_i'\eta_{i,k})=0$, for all $i$ and $k$. Then premultiplying by $Z_i$ we have
