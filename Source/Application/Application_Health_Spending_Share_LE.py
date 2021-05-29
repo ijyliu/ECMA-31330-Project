@@ -110,7 +110,7 @@ def run_empirical_analysis(data, name, covariates):
 
     # Sort, interpolate and fill
     data = (data.sort_index(level=['country', 'year'])
-                .interpolate(limit_area='inside')
+                #.interpolate(limit_area='inside')
                 .drop(columns=['govt_health_share_wb', 'govt_health_share_oecd'])
                 .dropna()
                 .set_index(['year', 'country']))
