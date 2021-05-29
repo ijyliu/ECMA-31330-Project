@@ -31,6 +31,8 @@
 \newcommand\der[2]{\frac{\partial{#1}}{\partial{#2}}}
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
+\newtheorem{claim}{Claim}
+\newtheorem{claimproof}{Proof of claim}[claim]
 
 % stuff to put matlab code in 
 \usepackage{listings}
@@ -162,13 +164,7 @@
             \left(\begin{array}{l}
         {\gamma}^* \\
         {\beta}^*
-        \end{array}\right)&=\left(\begin{array}{cc}
-        {\sigma}^2_{t} & \Sigma_{tX^*} \\
-        \Sigma_{X^*t} & {\Sigma}_{X^*}
-        \end{array}\right)^{-1}\left(\begin{array}{c}
-        \Sigma_{yt} \\
-        \Sigma_{yX^*}
-        \end{array}\right) \\
+        \end{array}\right)
         & =\left(\begin{array}{cc}
         {\sigma}^2_{t} & \Sigma_{tX} \\
         \Sigma_{Xt} & {\Sigma}_{X}+{\Sigma}_{\eta}
@@ -182,36 +178,23 @@
         \end{align}
         
         Without loss of generality, assume that the abovementioned GDP consists only of two variables as follows
-        
-             \begin{align}
+        \begin{align}
                     y_i = \gamma^* t_i +  \beta^*x_i* + \zeta_i
                 \end{align}
         
-            Then, equations $(4)$ and $(5)$ will be such that
-            \begin{align}
-                    \left(\begin{array}{l}
-                {\gamma}^* \\
-                {\beta}^*
-                \end{array}\right)&=\left(\begin{array}{cc}
-                {\sigma}^2_{t} & \operatorname{cov}({t,x^*}) \\
-                \operatorname{cov}({x^*,t}) & {\sigma}_{x^*}^2
-                \end{array}\right)^{-1}\left(\begin{array}{c}
-                \operatorname{cov}{(y,t)} \\
-                \operatorname{cov}{(y,x^*)}
-                \end{array}\right) \\
-                \end{align}
-            
-            Thus, the coefficient of our variable of interest will be
-            \begin{align}
-            {\gamma}^* =\frac{\sigma_{x^*}^2\operatorname{cov}{(y,t)}-\operatorname{cov}({t,x^*})\operatorname{cov}{(y,x^*)}}{\sigma_{t}^2\sigma_{x^*}^2-\operatorname{cov}({t,x^*})^2}
-        \end{align}
-        
-        And then
-        \begin{align}
+	Then, the the coefficient of our variable of interest will be biased.
+	\begin{claim}
+	Under measurement error in the covariates, the coefficient is such that:
+	\begin{align}
             \gamma^* = \gamma + \beta\frac{\operatorname{cov}(t,x)(\sigma^2_{x^*}-\sigma^2_x)}{\sigma_{t}^2\sigma_{x^*}^2-\operatorname{cov}({t,x})^2}
         \end{align}
-        
-        From $(10)$ it is clear that when $\operatorname{cov}(t,x)\neq 0$ and that $x$ is measured with error (i.e $\sigma_{x^*}^2>\sigma_x^2)$, the coefficient of our variable of interest is biased. If $t$ and $x$ are independent, then measurement error in $x^*$ does not cause any bias. If there is no measurement error in $x^*$, then $\sigma^2_{x^*}=\sigma^2_x$ and so we would not be facing any kind of bias, as one would expect.\\
+	\end{claim}
+	
+\begin{claimproof}
+	See Appendix 4
+	\end{claimproof}
+
+       From $(10)$ it is clear that when $\operatorname{cov}(t,x)\neq 0$ and that $x$ is measured with error (i.e $\sigma_{x^*}^2>\sigma_x^2)$, the coefficient of our variable of interest is biased. If $t$ and $x$ are independent, then measurement error in $x^*$ does not cause any bias. If there is no measurement error in $x^*$, then $\sigma^2_{x^*}=\sigma^2_x$ and so we would not be facing any kind of bias, as one would expect.\\
         
         Equation $(10)$ also allows us to know the direction of the bias. Given that we are facing measurement error in the covariate, $\sigma^2_{x^*}>\sigma^2_x$ which implies $\sigma^2_{x^*}-\sigma^2_x>0$. Also, it follows from the \textit{Cauchy-Schwarz} inequality that the denominator is also positive. Then, the direction of the bias will depend on the sign of $\beta$ and the covariance of $t$ and $x$, as Table one illustrates.
         
@@ -518,5 +501,45 @@ In this paper, we have
             \label{Econ_Share_Explained}	
             \includegraphics[width=\linewidth,keepaspectratio=true]{../Output/Figures/Econ_Indicator_Share_Explained_combined_short.pdf}
         \end{figure}
+
+\break
+\newpage
+
+	\section*{Appendix 4}
+	\subsection*{Short Proofs}
+
+	\begin{claim}
+	Under measurement error in the covariates, the coefficient is such that:
+	\begin{align}
+            \gamma^* = \gamma + \beta\frac{\operatorname{cov}(t,x)(\sigma^2_{x^*}-\sigma^2_x)}{\sigma_{t}^2\sigma_{x^*}^2-\operatorname{cov}({t,x})^2}
+        \end{align}
+	\end{claim}
+	
+\begin{claimproof}
+
+Then, equations $(4)$ and $(5)$ will be such that
+            \begin{align}
+                    \left(\begin{array}{l}
+                {\gamma}^* \\
+                {\beta}^*
+                \end{array}\right)&=\left(\begin{array}{cc}
+                {\sigma}^2_{t} & \operatorname{cov}({t,x^*}) \\
+                \operatorname{cov}({x^*,t}) & {\sigma}_{x^*}^2
+                \end{array}\right)^{-1}\left(\begin{array}{c}
+                \operatorname{cov}{(y,t)} \\
+                \operatorname{cov}{(y,x^*)}
+                \end{array}\right) \\
+                \end{align}
+           
+\end{claimproof}	
+ 
+            Thus, the coefficient of our variable of interest will be
+            \begin{align}
+            {\gamma}^* =\frac{\sigma_{x^*}^2\operatorname{cov}{(y,t)}-\operatorname{cov}({t,x^*})\operatorname{cov}{(y,x^*)}}{\sigma_{t}^2\sigma_{x^*}^2-\operatorname{cov}({t,x^*})^2}
+        \end{align}
+
+
+
+
 
 \end{document}
