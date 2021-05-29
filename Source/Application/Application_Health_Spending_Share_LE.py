@@ -244,6 +244,7 @@ def run_empirical_analysis(data, name, covariates):
     #iv_results = smf.ols("life_exp ~ govt_health_share + pred_gdp_pc_ppp", data = std_data.reset_index()).fit()
     iv_no_gdp = [item for item in covariates if item != 'gdp_pc_ppp']
     iv_no_gdp.append('govt_health_share')
+    #print(iv_no_gdp)
     # print(std_data.columns)
     # print(covariates)
     # print(std_data['life_exp'])
