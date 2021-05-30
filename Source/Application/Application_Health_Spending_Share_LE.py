@@ -216,7 +216,12 @@ def run_empirical_analysis(data, name, covariates):
     reg_table.covariate_order(['govt_health_share'])
     reg_table.rename_covariates({"govt_health_share":"Govt. Share of Health Exp."})
     # Fixed effects indicator
-    reg_table.add_line('Covariates', ['None', 'GDP PC PPP', 'Econ Indicators', 'Mean', 'PC 1'])
+    reg_table.add_line('', ['', '', '', '', ''])
+    reg_table.add_line('Covariates', ['None', 'Single', 'All', 'Average of', 'PCA'])
+    reg_table.add_line('', ['', 'Measurement', 'Measurements', 'Measurements', ''])
+    reg_table.add_line('', ['', '(GDP Per', '', '', ''])
+    reg_table.add_line('', ['', 'Capita PPP)', '', '', ''])
+    reg_table.add_line('', ['', '', '', '', ''])
     reg_table.show_degrees_of_freedom = False
     reg_table.show_r2 = False
     reg_table.show_adj_r2 = False
@@ -270,10 +275,19 @@ def run_empirical_analysis(data, name, covariates):
     additional_reg_table.rename_covariates({"govt_health_share":"Govt. Share of Health Exp."})
     # Fixed effects indicator
     if covariates == covariates_list:
-        additional_reg_table.add_line('Covariates', ['None', 'PC 1', 'PC 1-7', 'GDP PC (IV)'])
+        additional_reg_table.add_line('', ['', '', '', ''])
+        additional_reg_table.add_line('Covariates', ['None', 'PCA', 'PC 1-7', 'Instrumental'])
+        additional_reg_table.add_line('', ['', '', '', 'Variable'])
+        additional_reg_table.add_line('', ['', '', '', '(GDP Per'])
+        additional_reg_table.add_line('', ['', '', '', 'Capita PPP)'])
     else:
-        additional_reg_table.add_line('Covariates', ['None', 'PC 1', 'PC 1-2', 'GDP PC (IV)'])
+        additional_reg_table.add_line('', ['', '', '', ''])
+        additional_reg_table.add_line('Covariates', ['None', 'PCA', 'PC 1-2', 'Instrumental Variable'])
+        additional_reg_table.add_line('', ['', '', '', '(GDP Per'])
+        additional_reg_table.add_line('', ['', '', '', 'Capita PPP)'])
+    additional_reg_table.add_line('', ['', '', '', ''])
     additional_reg_table.add_line('Fixed Effects', ['Yes', 'Yes', 'No', 'No'])
+    additional_reg_table.add_line('', ['', '', '', ''])
     additional_reg_table.show_degrees_of_freedom(False)
     additional_reg_table.show_r2 = False 
     additional_reg_table.show_adj_r2 = False
