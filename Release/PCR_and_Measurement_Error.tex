@@ -192,7 +192,7 @@
 	\end{claim}
 	
 \begin{claimproof}
-	See Appendix 4
+	See Theory Appendix
 	\end{claimproof}
 
        From $(10)$ it is clear that when $\operatorname{cov}(t,x)\neq 0$ and that $x$ is measured with error (i.e $\sigma_{x^*}^2>\sigma_x^2)$, the coefficient of our variable of interest is biased. If $t$ and $x$ are independent, then measurement error in $x^*$ does not cause any bias. If there is no measurement error in $x^*$, then $\sigma^2_{x^*}=\sigma^2_x$ and so we would not be facing any kind of bias, as one would expect.\\
@@ -228,7 +228,7 @@ And so $\gamma$ can be identified through IV regression.
 \end{claim}
 
 \begin{claimproof}
-See Appendix \#4
+See Theory Appendix
 \end{claimproof}
         
         Alternatively, we propose an alternative bias-correction method when there are several missmeasured variables for each covariate, that is when we have more than one $x_{i,k}^*$ for every $x_{i,k}$. Given that in all the miss-measured variables the underlying value is the real value, one could think of extracting the underlying true $x_{i,k}$ through a linear combination of the different $x_{i,k}^*$. Then, we could treat all the $x_{i,k}^*$ as variables that share compononents as follows
@@ -366,11 +366,11 @@ In our simulations, we assume default values of $\rho = 0.5$, $\beta_1 = \beta_2
 
 \input{../Output/Tables/sim_reg_results_p_5methods_noexp.tex}
 
-We can see that using PCA to extract the latent covariate driving the mismeasured covariates noticeably outperforms using a single mismeasured covariate across several values of $p$. Both the average coefficient on $\beta_1$ obtained when including the PCA output in the regression, and the mean absolute percentage error obtained on the 1,000 simulations are both much closer to the target values with the PCA-based regression than with the single measurement regression. Additionally, we can see that as $p$ increases the estimated $\beta_1$ coefficient in the PCA regression gets steadily closer to the true $\beta_1$ value of 1. Appendix 1 contains charts that show that this increase in performance is also true for different values of $\beta_1$ and $\beta_2$.
+We can see that using PCA to extract the latent covariate driving the mismeasured covariates noticeably outperforms using a single mismeasured covariate across several values of $p$. Both the average coefficient on $\beta_1$ obtained when including the PCA output in the regression, and the mean absolute percentage error obtained on the 1,000 simulations are both much closer to the target values with the PCA-based regression than with the single measurement regression. Additionally, we can see that as $p$ increases the estimated $\beta_1$ coefficient in the PCA regression gets steadily closer to the true $\beta_1$ value of 1. The simulation appendix contains charts that show that this increase in performance is also true for different values of $\beta_1$ and $\beta_2$.
 
 However, the performance advantages that we see from using PCA could be driven by the benefit of having multiple measurements of our true covariate of interest, as opposed to any special advantages from PCA specifically. We test this question by comparing the estimated $\beta_1$ in our PCA regressions with the estimated $\beta_1$ when we include all $p$ measurements as separate covariates in the regression, and the $\beta_1$ obtained when the covariate is the mean of all $p$ measurements of the true covariate. We also show the results for an instrumental variables regression where we use other measurements of the true covariate as an instrument for a single measurement of the covariate. The results from these regressions for different values of $p$ are also shown in Table \ref{sim_p_5_noexp}.
 
-As one can see from these results (and results for different values of $\beta_1$, $\beta_2$, and $\rho$ in Appendix 1), there does not seem to be a noticeable difference between the first three regression methods, with the instrumental variable regression performing slightly worse. Thus, our simulations suggest that there are major benefits to having multiple measurements of a latent covariate of interest, but under our first framework, using PCA, taking the average of these measurements, and including all measurements as separate covariates seem to give similar benefits to the performance of the regression.
+As one can see from these results (and results for different values of $\beta_1$, $\beta_2$, and $\rho$ in the simulation appendix), there does not seem to be a noticeable difference between the first three regression methods, with the instrumental variable regression performing slightly worse. Thus, our simulations suggest that there are major benefits to having multiple measurements of a latent covariate of interest, but under our first framework, using PCA, taking the average of these measurements, and including all measurements as separate covariates seem to give similar benefits to the performance of the regression.
 
 Additionally, there are certain circumstances where the PCA method does not lead to more accurate estimates of $\beta_1$ than even using a single mismeasured covariate. Table \ref{sim_rho_2_noexp} contains the simulation results for different values of $\rho$ (the covariance between the main variable of interest $x_i$ and the true latent covariate $z_i$).
 
@@ -378,11 +378,11 @@ Additionally, there are certain circumstances where the PCA method does not lead
 
 We first note that when $\rho = 0.5$ or $0.9$ then the coefficient on the variable of interest is artificially inflated when we use a single mismeasurement as a covariate (on average, for $\rho = 0.5$, it is 1.28 instead of the true value of 1). Conversely, when $\rho = -0.5$ or $-0.9$ then the coefficient is artificially deflated. Using the PCA value as the covariate reduces this bias for both directions, and brings the main coefficient closer to its true value of 1.0. These results are consistent with our theoretical section, where we argued that a positive covariance between the main variable and the true covariate will lead to an inflation on the main coefficient, while a negative covariance will lead to a deflation of the coefficient. Separately, there is no bias when $\rho = 0$, as predicted. Since there is hardly any bias to correct, we do not see gains from using the PCA covariate method for that particular $\rho$ value. These simulation results suggest that using PCR is more effective than a single mismeasured covariate, although there are no gains to using it when the covariance between the covariate and the main variable of interest is close to $0$.
 
-We also explore how our results differ under a different framework of measurement error. For the following regressions (and those in Appendix 2) we transform half of the covariate measurements by taking the $z_{i,j}^*$ value from before and transforming it so that the new $z_{i,j}'$ value was equal to $z_{i,j}' = e^{z_{i,j}^*}$. This allows us to analyze the performance of our different techniques in a situation where the measurements of the true covariate are on different scales from one another. \footnote{This is often the case; for example, one could measure income inequality through a Gini coefficient and the percent of income that goes to the top 1\% of income-earners, but these variables are on totally different scales from each other.} Table \ref{sim_p_5_exp} shows the results of our five techniques in this new context.
+We also explore how our results differ under a different framework of measurement error. For the following regressions (and those in the simulation appendix) we transform half of the covariate measurements by taking the $z_{i,j}^*$ value from before and transforming it so that the new $z_{i,j}'$ value was equal to $z_{i,j}' = e^{z_{i,j}^*}$. This allows us to analyze the performance of our different techniques in a situation where the measurements of the true covariate are on different scales from one another. \footnote{This is often the case; for example, one could measure income inequality through a Gini coefficient and the percent of income that goes to the top 1\% of income-earners, but these variables are on totally different scales from each other.} Table \ref{sim_p_5_exp} shows the results of our five techniques in this new context.
 
 \input{../Output/Tables/sim_reg_results_p_5methods_exp.tex}
 
-We can see that taking the average of the covariate measurements now performs noticeably worse than PCA or using all measurements as separate covariates. Additionally, IV techniques seem to perform better in this paradigm and attains results consistent with those for the PCA and all measurements techniques. As can be seen in Appendix 2, these findings hold for other values of $\beta_1$, $\beta_2$, and $\rho$.
+We can see that taking the average of the covariate measurements now performs noticeably worse than PCA or using all measurements as separate covariates. Additionally, IV techniques seem to perform better in this paradigm and attains results consistent with those for the PCA and all measurements techniques. As can be seen in the simulation appendix, these findings hold for other values of $\beta_1$, $\beta_2$, and $\rho$.
 
 Thus, these Monte Carlo simulations tell us that using PCR provides significant performance benefits relative to using a single mismeasured covariate of the true latent covariate in a regression. When the measurements of the true covariate have the same scale and only have Gaussian measurement error, then PCR performs about as well as taking the average of all covariate measurements or as using all measurements as separate covariates in an OLS regression. When we took the exponential of half of the measurements, then PCR outperformed taking the average of the covariate measurements and performed in line with using all measurements as covariates or using an IV technique. These simulations thus tell us that PCR is a useful way of reducing measurement error-caused bias in OLS regression with a latent covariate, and that the performance of this technique is in line with, or better than, other techniques for reducing that bias.
 
@@ -430,47 +430,7 @@ Thus, these Monte Carlo simulations tell us that using PCR provides significant 
 
     \appendix
 
-    \section*{Appendix 1}
-
-        \input{../Output/Tables/sim_reg_results_beta1_5methods_noexp.tex}
-        \input{../Output/Tables/sim_reg_results_beta2_5methods_noexp.tex}
-        \input{../Output/Tables/sim_reg_results_rho_5methods_noexp.tex}
-        
-    \section*{Appendix 2}
-
-
-         \input{../Output/Tables/sim_reg_results_beta1_5methods_exp.tex}
-        \input{../Output/Tables/sim_reg_results_beta2_5methods_exp.tex}
-        \input{../Output/Tables/sim_reg_results_rho_5methods_exp.tex}
-
-
-    \section*{Appendix 3}
-
-        \begin{figure}[h!]
-            \centering
-            \caption{Correlations Between Covariates and Life Expectancy}
-            \label{LE_Health_Econ_Correlations}	
-            \includegraphics[width=\linewidth,keepaspectratio=true]{../Output/Figures/LE_Health_Econ_Correlations_wb_only_short.pdf}
-        \end{figure}
-
-        \begin{figure}[h!]
-            \centering
-            \caption{Economic Measures PCA Loadings}
-            \label{Econ_Loadings}	
-            \includegraphics[width=\linewidth,keepaspectratio=true]{../Output/Figures/Econ_Indicator_Loadings_wb_only_short.pdf}
-        \end{figure}
-
-        \begin{figure}[h!]
-            \centering
-            \caption{Economic Measures PCA Share of Variance Explained}
-            \label{Econ_Share_Explained}	
-            \includegraphics[width=\linewidth,keepaspectratio=true]{../Output/Figures/Econ_Indicator_Share_Explained_wb_only_short.pdf}
-        \end{figure}
-
-\break
-\newpage
-
-	\section*{Appendix 4}
+	\section*{Theory Appendix}
 	\subsection*{Short Proofs}
 
 \setcounter{claim}{0}
@@ -570,5 +530,46 @@ Suppose an instrument $Z_i$ that satisfies the relevance condition $\operatornam
         And so $Z_i$ is exogenous. Given $(16)$ it is clear that $\operatorname{E}(Z_iX_i)\neq0$ and so relevance is also satisfied. Thus, $\gamma$ and $\b$ may be identifies using this kind of instrument.\\
 
 \end{claimproof}
+
+\clearpage
+
+    \section*{Simulation Appendix}
+
+        \input{../Output/Tables/sim_reg_results_beta1_5methods_noexp.tex}
+        \input{../Output/Tables/sim_reg_results_beta2_5methods_noexp.tex}
+        \input{../Output/Tables/sim_reg_results_rho_5methods_noexp.tex}
+        
+
+         \input{../Output/Tables/sim_reg_results_beta1_5methods_exp.tex}
+        \input{../Output/Tables/sim_reg_results_beta2_5methods_exp.tex}
+        \input{../Output/Tables/sim_reg_results_rho_5methods_exp.tex}
+
+\clearpage
+
+    \section*{Application Appendix}
+
+        \begin{figure}[h!]
+            \centering
+            \caption{Correlations Between Covariates and Life Expectancy}
+            \label{LE_Health_Econ_Correlations}	
+            \includegraphics[width=\linewidth,keepaspectratio=true]{../Output/Figures/LE_Health_Econ_Correlations_wb_only_short.pdf}
+        \end{figure}
+
+        \begin{figure}[h!]
+            \centering
+            \caption{Economic Measures PCA Loadings}
+            \label{Econ_Loadings}	
+            \includegraphics[width=\linewidth,keepaspectratio=true]{../Output/Figures/Econ_Indicator_Loadings_wb_only_short.pdf}
+        \end{figure}
+
+        \begin{figure}[h!]
+            \centering
+            \caption{Economic Measures PCA Share of Variance Explained}
+            \label{Econ_Share_Explained}	
+            \includegraphics[width=\linewidth,keepaspectratio=true]{../Output/Figures/Econ_Indicator_Share_Explained_wb_only_short.pdf}
+        \end{figure}
+
+
+
 
 \end{document}
