@@ -20,18 +20,13 @@ import statsmodels.formula.api as smf
 from statsmodels.sandbox.regression.gmm import IV2SLS 
 import regex as re
 
-# Create a list of the important covariates for convenience
-short_covariates_list = ['gdp_pc_ppp', 'NY.GDP.PCAP.CD', 'NY.GNP.PCAP.PP.CD', 'NY.GNP.PCAP.CD', 'SL.GDP.PCAP.EM.KD']
-
 # Load in the WB data
-wb_data = (pd.read_csv(apps_dir + "/WB_Data.csv", index_col=['economy', 'series'])
+wb_data = (pd.read_csv(input_dir + "/WB_Data.csv", index_col=['economy', 'series'])
              # Reshape and rename a few columns
              .transpose()
              .stack(level = 'economy')
              .rename_axis(None, axis = 1)
              .rename(columns = {"SP.DYN.LE00.IN":"life_exp", "SH.XPD.GHED.CH.ZS":"govt_health_share", "NY.GDP.PCAP.PP.CD":"gdp_pc_ppp"})
-             # Get rid of old health GDP share measure
-             .filter(short_covariates_list + ['country', 'year', 'life_exp', 'govt_health_share'])
              .rename_axis(['year', 'country'])
              .reset_index()
              .astype({'year': 'int', 'country': 'str'})
@@ -41,8 +36,13 @@ wb_data = (pd.read_csv(apps_dir + "/WB_Data.csv", index_col=['economy', 'series'
 
 # Remove periods from column names for convenience
 wb_data.columns = wb_data.columns.str.replace(".", "_")
-# Also correct the covariates list
-short_covariates_list = [re.sub('\.', '_', item) for item in short_covariates_list]
+
+# Create a list of the key covariates for convenience
+short_covariates_list = ['gdp_pc_ppp', 'NY_GDP_PCAP_CD', 'NY_GNP_PCAP_PP_CD', 'NY_GNP_PCAP_CD', 'SL_GDP_PCAP_EM_KD']
+# String format of covariates for patsy formulas
+covariates_formula_string = short_covariates_list[0]
+for i in range(1, len(short_covariates_list)):
+    covariates_formula_string += " + " + short_covariates_list[i]
 
 # Dictionary for linking column names/variables to nice/written out version
 variables_mapped_to_long = {"gdp_pc_ppp":"GDP Per Capita PPP (Current International $)", "NY_GDP_PCAP_CD":"GDP Per Capita (Current USD)", "NY_GNP_PCAP_PP_CD":"GNP Per Capita PPP (Current International $)", "NY_GNP_PCAP_CD":"GNP Per Capita (Current USD)", "SL_GDP_PCAP_EM_KD":"ILO GDP Per Person Employed", "life_exp":"Life Expectancy at Birth (All Population)", "govt_health_share":"Government Share of Health Expenditure"}
@@ -86,10 +86,6 @@ ols_benchmark = smf.ols("life_exp ~ govt_health_share", data = std_data.reset_in
 ols_one_covariate = smf.ols("life_exp ~ govt_health_share + gdp_pc_ppp", data = std_data.reset_index()).fit()
 
 # Many covariate OLS
-# String format of covariates for patsy formulas
-covariates_formula_string = short_covariates_list[0]
-for i in range(1, len(short_covariates_list)):
-    covariates_formula_string += " + " + short_covariates_list[i]
 ols_many_covariates = smf.ols("life_exp ~ govt_health_share + " + covariates_formula_string, data = std_data.reset_index()).fit()
 
 # Mean of standardized covariates OLS
