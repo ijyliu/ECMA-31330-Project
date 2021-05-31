@@ -1,7 +1,0 @@
-==========================================
-SLURM_JOB_ID = 3003524
-SLURM_SUBMIT_DIR = /home/ijyliu/repo/ECMA-31330-Project/Source/Parallel_Cluster_Simulations
-SLURM_JOB_NODELIST = mcn02
-==========================================
-began compiling results
-finished analysis
