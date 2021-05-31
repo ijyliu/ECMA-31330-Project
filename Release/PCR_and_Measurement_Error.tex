@@ -57,9 +57,6 @@
 \def\w{\omega}
 \def\W{\Omega}
 
-\usepackage[autostyle, english = american]{csquotes}
-\MakeOuterQuote{"}
-
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 \usepackage{fancyhdr}
@@ -72,6 +69,9 @@
 
 \newcommand{\numpy}{{\tt numpy}}    % tt font for numpy
 
+\usepackage[autostyle, english = american]{csquotes}
+\MakeOuterQuote{"}
+
 \topmargin -.5in
 \textheight 9in
 \oddsidemargin -.25in
@@ -83,6 +83,8 @@
 
 \floatplacement{table}{H}
 \floatplacement{figure}{H}
+
+\pgfplotsset{compat=1.17}
 
 \begin{document}
 
@@ -199,7 +201,7 @@
         
         Equation $(10)$ also allows us to know the direction of the bias. Given that we are facing measurement error in the covariate, $\sigma^2_{x^*}>\sigma^2_x$ which implies $\sigma^2_{x^*}-\sigma^2_x>0$. Also, it follows from the \textit{Cauchy-Schwarz} inequality that the denominator is also positive. Then, the direction of the bias will depend on the sign of $\beta$ and the covariance of $t$ and $x$, as Table one illustrates.
         
-        \begin{table}[h!]
+        \begin{table}[H]
             \centering
             \begin{tabular}{|c|c|c|}\hline \hline
               & $\b>0$  & $\b<0$ \\ \hline
@@ -337,7 +339,26 @@ $$y_i = \beta_1 x_i + \beta_2 z_i + u_i$$
 
 In our simulations, we assume default values of $\rho = 0.5$, $\beta_1 = \beta_2 = 1$, and $p=5$. We then vary each factor while holding the others fixed, and perform 1,000 simulations of the DGP followed by an OLS regression on either the PCA value from the p measurements of the true $z_i$, or on a single one of the measurements of $z_i$. For each simulation, we generate 2,000 observations of $y_i,x_i$, etc. Table \ref{sim_rho_5_noexp} shows the results for different values of $\rho$.
 
-\input{../Output/Tables/sim_reg_results_rho_5methods_noexp.tex}
+\begin{table}[!htbp] \centering
+    \caption{Average Coefficients for Values of $\rho$ (No Transformation of Measurements) \label{sim_rho_5_noexp}}
+    \scalebox{0.75}{
+      \begin{tabular}{@{\extracolsep{5pt}}lccccc}
+  \\[-1.8ex]\hline
+  \hline \\[-1.8ex]
+  & \multicolumn{5}{c}{$\rho$ \textit{ Value}} \
+  \cr \
+  \\[-1.8ex] & -1 & -0.5 & 0 & 0.5 & 1 \\
+  \hline \\[-1.8ex]
+  & \multicolumn{5}{c}{\textit{Coefficient on Main Variable}} \\
+  \input{../Output/Tables/covariance_coefs_no_exp.tex}
+    & \multicolumn{5}{c}{\textit{Mean Absolute Percentage Error}} \\
+    \input{../Output/Tables/covariance_apes_no_exp.tex} \\
+    \hline \\[-1.8ex]
+    Simulations & 1,000 & 1,000 & 1,000 & 1,000 & 1,000\\
+  \hline
+  \hline \\[-1.8ex]
+  \end{tabular}}
+  \end{table}
 
 We first note that when $\rho = 0.5$ or $0.9$ then the coefficient on the variable of interest is artificially inflated when we use a single mismeasurement as a covariate (on average, for $\rho = 0.5$, it is 1.28 instead of the true value of 1). Conversely, when $\rho = -0.5$ or $-0.9$ then the coefficient is artificially deflated. Using the PCA value as the covariate reduces this bias for both directions, and brings the main coefficient closer to its true value of 1.0. These results are consistent with our theoretical section, where we argued that a positive covariance between the main variable and the true covariate will lead to an inflation on the main coefficient, while a negative covariance will lead to a deflation of the coefficient. Separately, there is no bias when $\rho = 0$, as predicted. Since there no bias to correct, we do not see gains from using the PCA covariate method for that particular $\rho$ value. These simulation results suggest that using PCR is more effective than a single mismeasured covariate, although there are no gains to using it when the covariance between the covariate and the main variable of interest is close to $0$. The simulation appendix contains charts that show that this increase in performance is also true for different values of $p$, $\beta_1$ and $\beta_2$.
 
@@ -347,7 +368,27 @@ As one can see from these results (and results for different values of $\beta_1$
 
 We also explore how our results differ under a different framework of measurement error. For the following regressions (and those in the simulation appendix) we transform half of the covariate measurements by taking the $z_{i,j}^*$ value from before and transforming it so that the new $z_{i,j}'$ value was equal to $z_{i,j}' = e^{z_{i,j}^*}$. This allows us to analyze the performance of our different techniques in a situation where the measurements of the true covariate are on different scales from one another. \footnote{This is often the case; for example, one could measure income inequality through a Gini coefficient and the percent of income that goes to the top 1\% of income-earners, but these variables are on totally different scales from each other.} Table \ref{sim_rho_5_exp} shows the results of our five techniques in this new context.
 
-\input{../Output/Tables/sim_reg_results_rho_5methods_exp.tex}
+\begin{table}[!htbp] \centering
+    \caption{Average Coefficients for Values of $\rho$ (Half of Measurements are Transformed) \label{sim_rho_5_exp}}
+    \scalebox{0.75}{
+      \begin{tabular}{@{\extracolsep{5pt}}lccccc}
+  \\[-1.8ex]\hline
+  \hline \\[-1.8ex]
+  & \multicolumn{5}{c}{$\rho$ \textit{ Value}} \
+  \cr \
+  \\[-1.8ex] & -1 & -0.5 & 0 & 0.5 & 1 \\
+  \hline \\[-1.8ex]
+  & \multicolumn{5}{c}{\textit{Coefficient on Main Variable}} \\
+  \input{../Output/Tables/covariance_coefs_exp.tex}
+  & \multicolumn{5}{c}{\textit{Mean Absolute Percentage Error}} \\
+    \input{../Output/Tables/covariance_apes_exp.tex} \\
+    \hline \\[-1.8ex]
+    Simulations & 1,000 & 1,000 & 1,000 & 1,000 & 1,000\\
+  \hline
+  \hline \\[-1.8ex]
+  \end{tabular}}
+  \end{table}
+
 
 We can see that taking the average of the covariate measurements now performs noticeably worse than PCR or using all measurements as separate covariates. Additionally, IV techniques seem to perform better in this paradigm and attains results consistent with those for the PCR and all measurements techniques. As can be seen in the simulation appendix, these findings hold for other values of $\beta_1$, $\beta_2$, and $\rho$.
 
@@ -374,7 +415,7 @@ Thus, these Monte Carlo simulations tell us that using PCR provides significant 
         The results clearly demonstrate that all of the methods using multiple measures of the covariates produce noticably different coefficients for government health share, relative to the use of single mismeasurement. The usage of many economic indicators directly, the mean, and the principal components estimator each produce smaller coefficients.
 
         % REWRITE this paragraph if we bump up the number of observations in the simulation and if the simulation section table changes
-        Moreover, these different coefficients behave in a manner similar to that predicted by our theoretical development and simulations. In Table \ref{sim_rho_2_noexp}, we saw the impact of variation in $\rho$, the correlation between measurements for a value of $p = 5$ and $\beta = 1$ for 100 observations. In the empirical setting it is difficult to tell what is a reasonable value of $\beta$, and we instead have nearly 2000 observations. Nevertheless, we see that for a positive $\rho$ value between 0 and 1 (as is likely to be the case in light the correlation between GDP and the government share of health spending and overall public goods), the coefficient obtained from using a single measurement is inflated relative to that from PCA, and presumably other methods combining multiple measures as in columns (3), (4), and (5) of Table \ref{main_regs}.
+        Moreover, these different coefficients behave in a manner similar to that predicted by our theoretical development and simulations. In Table \ref{sim_rho_5_noexp}, we saw the impact of variation in $\rho$, the correlation between measurements for a value of $p = 5$ and $\beta = 1$ for 100 observations. In the empirical setting it is difficult to tell what is a reasonable value of $\beta$, and we instead have nearly 2000 observations. Nevertheless, we see that for a positive $\rho$ value between 0 and 1 (as is likely to be the case in light the correlation between GDP and the government share of health spending and overall public goods), the coefficient obtained from using a single measurement is inflated relative to that from PCA, and presumably other methods combining multiple measures as in columns (3), (4), and (5) of Table \ref{main_regs}.
 
         Results using fixed effects panel models (with country clustered standard errors), more principal components, and instrumental variables regression using all the economic indicators as an instrument for GDP per capita (PPP), are in Table \ref{additional_regs}. Fixed effects coefficients greatly reduce the magnitude of any potential causal effects and are insignificant.  The results in column (3) and (4) also show reductions in the inflation of coefficients relative to column (2) of Table \ref{main_regs}. The inclusion of more principal components produces a small coefficient similar to that obtained with just a single component, while the reduction provided by the IV coefficient is minimal.
 
@@ -576,41 +617,161 @@ The coefficients are as follows
 
     \section*{Simulation Appendix}
 
-        \input{../Output/Tables/sim_reg_results_beta1_5methods_noexp.tex}
-        \input{../Output/Tables/sim_reg_results_beta2_5methods_noexp.tex}
-        \input{../Output/Tables/sim_reg_results_p_5methods_noexp.tex}
-        
+    % Non-transformed
 
-         \input{../Output/Tables/sim_reg_results_beta1_5methods_exp.tex}
-        \input{../Output/Tables/sim_reg_results_beta2_5methods_exp.tex}
-        \input{../Output/Tables/sim_reg_results_p_5methods_exp.tex}
+    \begin{table}[!htbp] \centering
+        \caption{Average Coefficients for Values of $\beta_1$ (No Transformation of Measurements) \label{sim_beta1_5_noexp}}
+        \scalebox{0.75}{
+          \begin{tabular}{@{\extracolsep{5pt}}lccccc}
+      \\[-1.8ex]\hline
+      \hline \\[-1.8ex]
+      & \multicolumn{4}{c}{\textit{True $\beta_1$}} \
+      \cr \
+      \\[-1.8ex] & 0.1 & 1 & 10\\
+      \hline \\[-1.8ex]
+      & \multicolumn{4}{c}{\textit{Coefficient on Main Variable}} \\
+      \input{../Output/Tables/beta1_coefs_no_exp.tex}
+      & \multicolumn{4}{c}{\textit{Absolute Percentage Error}} \\
+      \input{../Output/Tables/beta1_apes_no_exp.tex} \\
+      \hline \\[-1.8ex]
+      Simulations & 1,000 & 1,000 & 1,000 &\\
+      \hline
+      \hline \\[-1.8ex]
+      \end{tabular}}
+      \end{table}
+
+      \begin{table}[!htbp] \centering
+        \caption{Average Coefficients for Values of $\beta_2$ (No Transformation of Measurements) \label{sim_beta2_5_noexp}}
+        \scalebox{0.75}{
+          \begin{tabular}{@{\extracolsep{5pt}}lccccc}
+      \\[-1.8ex]\hline
+      \hline \\[-1.8ex]
+      & \multicolumn{4}{c}{\textit{True $\beta_1$}} \
+      \cr \
+      \\[-1.8ex] & 0.1 & 1 & 10\\
+      \hline \\[-1.8ex]
+      & \multicolumn{4}{c}{\textit{Coefficient on Main Variable}} \\
+        \input{../Output/Tables/beta2_coefs_no_exp.tex}
+      & \multicolumn{4}{c}{\textit{Absolute Percentage Error}} \\
+       \input{../Output/Tables/beta2_apes_no_exp.tex}  \\ 
+      \hline \\[-1.8ex]
+      Simulations & 1,000 & 1,000 & 1,000 & \\
+      \hline
+      \hline \\[-1.8ex]
+      \end{tabular}}
+      \end{table}
+
+      \begin{table}[!htbp] \centering
+        \caption{Average Coefficients for Values of $p$ (No Transformation of Measurements) \label{sim_p_5_noexp}}
+        \scalebox{0.75}{
+          \begin{tabular}{@{\extracolsep{5pt}}lccccc}
+      \\[-1.8ex]\hline
+      \hline \\[-1.8ex]
+      & \multicolumn{4}{c}{\textit{Number of p}} \
+      \cr \
+      \\[-1.8ex] & 5 & 20 & 50 \\
+      \hline \\[-1.8ex]
+      & \multicolumn{4}{c}{\textit{Coefficient on Main Variable}} \\
+      \input{../Output/Tables/p_coefs_no_exp.tex}
+      & \multicolumn{4}{c}{\textit{Mean Absolute Percentage Error}} \\
+      \input{../Output/Tables/p_apes_no_exp.tex} \\
+      \hline \\[-1.8ex]
+      Simulations & 1,000 & 1,000 & 1,000  \\
+      \hline
+      \hline \\[-1.8ex]
+      \end{tabular}}
+      \end{table}
+        
+      % Transformed
+
+      \begin{table}[!htbp] \centering
+        \caption{Average Coefficients for Values of $\beta_1$ (Half of Measurements are Transformed)\label{sim_beta1_5_exp}}
+        \scalebox{0.75}{
+        \begin{tabular}{@{\extracolsep{5pt}}lccccc}
+      \\[-1.8ex]\hline
+      \hline \\[-1.8ex]
+      & \multicolumn{4}{c}{\textit{True $\beta_1$}} \
+      \cr \
+      \\[-1.8ex] & 0.1 & 1 & 10\\
+      \hline \\[-1.8ex]
+      & \multicolumn{4}{c}{\textit{Coefficient on Main Variable}} \\
+      \input{../Output/Tables/beta1_coefs_exp.tex}
+      & \multicolumn{3}{c}{\textit{Absolute Percentage Error}} \\
+      \input{../Output/Tables/beta1_apes_exp.tex}\\
+      \hline \\[-1.8ex]
+       Simulations & 1,000 & 1,000 & 1,000 &\\
+      \hline
+      \hline \\[-1.8ex]
+      \end{tabular}}
+      \end{table}
+
+      \begin{table}[!htbp] \centering
+        \caption{Average Coefficients for Values of $\beta_2$ (Half of Measurements are Transformed) \label{sim_beta2_5_exp}}
+        \scalebox{0.75}{
+            \begin{tabular}{@{\extracolsep{5pt}}lccccc}
+        \\[-1.8ex]\hline
+        \hline \\[-1.8ex]
+        & \multicolumn{5}{c}{\textit{True $\beta_1$}} \
+        \cr \
+        \\[-1.8ex] & 0.1 & 1 & 10\\
+        \hline \\[-1.8ex]
+        & \multicolumn{4}{c}{\textit{Coefficient on Main Variable}} \\
+        \input{../Output/Tables/beta2_coefs_exp.tex}
+        & \multicolumn{5}{c}{\textit{Absolute Percentage Error}} \\
+        \input{../Output/Tables/beta2_apes_exp.tex} \\
+        \hline \\[-1.8ex]
+        Simulations & 1,000 & 1,000 & 1,000 &\\
+        \hline
+        \hline \\[-1.8ex]
+        \end{tabular}}
+        \end{table}
+
+        \begin{table}[!htbp] \centering
+            \caption{Average Coefficients for Values of $p$ (Half of Measurements are Transformed) \label{sim_p_5_exp}}
+            \scalebox{0.75}{
+              \begin{tabular}{@{\extracolsep{5pt}}lccccc}
+          \\[-1.8ex]\hline
+          \hline \\[-1.8ex]
+          & \multicolumn{4}{c}{\textit{Number of p}} \
+          \cr \
+          \\[-1.8ex] & 5 & 20 & 50 \\
+          \hline \\[-1.8ex]
+          & \multicolumn{4}{c}{\textit{Coefficient on Main Variable}} \\
+          \input{../Output/Tables/p_coefs_exp.tex}
+          & \multicolumn{4}{c}{\textit{Mean Absolute Percentage Error}} \\
+          \input{../Output/Tables/p_apes_exp.tex} \\
+            
+          \hline \\[-1.8ex]
+          Simulations & 1,000 & 1,000 & 1,000  \\
+          \hline
+          \hline \\[-1.8ex]
+          \end{tabular}}
+          \end{table}
+
 
 \clearpage
 
     \section*{Application Appendix}
 
-        \begin{figure}[h!]
+        \begin{figure}[H]
             \centering
             \caption{Correlations Between Covariates and Life Expectancy}
             \label{LE_Health_Econ_Correlations}	
             \includegraphics[width=\linewidth,keepaspectratio=true]{../Output/Figures/LE_Health_Econ_Correlations_wb_only_short.pdf}
         \end{figure}
 
-        \begin{figure}[h!]
+        \begin{figure}[H]
             \centering
             \caption{Economic Measures PCA Loadings}
             \label{Econ_Loadings}	
             \includegraphics[width=\linewidth,keepaspectratio=true]{../Output/Figures/Econ_Indicator_Loadings_wb_only_short.pdf}
         \end{figure}
 
-        \begin{figure}[h!]
+        \begin{figure}[H]
             \centering
             \caption{Economic Measures PCA Share of Variance Explained}
             \label{Econ_Share_Explained}	
             \includegraphics[width=\linewidth,keepaspectratio=true]{../Output/Figures/Econ_Indicator_Share_Explained_wb_only_short.pdf}
         \end{figure}
-
-
-
 
 \end{document}
