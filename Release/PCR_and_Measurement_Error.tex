@@ -237,29 +237,18 @@ See Theory Appendix
         \end{align}
         
         
-        where $h_j$ is the eigenvector of $\Sigma$ associated with the $j^{t h}$ ordered eigenvalue $\lambda_{j}$ of $\Sigma_{X^*_k}$, and the principal components of $X^*_k$ are $U_{j}=h_{j}^{\prime} X^*_k$, where $h_{j}$ is the eigenvector of $\Sigma$ associated with the $j^{t h}$ ordered eigenvalue $\lambda_{j}$ of $\Sigma$.\\
-        
-        Under our assumptions, the vector of missmeasured values $X^*_k$ of $x_{i,k}$, share only one principal component which is precisely $x_{i,k}$. Then, we only have one principal component, $x_{i,k}$, and so the $x_{i,k}$ is such that
-        \begin{align}
-            x_{i,k}=h_{k}^{\prime} X^*_k
-        \end{align}
-        
-        Finally, we could then retrieve the vector of true variables $X_i$
-        \begin{align}
+        where $h_j$ is the eigenvector of $\Sigma$ associated with the $j^{t h}$ ordered eigenvalue $\lambda_{j}$ of $\Sigma_{X^*_k}$, and the principal components of $X^*_k$ are $U_{j}=h_{j}^{\prime} X^*_k$, where $h_{j}$ is the eigenvector of $\Sigma$ associated with the $j^{t h}$ ordered eigenvalue $\lambda_{j}$ of $\Sigma$. Then, we could then retrieve the vector of true variables $X_i$
+\begin{claim}
+\begin{align}
             X_i=HX^*_i
         \end{align}
-        
-        where $H$ is a matrix such that
-        \begin{align*}
-            H=\left(\begin{array}{ccccc}
-        h_1 & 0 & 0 & \dots & 0 \\
-        0 & h_2 & 0 & \dots & 0 \\
-        \vdots & \ddots & h_3 & \ddots & \vdots \\
-        0 & \dots & \dots & \dots \ddots & h_p
-        \end{array}\right)
-        \end{align*}
-        
-        and $h_k$ is the vector of eigenvalues for the variable $x_{i,k}$.
+where $H$ is a matrix compound of the $h_k$ vectors of eigenvalues of $x_{i,k}$, $\forall i,k$
+\end{claim}
+
+\begin{claimproof}
+See Theory Appendix
+\end{claimproof}
+ 
         
         Our new linear model then would be
         \begin{align}
@@ -529,6 +518,37 @@ Suppose an instrument $Z_i$ that satisfies the relevance condition $\operatornam
         
         And so $Z_i$ is exogenous. Given $(16)$ it is clear that $\operatorname{E}(Z_iX_i)\neq0$ and so relevance is also satisfied. Thus, $\gamma$ and $\b$ may be identifies using this kind of instrument.\\
 
+\end{claimproof}
+
+\begin{claim}
+\begin{align}
+            X_i=HX^*_i
+        \end{align}
+where $H$ is a matrix compound of the $h_k$ vectors of eigenvalues of $x_{i,k}$, $\forall i,k$
+\end{claim}
+
+\begin{claimproof}
+Under our assumptions, the vector of missmeasured values $X^*_k$ of $x_{i,k}$, share only one principal component which is precisely $x_{i,k}$. Then, we only have one principal component, $x_{i,k}$, and so the $x_{i,k}$ is such that
+        \begin{align}
+            x_{i,k}=h_{k}^{\prime} X^*_k
+        \end{align}
+        
+        Finally, we could then retrieve the vector of true variables $X_i$
+        \begin{align}
+            X_i=HX^*_i
+        \end{align}
+        
+        where $H$ is a matrix such that
+        \begin{align*}
+            H=\left(\begin{array}{ccccc}
+        h_1 & 0 & 0 & \dots & 0 \\
+        0 & h_2 & 0 & \dots & 0 \\
+        \vdots & \ddots & h_3 & \ddots & \vdots \\
+        0 & \dots & \dots & \dots \ddots & h_p
+        \end{array}\right)
+        \end{align*}
+        
+        and $h_k$ is the vector of eigenvalues for the variable $x_{i,k}$.
 \end{claimproof}
 
 \clearpage
