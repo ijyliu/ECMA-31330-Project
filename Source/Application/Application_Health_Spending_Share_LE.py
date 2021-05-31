@@ -20,20 +20,10 @@ import statsmodels.formula.api as smf
 from statsmodels.sandbox.regression.gmm import IV2SLS 
 import regex as re
 
-# # Font settings for plots
-# SMALL_SIZE = 8
-# MEDIUM_SIZE = 10
-# BIGGER_SIZE = 12
-# plt.rc('font', size=SMALL_SIZE)          # controls default text sizes
-# plt.rc('axes', titlesize=SMALL_SIZE)     # fontsize of the axes title
-# plt.rc('axes', labelsize=MEDIUM_SIZE)    # fontsize of the x and y labels
-# plt.rc('xtick', labelsize=SMALL_SIZE)    # fontsize of the tick labels
-# plt.rc('ytick', labelsize=SMALL_SIZE)    # fontsize of the tick labels
-# plt.rc('legend', fontsize=SMALL_SIZE)    # legend fontsize
-# plt.rc('figure', titlesize=BIGGER_SIZE)  # fontsize of the figure title
-
-# Get the list of indicators
-indicators_list = get_wb_ind_list()
+# Get the list of world bank indicators
+indicators_list = (pd.read_csv(input_dir + '/wb_indicators_list.csv')
+                    ['Indicator_Code']
+                    .tolist())
 # Create a list of covariates
 # For some reason net foreign assets pc doesn't read in correctly
 covariates_list = [variable for variable in indicators_list if variable != "SP.DYN.LE00.IN" and variable != "SH.XPD.GHED.CH.ZS" and variable != "NW.NFA.PC" and variable != "SH.XPD.CHEX.GD.ZS"]
