@@ -61,8 +61,15 @@ sum_stats = (wb_data.describe()
                     .rename(columns = {"index":"Variable", "count":"Obs", "mean":"Mean", "std":"SD", "min":"Min", "50%":"Med", "max":"Max"}))
 # Ensure entire strings/columns get printed
 with pd.option_context('display.max_colwidth', -1):
-    sum_stats.to_latex(tables_dir + '/sum_stats_wb_only_short.tex', index = False, caption = "Summary Statistics", label = "Sum_Stats", column_format = 'l' + 'c'*(len(sum_stats.columns) - 1), float_format = "{:,.10g}".format)
-    #formatters = [None, None, preferred_format, preferred_format, preferred_format, preferred_format, preferred_format])
+
+    # Render the sum stats table as a string
+    sum_stats_latex = sum_stats.to_latex(index = False, caption = "Summary Statistics", label = "Sum_Stats", column_format = 'l' + 'c'*(len(sum_stats.columns) - 1), float_format = "{:,.10g}".format)
+
+    # Write the a corrected (scaled down by 0.75) version to the file
+    with open(tables_dir + '/sum_stats_wb_only_short.tex', "w") as f:
+        corrected_table = re.sub("begin{tabular}", r"scalebox{0.75}{\\begin{tabular}", sum_stats_latex)
+        corrected_table = re.sub("end{tabular}", "end{tabular}}", corrected_table)
+        f.write(corrected_table)
 
 # Standardize all variables
 # https://stackoverflow.com/questions/35723472/how-to-use-sklearn-fit-transform-with-pandas-and-return-wb_dataframe-instead-of-num
