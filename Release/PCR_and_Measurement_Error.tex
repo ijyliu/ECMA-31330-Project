@@ -255,35 +255,19 @@ See Theory Appendix
             y_i = \gamma^{PCR} t_i + H{X^*_i}'\beta^{PCR} + \epsilon_i
         \end{align}
         
-        where the coefficients are as follows
-        \begin{align}
-            \left(\begin{array}{l}
-        {\gamma}^{PCR} \\
-        {\beta}^{PCR}
-        \end{array}\right)&=\left(\begin{array}{cc}
-        {\sigma}^2_{t} & \Sigma_{t,HX^*} \\
-        \Sigma_{HX^*,t} & {\Sigma}_{HX^*}
-        \end{array}\right)^{-1}\left(\begin{array}{c}
-        \Sigma_{yt} \\
-        \Sigma_{y,HX^*}
-        \end{array}\right)\\
-        &=\left(\begin{array}{cc}
-        {\sigma}^2_{t} & \Sigma_{t,HX^*} \\
-        \Sigma_{HX^*,t} & {\Sigma}_{HX^*}
-        \end{array}\right)^{-1}\left(\begin{array}{cc}
-        {\sigma}^2_{t} & \Sigma_{tX} \\
-        \Sigma_{Xt} & {\Sigma}_{X}
-        \end{array}\right)\left(\begin{array}{l}
-        {\gamma} \\
-        {\beta}
-        \end{array}\right)\\
-        &=\left(\begin{array}{l}
-        {\gamma} \\
-        {\beta}
-        \end{array}\right)
-        \end{align}
-        
-        where the last equality comes from $(13)$.\\
+        where $\gamma$ is identified
+\begin{claim}
+Consider equation $(11)$. Then
+\begin{align}
+{\gamma}^{PCR} = \gamma
+\end{align}
+\end{claim}
+
+\begin{claimproof}
+See Theory Appendix
+\end{claimproof}
+
+
         
         Note that according to equation $(17)$, the true variable $x_{i,k}$ is a linear combination of the missmeasured variables that the researcher may have, were the weights are such that equation $(16)$ is satisfied. This allows us to think about other linear combination that could be used as a bias-correction method. In particular, take the case in which $h_k='(\frac{1}{n},\frac{1}{n},\dots,\frac{1}{n})$, where $h_k$ is a row vector of dimension $(1\times J)$, and $J$ is the amount of missmeasured variables for $x_{i,k}$. Then, equation $(17)$ will be
         \begin{align}
@@ -549,6 +533,49 @@ Under our assumptions, the vector of missmeasured values $X^*_k$ of $x_{i,k}$, s
         \end{align*}
         
         and $h_k$ is the vector of eigenvalues for the variable $x_{i,k}$.
+\end{claimproof}
+
+\begin{claimproof}
+See Theory Appendix
+\end{claimproof}
+ 
+\begin{claim}
+Consider equation $(11)$. Then
+\begin{align}
+{\gamma}^{PCR} = \gamma
+\end{align}
+\end{claim}
+
+\begin{claimproof}
+The coefficients are as follows
+        \begin{align}
+            \left(\begin{array}{l}
+        {\gamma}^{PCR} \\
+        {\beta}^{PCR}
+        \end{array}\right)&=\left(\begin{array}{cc}
+        {\sigma}^2_{t} & \Sigma_{t,HX^*} \\
+        \Sigma_{HX^*,t} & {\Sigma}_{HX^*}
+        \end{array}\right)^{-1}\left(\begin{array}{c}
+        \Sigma_{yt} \\
+        \Sigma_{y,HX^*}
+        \end{array}\right)\\
+        &=\left(\begin{array}{cc}
+        {\sigma}^2_{t} & \Sigma_{t,HX^*} \\
+        \Sigma_{HX^*,t} & {\Sigma}_{HX^*}
+        \end{array}\right)^{-1}\left(\begin{array}{cc}
+        {\sigma}^2_{t} & \Sigma_{tX} \\
+        \Sigma_{Xt} & {\Sigma}_{X}
+        \end{array}\right)\left(\begin{array}{l}
+        {\gamma} \\
+        {\beta}
+        \end{array}\right)\\
+        &=\left(\begin{array}{l}
+        {\gamma} \\
+        {\beta}
+        \end{array}\right)
+        \end{align}
+        
+        where the last equality comes from $(13)$
 \end{claimproof}
 
 \clearpage
