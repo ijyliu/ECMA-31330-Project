@@ -50,6 +50,10 @@ variables_mapped_to_short = {"gdp_pc_ppp":"GDP PC PPP", "NY_GDP_PCAP_CD":"GDP PC
 
 # Run the empirical analysis
 
+# Formatter for the sum stats table
+# def preferred_format(x):
+#     return '{0:,.2f}' % x
+
 # Summary statistics table
 sum_stats = (wb_data.describe()
                     .rename(columns = variables_mapped_to_long)
@@ -57,11 +61,12 @@ sum_stats = (wb_data.describe()
                     .reset_index()
                     .drop(columns = ['25%', '75%'])
                     .round(2)
-                    .astype({'count': 'int32'})
+                    #.astype({'count': 'int32'})
                     .rename(columns = {"index":"Variable", "count":"Obs", "mean":"Mean", "std":"SD", "min":"Min", "50%":"Med", "max":"Max"}))
 # Ensure entire strings/columns get printed
 with pd.option_context('display.max_colwidth', -1):
-    sum_stats.to_latex(tables_dir + '/sum_stats_wb_only_short.tex', index = False, caption = "Summary Statistics", label = "Sum_Stats", column_format = 'l' + 'c'*(len(sum_stats.columns) - 1))
+    sum_stats.to_latex(tables_dir + '/sum_stats_wb_only_short.tex', index = False, caption = "Summary Statistics", label = "Sum_Stats", column_format = 'l' + 'c'*(len(sum_stats.columns) - 1), float_format = "{:,.10g}".format)
+    #formatters = [None, None, preferred_format, preferred_format, preferred_format, preferred_format, preferred_format])
 
 # Standardize all variables
 # https://stackoverflow.com/questions/35723472/how-to-use-sklearn-fit-transform-with-pandas-and-return-wb_dataframe-instead-of-num
