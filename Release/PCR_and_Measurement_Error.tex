@@ -84,6 +84,8 @@
 \floatplacement{table}{H}
 \floatplacement{figure}{H}
 
+\pgfplotsset{compat=1.17}
+
 \begin{document}
 
     \thispagestyle{firststyle}
@@ -199,7 +201,7 @@
         
         Equation $(10)$ also allows us to know the direction of the bias. Given that we are facing measurement error in the covariate, $\sigma^2_{x^*}>\sigma^2_x$ which implies $\sigma^2_{x^*}-\sigma^2_x>0$. Also, it follows from the \textit{Cauchy-Schwarz} inequality that the denominator is also positive. Then, the direction of the bias will depend on the sign of $\beta$ and the covariance of $t$ and $x$, as Table one illustrates.
         
-        \begin{table}[h!]
+        \begin{table}[H]
             \centering
             \begin{tabular}{|c|c|c|}\hline \hline
               & $\b>0$  & $\b<0$ \\ \hline
@@ -751,21 +753,21 @@ The coefficients are as follows
 
     \section*{Application Appendix}
 
-        \begin{figure}[h!]
+        \begin{figure}[H]
             \centering
             \caption{Correlations Between Covariates and Life Expectancy}
             \label{LE_Health_Econ_Correlations}	
             \includegraphics[width=\linewidth,keepaspectratio=true]{../Output/Figures/LE_Health_Econ_Correlations_wb_only_short.pdf}
         \end{figure}
 
-        \begin{figure}[h!]
+        \begin{figure}[H]
             \centering
             \caption{Economic Measures PCA Loadings}
             \label{Econ_Loadings}	
             \includegraphics[width=\linewidth,keepaspectratio=true]{../Output/Figures/Econ_Indicator_Loadings_wb_only_short.pdf}
         \end{figure}
 
-        \begin{figure}[h!]
+        \begin{figure}[H]
             \centering
             \caption{Economic Measures PCA Share of Variance Explained}
             \label{Econ_Share_Explained}	
