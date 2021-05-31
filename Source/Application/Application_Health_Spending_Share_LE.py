@@ -216,12 +216,10 @@ def run_empirical_analysis(data, name, covariates):
     reg_table.covariate_order(['govt_health_share'])
     reg_table.rename_covariates({"govt_health_share":"Govt. Share of Health Exp."})
     # Fixed effects indicator
-    reg_table.add_line('', ['', '', '', '', ''])
     reg_table.add_line('Covariates', ['None', 'Single', 'All', 'Average of', 'PCA'])
     reg_table.add_line('', ['', 'Measurement', 'Measurements', 'Measurements', ''])
     reg_table.add_line('', ['', '(GDP Per', '', '', ''])
     reg_table.add_line('', ['', 'Capita PPP)', '', '', ''])
-    reg_table.add_line('', ['', '', '', '', ''])
     reg_table.show_degrees_of_freedom = False
     reg_table.show_r2 = False
     reg_table.show_adj_r2 = False
@@ -232,6 +230,9 @@ def run_empirical_analysis(data, name, covariates):
     # Write regression table to LaTeX
     with open(tables_dir + "/LE_Health_Econ_Regressions_" + name + ".tex", "w") as f:
         corrected_table = re.sub('\\cline{[0-9\-]+}', '', reg_table.render_latex())
+        corrected_table = re.sub("begin{tabular}", r"scalebox{0.75}{\\begin{tabular}", corrected_table)
+        corrected_table = re.sub("end{tabular}", "end{tabular}}", corrected_table)
+        corrected_table = re.sub("Covariates", "\hline \\\\\\[-1.8ex]\n  Covariates", corrected_table)
         f.write(corrected_table)
 
     # Additional results
@@ -275,19 +276,15 @@ def run_empirical_analysis(data, name, covariates):
     additional_reg_table.rename_covariates({"govt_health_share":"Govt. Share of Health Exp."})
     # Fixed effects indicator
     if covariates == covariates_list:
-        additional_reg_table.add_line('', ['', '', '', ''])
         additional_reg_table.add_line('Covariates', ['None', 'PCA', 'PC 1-7', 'Instrumental'])
         additional_reg_table.add_line('', ['', '', '', 'Variable'])
         additional_reg_table.add_line('', ['', '', '', '(GDP Per'])
         additional_reg_table.add_line('', ['', '', '', 'Capita PPP)'])
     else:
-        additional_reg_table.add_line('', ['', '', '', ''])
         additional_reg_table.add_line('Covariates', ['None', 'PCA', 'PC 1-2', 'Instrumental Variable'])
         additional_reg_table.add_line('', ['', '', '', '(GDP Per'])
         additional_reg_table.add_line('', ['', '', '', 'Capita PPP)'])
-    additional_reg_table.add_line('', ['', '', '', ''])
     additional_reg_table.add_line('Fixed Effects', ['Yes', 'Yes', 'No', 'No'])
-    additional_reg_table.add_line('', ['', '', '', ''])
     additional_reg_table.show_degrees_of_freedom(False)
     additional_reg_table.show_r2 = False 
     additional_reg_table.show_adj_r2 = False
@@ -300,6 +297,9 @@ def run_empirical_analysis(data, name, covariates):
         corrected_table = re.sub('\\cline{[0-9\-]+}', '', additional_reg_table.render_latex())
         #corrected_table_added_iv_coeff = re.sub(pattern = r'& \\', repl = '& '+ str(iv_results.params['govt_health_share']) + r' \\', string = corrected_table, count = 0)
         #corrected_table_added_iv = re.sub(pattern = r'& \\', repl = '& ('+ str(iv_results.bse['govt_health_share']) + r') \\', string = corrected_table_added_iv_coeff, count = 0)
+        corrected_table = re.sub("begin{tabular}", r"scalebox{0.75}{\\begin{tabular}", corrected_table)
+        corrected_table = re.sub("end{tabular}", "end{tabular}}", corrected_table)
+        corrected_table = re.sub("Covariates", "\hline \\\\\\[-1.8ex]\n  Covariates", corrected_table)
         f.write(corrected_table)
 
 # Do the analysis on the two datasets and all the covariates combos
