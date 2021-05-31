@@ -50,10 +50,6 @@ variables_mapped_to_short = {"gdp_pc_ppp":"GDP PC PPP", "NY_GDP_PCAP_CD":"GDP PC
 
 # Run the empirical analysis
 
-# Formatter for the sum stats table
-# def preferred_format(x):
-#     return '{0:,.2f}' % x
-
 # Summary statistics table
 sum_stats = (wb_data.describe()
                     .rename(columns = variables_mapped_to_long)
