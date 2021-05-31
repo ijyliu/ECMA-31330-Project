@@ -81,16 +81,16 @@ plt.savefig(figures_dir + "/LE_Health_Econ_Correlations_wb_only_short.pdf")
 plt.close()
 
 # OLS for benchmark
-ols_benchmark = smf.ols("life_exp ~ govt_health_share", data = std_data.reset_index()).fit()
+ols_benchmark = smf.ols("life_exp ~ -1 + govt_health_share", data = std_data.reset_index()).fit()
 
 # Single mismeasured covariate OLS
-ols_one_covariate = smf.ols("life_exp ~ govt_health_share + gdp_pc_ppp", data = std_data.reset_index()).fit()
+ols_one_covariate = smf.ols("life_exp ~ -1 + govt_health_share + gdp_pc_ppp", data = std_data.reset_index()).fit()
 
 # Many covariate OLS
-ols_many_covariates = smf.ols("life_exp ~ govt_health_share + " + covariates_formula_string, data = std_data.reset_index()).fit()
+ols_many_covariates = smf.ols("life_exp ~ -1 + govt_health_share + " + covariates_formula_string, data = std_data.reset_index()).fit()
 
 # Mean of standardized covariates OLS
-ols_mean_covariates = smf.ols("life_exp ~ govt_health_share + covariates_mean", data = std_data.reset_index()).fit()
+ols_mean_covariates = smf.ols("life_exp ~ -1 + govt_health_share + covariates_mean", data = std_data.reset_index()).fit()
 
 # Decompose into matrix for PCA analysis
 # This contains only the economic covariates
@@ -127,7 +127,7 @@ plt.savefig(figures_dir + "/Econ_Indicator_Share_Explained_wb_only_short.pdf")
 plt.close()
 
 # Main PCR spec
-partial_pc_regression = smf.ols("life_exp ~ govt_health_share + PC1", data = std_data).fit()
+partial_pc_regression = smf.ols("life_exp ~ -1 + govt_health_share + PC1", data = std_data).fit()
 
 # Regression table settings
 reg_table = Stargazer([ols_benchmark, ols_one_covariate, ols_many_covariates, ols_mean_covariates, partial_pc_regression])
@@ -157,11 +157,11 @@ with open(tables_dir + "/LE_Health_Econ_Regressions_wb_only_short.tex", "w") as 
 
 # Fixed effects
 # Panel Fixed Effects Regression for Benchmark
-fixed_effects_results = smf.ols("life_exp ~ govt_health_share + " + covariates_formula_string + " + C(year) + C(country)", data = std_data.reset_index()).fit(cov_type='cluster', cov_kwds={'groups': std_data.reset_index()['country']})
+fixed_effects_results = smf.ols("life_exp ~ -1 + govt_health_share + " + covariates_formula_string + " + C(year) + C(country)", data = std_data.reset_index()).fit(cov_type='cluster', cov_kwds={'groups': std_data.reset_index()['country']})
 # PCR with fixed effects
-pc_fixed_effects_results = smf.ols("life_exp ~ govt_health_share + PC1 + C(year) + C(country)", data = std_data.reset_index()).fit(cov_type='cluster', cov_kwds={'groups': std_data.reset_index()['country']})
+pc_fixed_effects_results = smf.ols("life_exp ~ -1 + govt_health_share + PC1 + C(year) + C(country)", data = std_data.reset_index()).fit(cov_type='cluster', cov_kwds={'groups': std_data.reset_index()['country']})
 # Use more principal components (this gets at a large share of the variance)
-more_pcs_results = smf.ols("life_exp ~ govt_health_share + PC1 + PC2", data = std_data).fit()
+more_pcs_results = smf.ols("life_exp ~ -1 + govt_health_share + PC1 + PC2", data = std_data).fit()
 # Instrumental variables- instrument GDP per capita (probably mismeasured) on all the other development indicators
 iv_no_gdp = [item for item in short_covariates_list if item != 'gdp_pc_ppp']
 iv_no_gdp.append('govt_health_share')
