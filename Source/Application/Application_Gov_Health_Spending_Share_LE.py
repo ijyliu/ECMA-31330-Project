@@ -172,7 +172,6 @@ more_pcs_results = smf.ols("life_exp ~ -1 + govt_health_share + PC1 + PC2", data
 # Instrumental variables- instrument GDP per capita (probably mismeasured) on all the other development indicators
 iv_no_gdp = [item for item in short_covariates_list if item != 'gdp_pc_ppp']
 iv_no_gdp.append('govt_health_share')
-# Ugh, so confusing: https://stackoverflow.com/questions/37012110/how-to-do-2sls-iv-regression-using-statsmodels-python
 iv_results = IV2SLS(endog = std_data['life_exp'], exog = std_data[['govt_health_share', 'gdp_pc_ppp']], instrument = std_data[iv_no_gdp]).fit()
 
 # Regression table settings
