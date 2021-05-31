@@ -4,15 +4,5 @@ NY.GDP.PCAP.PP.CD,GDP Per Capita PPP (Current International $)
 NY.GDP.PCAP.CD,GDP Per Capita (Current USD)
 NY.GNP.PCAP.PP.CD,GNP Per Capita PPP (Current International $)
 NY.GNP.PCAP.CD,GNP Per Capita (Current USD)
-SI.SPR.PCAP,Survey Mean Income or Consumption Per Capita
-SI.SPR.PC40,"Survey Mean Income or Consumption Per Capita, Bottom 40%"
 SL.GDP.PCAP.EM.KD,ILO GDP Per Person Employed
-FI.RES.TOTL.CD,Total Foreign Reserves
-SI.POV.DDAY,Poverty Headcount Ratio (International Extreme Poverty Line)
-SI.POV.NAHC,Poverty Headcount Ratio (National Poverty Line)
-SI.POV.GAPS,Poverty Gap (International Extreme Poverty Line)
 SH.XPD.GHED.CH.ZS,Government Share of Health Expenditure
-DT.ODA.ODAT.PC.ZS,Net Official Development Assistance Per Capita (Current USD)
-DT.ODA.ODAT.GN.ZS,"Net Official Development Assistance Per Capita, Percent of GNI"
-DT.ODA.ODAT.XP.ZS,"Net Official Development Assistance, Percent of Total Government Expenditure"
-SH.XPD.CHEX.GD.ZS,Health Spending Share of GDP (Current USD)
