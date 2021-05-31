@@ -380,7 +380,28 @@ We first note that when $\rho = 0.5$ or $0.9$ then the coefficient on the variab
 
 We also explore how our results differ under a different framework of measurement error. For the following regressions (and those in the simulation appendix) we transform half of the covariate measurements by taking the $z_{i,j}^*$ value from before and transforming it so that the new $z_{i,j}'$ value was equal to $z_{i,j}' = e^{z_{i,j}^*}$. This allows us to analyze the performance of our different techniques in a situation where the measurements of the true covariate are on different scales from one another. \footnote{This is often the case; for example, one could measure income inequality through a Gini coefficient and the percent of income that goes to the top 1\% of income-earners, but these variables are on totally different scales from each other.} Table \ref{sim_p_5_exp} shows the results of our five techniques in this new context.
 
-\input{../Output/Tables/sim_reg_results_p_5methods_exp.tex}
+\begin{table}[!htbp] \centering
+\caption{Average Coefficients for Values of $p$ (Half of Measurements are Transformed) \label{sim_p_5_exp}}
+\scalebox{0.75}{
+\begin{tabular}{@{\extracolsep{5pt}}lccccc}
+\\[-1.8ex]\hline
+\hline \\[-1.8ex]
+& \multicolumn{4}{c}{\textit{Number of p}} \
+\cr \
+\\[-1.8ex] & 5 & 20 & 50 \\
+\hline \\[-1.8ex]
+& \multicolumn{4}{c}{\textit{Coefficient on Main Variable}} \\
+\input{../Output/Tables/p_coefs_exp.tex}
+
+& \multicolumn{4}{c}{\textit{Absolute Percentage Error}} \\
+\input{../Output/Tables/p_apes_exp.tex}   \\ 
+
+\hline \\[-1.8ex]
+Simulations & 1,000 & 1,000 & 1,000  \\
+\hline
+\hline \\[-1.8ex]
+\end{tabular}}
+\end{table}
 
 We can see that taking the average of the covariate measurements now performs noticeably worse than PCA or using all measurements as separate covariates. Additionally, IV techniques seem to perform better in this paradigm and attains results consistent with those for the PCA and all measurements techniques. As can be seen in the simulation appendix, these findings hold for other values of $\beta_1$, $\beta_2$, and $\rho$.
 
