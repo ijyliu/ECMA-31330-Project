@@ -364,7 +364,26 @@ where $x_i$ and $z_i$ are single variables drawn from $\mathcal{N}(\begin{bmatri
 
 In our simulations, we assume default values of $\rho = 0.5$, $\beta_1 = \beta_2 = 1$, and $p=5$. We then vary each factor while holding the others fixed, and perform 1,000 simulations of the DGP followed by an OLS regression on either the PCA value from the p measurements of the true $z_i$, or on a single one of the measurements of $z_i$. For each simulation, we generate 2,000 observations of $y_i,x_i$, etc. Table \ref{sim_p_5_noexp} shows the results for different values of $p$.
 
-\input{../Output/Tables/sim_reg_results_p_5methods_noexp.tex}
+\begin{table}[!htbp] \centering
+    \caption{Average Coefficients for Values of $p$ (No Transformation of Measurements) \label{sim_p_5_noexp}}
+    \scalebox{0.75}{
+      \begin{tabular}{@{\extracolsep{5pt}}lccccc}
+  \\[-1.8ex]\hline
+  \hline \\[-1.8ex]
+  & \multicolumn{4}{c}{\textit{Number of p}} \
+  \cr \
+  \\[-1.8ex] & 5 & 20 & 50 \\
+  \hline \\[-1.8ex]
+  & \multicolumn{4}{c}{\textit{Coefficient on Main Variable}} \\
+\input{../Output/Tables/p_coefs_no_exp.tex}
+  & \multicolumn{4}{c}{\textit{Absolute Percentage Error}} \\
+\input{../Output/Tables/p_apes_no_exp.tex} \\
+  \hline \\[-1.8ex]
+  Simulations & 1,000 & 1,000 & 1,000  \\
+  \hline
+  \hline \\[-1.8ex]
+  \end{tabular}}
+  \end{table}
 
 We can see that using PCA to extract the latent covariate driving the mismeasured covariates noticeably outperforms using a single mismeasured covariate across several values of $p$. Both the average coefficient on $\beta_1$ obtained when including the PCA output in the regression, and the mean absolute percentage error obtained on the 1,000 simulations are both much closer to the target values with the PCA-based regression than with the single measurement regression. Additionally, we can see that as $p$ increases the estimated $\beta_1$ coefficient in the PCA regression gets steadily closer to the true $\beta_1$ value of 1. The simulation appendix contains charts that show that this increase in performance is also true for different values of $\beta_1$ and $\beta_2$.
 
@@ -556,14 +575,135 @@ Suppose an instrument $Z_i$ that satisfies the relevance condition $\operatornam
 
     \section*{Simulation Appendix}
 
-        \input{../Output/Tables/sim_reg_results_beta1_5methods_noexp.tex}
-        \input{../Output/Tables/sim_reg_results_beta2_5methods_noexp.tex}
-        \input{../Output/Tables/sim_reg_results_rho_5methods_noexp.tex}
-        
+    % Non-transformed
 
-         \input{../Output/Tables/sim_reg_results_beta1_5methods_exp.tex}
-        \input{../Output/Tables/sim_reg_results_beta2_5methods_exp.tex}
-        \input{../Output/Tables/sim_reg_results_rho_5methods_exp.tex}
+    \begin{table}[!htbp] \centering
+        \caption{Average Coefficients for Values of $\beta_1$ (No Transformation of Measurements) \label{sim_beta1_5_noexp}}
+        \scalebox{0.75}{
+          \begin{tabular}{@{\extracolsep{5pt}}lccccc}
+      \\[-1.8ex]\hline
+      \hline \\[-1.8ex]
+      & \multicolumn{4}{c}{\textit{True $\beta_1$}} \
+      \cr \
+      \\[-1.8ex] & 0.1 & 1 & 10\\
+      \hline \\[-1.8ex]
+      & \multicolumn{4}{c}{\textit{Coefficient on Main Variable}} \\
+      \input{../Output/Tables/beta1_coefs_no_exp.tex}
+      & \multicolumn{4}{c}{\textit{Absolute Percentage Error}} \\
+      \input{../Output/Tables/beta1_apes_no_exp.tex} \\
+      \hline \\[-1.8ex]
+      Simulations & 1,000 & 1,000 & 1,000 &\\
+      \hline
+      \hline \\[-1.8ex]
+      \end{tabular}}
+      \end{table}
+
+      \begin{table}[!htbp] \centering
+        \caption{Average Coefficients for Values of $\beta_2$ (No Transformation of Measurements) \label{sim_beta2_5_noexp}}
+        \scalebox{0.75}{
+          \begin{tabular}{@{\extracolsep{5pt}}lccccc}
+      \\[-1.8ex]\hline
+      \hline \\[-1.8ex]
+      & \multicolumn{4}{c}{\textit{True $\beta_1$}} \
+      \cr \
+      \\[-1.8ex] & 0.1 & 1 & 10\\
+      \hline \\[-1.8ex]
+      & \multicolumn{4}{c}{\textit{Coefficient on Main Variable}} \\
+        \input{../Output/Tables/beta2_coefs_no_exp.tex}
+      & \multicolumn{4}{c}{\textit{Absolute Percentage Error}} \\
+       \input{../Output/Tables/beta2_apes_no_exp.tex}  \\ 
+      \hline \\[-1.8ex]
+      Simulations & 1,000 & 1,000 & 1,000 & \\
+      \hline
+      \hline \\[-1.8ex]
+      \end{tabular}}
+      \end{table}
+
+      \begin{table}[!htbp] \centering
+        \caption{Average Coefficients for Values of $\rho$ (No Transformation of Measurements) \label{sim_rho_5_noexp}}
+        \scalebox{0.75}{
+          \begin{tabular}{@{\extracolsep{5pt}}lccccc}
+      \\[-1.8ex]\hline
+      \hline \\[-1.8ex]
+      & \multicolumn{5}{c}{$\rho$ \textit{ Value}} \
+      \cr \
+      \\[-1.8ex] & -1 & -0.5 & 0 & 0.5 & 1 \\
+      \hline \\[-1.8ex]
+      & \multicolumn{5}{c}{\textit{Coefficient on Main Variable}} \\
+     \input{../Output/Tables/covariance_coefs_no_exp.tex}
+        & \multicolumn{5}{c}{\textit{Absolute Percentage Error}} \\
+        \input{../Output/Tables/covariance_apes_no_exp.tex} \\
+        \hline \\[-1.8ex] 
+        Simulations & 1,000 & 1,000 & 1,000 & 1,000 & 1,000\\
+      \hline
+      \hline \\[-1.8ex]
+      \end{tabular}}
+      \end{table}
+        
+      % Transformed
+
+      \begin{table}[!htbp] \centering
+        \caption{Average Coefficients for Values of $\beta_1$ (Half of Measurements are Transformed)\label{sim_beta1_5_exp}}
+        \scalebox{0.75}{
+        \begin{tabular}{@{\extracolsep{5pt}}lccccc}
+      \\[-1.8ex]\hline
+      \hline \\[-1.8ex]
+      & \multicolumn{4}{c}{\textit{True $\beta_1$}} \
+      \cr \
+      \\[-1.8ex] & 0.1 & 1 & 10\\
+      \hline \\[-1.8ex]
+      & \multicolumn{4}{c}{\textit{Coefficient on Main Variable}} \\
+       \input{../Output/Tables/beta1_coefs_exp.tex}
+      & \multicolumn{3}{c}{\textit{Absolute Percentage Error}} \\
+      \input{../Output/Tables/beta1_apes_exp.tex}\\
+      \hline \\[-1.8ex]
+       Simulations & 1,000 & 1,000 & 1,000 &\\
+      \hline
+      \hline \\[-1.8ex]
+      \end{tabular}}
+      \end{table}
+
+      \begin{table}[!htbp] \centering
+        \caption{Average Coefficients for Values of $\beta_2$ (Half of Measurements are Transformed) \label{sim_beta2_5_exp}}
+        \scalebox{0.75}{
+            \begin{tabular}{@{\extracolsep{5pt}}lccccc}
+        \\[-1.8ex]\hline
+        \hline \\[-1.8ex]
+        & \multicolumn{5}{c}{\textit{True $\beta_1$}} \
+        \cr \
+        \\[-1.8ex] & 0.1 & 1 & 10\\
+        \hline \\[-1.8ex]
+        & \multicolumn{4}{c}{\textit{Coefficient on Main Variable}} \\
+        \input{../Output/Tables/beta2_coefs_exp.tex}
+        & \multicolumn{5}{c}{\textit{Absolute Percentage Error}} \\
+        \input{../Output/Tables/beta2_apes_exp.tex} \\
+        \hline \\[-1.8ex]
+        Simulations & 1,000 & 1,000 & 1,000 &\\
+        \hline
+        \hline \\[-1.8ex]
+        \end{tabular}}
+        \end{table}
+
+        \begin{table}[!htbp] \centering
+            \caption{Average Coefficients for Values of $\rho$ (Half of Measurements are Transformed) \label{sim_rho_5_exp}}
+            \scalebox{0.75}{
+              \begin{tabular}{@{\extracolsep{5pt}}lccccc}
+          \\[-1.8ex]\hline
+          \hline \\[-1.8ex]
+          & \multicolumn{5}{c}{$\rho$ \textit{ Value}} \
+          \cr \
+          \\[-1.8ex] & -1 & -0.5 & 0 & 0.5 & 1 \\
+          \hline \\[-1.8ex]
+          & \multicolumn{5}{c}{\textit{Coefficient on Main Variable}} \\
+          \input{../Output/Tables/covariance_coefs_exp.tex}
+          & \multicolumn{5}{c}{\textit{Absolute Percentage Error}} \\
+          \input{../Output/Tables/covariance_apes_exp.tex} \\
+            \hline \\[-1.8ex]
+            Simulations & 1,000 & 1,000 & 1,000 & 1,000 & 1,000 \\
+          \hline
+          \hline \\[-1.8ex]
+          \end{tabular}}
+          \end{table}
 
 \clearpage
 
@@ -589,8 +729,5 @@ Suppose an instrument $Z_i$ that satisfies the relevance condition $\operatornam
             \label{Econ_Share_Explained}	
             \includegraphics[width=\linewidth,keepaspectratio=true]{../Output/Figures/Econ_Indicator_Share_Explained_wb_only_short.pdf}
         \end{figure}
-
-
-
 
 \end{document}
