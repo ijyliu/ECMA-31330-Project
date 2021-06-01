@@ -4,6 +4,8 @@
 # Import objects from the setup file
 import os
 import sys
+
+from numpy.core.fromnumeric import std
 sys.path.append(os.path.expanduser('~/repo/ECMA-31330-Project/Source'))
 from ME_Setup import *
 
@@ -71,9 +73,11 @@ with pd.option_context('display.max_colwidth', -1):
         corrected_table = re.sub("end{tabular}", "end{tabular}}", corrected_table)
         f.write(corrected_table)
 
-# Standardize all variables
+# Standardize the covariates (for PCA)
 # https://stackoverflow.com/questions/35723472/how-to-use-sklearn-fit-transform-with-pandas-and-return-wb_dataframe-instead-of-num
-std_data = pd.DataFrame(StandardScaler().fit_transform(wb_data), index=wb_data.index, columns=wb_data.columns)
+standardized_covariates = pd.DataFrame(StandardScaler().fit_transform(wb_data[short_covariates_list]), index=wb_data.index, columns=wb_data[short_covariates_list].columns)
+std_data = wb_data
+std_data[short_covariates_list] = standardized_covariates
 
 # Calculate the 'averaged' covariate measure, now that the standardization is done
 std_data['covariates_mean'] =  std_data[short_covariates_list].mean(axis = 1)
