@@ -1,6 +1,7 @@
 # ECMA-31330-Project
-Econometrics and Machine Learning Group Project  
-Principal Component Regression as a Solution to Measurement Error Bias  
+
+Econometrics and Machine Learning Group Project
+Principal Component Regression as a Solution to Measurement Error Bias
 Isaac Liu, Nico Martorelli, Paul Opheim
 
 ## Contents
@@ -13,7 +14,7 @@ Contains the World Bank Data for the application.
 
 ### [Output](Output)
 
-Contains [tables](Output/Tables) and [figures](Output/Figures) for the project.
+Contains [tables](Output/Tables), [figures](Output/Figures), and raw [simulation results](Output/Sim_Results) for the project.
 
 ### [Release](Release)
 
