@@ -1,11 +1,14 @@
 # Get_WBData.py 
 # Retrives world bank data for requested indicators, countries, and time periods from the API
 
-# Import objects from the setup file
+# Directory structure
 import os
-import sys
-sys.path.append(os.path.expanduser('~/repo/ECMA-31330-Project/Source'))
-from ME_Setup import *
+repo_dir = os.path.join(os.path.dirname( __file__ ), '../..')
+input_dir = repo_dir + "/Input"
+output_dir = repo_dir + "/Output"
+figures_dir = output_dir + "/Figures"
+tables_dir = output_dir + "/Tables"
+sim_results_dir = output_dir + "/Sim_Results"
 
 # Packages
 import wbgapi as wb
