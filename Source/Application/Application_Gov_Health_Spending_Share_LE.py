@@ -172,6 +172,8 @@ with open(tables_dir + "/LE_Health_Econ_Regressions_wb_only_short.tex", "w") as 
 
 # Additional results
 
+# Univariate OLS
+univariate_ols = smf.ols("life_exp ~ govt_health_share", data = std_data.reset_index()).fit()
 # Fixed effects
 # Panel Fixed Effects Regression for Benchmark
 fixed_effects_results = smf.ols("life_exp ~ govt_health_share + " + covariates_formula_string + " + C(year) + C(country)", data = std_data.reset_index()).fit(cov_type='cluster', cov_kwds={'groups': std_data.reset_index()['country']})
@@ -181,15 +183,13 @@ pc_fixed_effects_results = smf.ols("life_exp ~ govt_health_share + PC1 + C(year)
 more_pcs_results = smf.ols("life_exp ~ govt_health_share + PC1 + PC2", data = std_data).fit()
 
 # Regression table settings
-additional_reg_table = Stargazer([fixed_effects_results, pc_fixed_effects_results, more_pcs_results])
+additional_reg_table = Stargazer([univariate_ols, fixed_effects_results, pc_fixed_effects_results, more_pcs_results])
 additional_reg_table.title("Additional Regressions \label{additional_regs}")
 additional_reg_table.dependent_variable_name("Life Expectancy at Birth (Years)")
 additional_reg_table.covariate_order(['govt_health_share'])
 additional_reg_table.rename_covariates({"govt_health_share":"Govt. Share of Health Exp."})
-additional_reg_table.add_line('Covariates', ['None', 'PCA', 'PC 1-2'])
-additional_reg_table.add_line('', ['', '', ''])
-additional_reg_table.add_line('', ['', '', ''])
-additional_reg_table.add_line('Fixed Effects', ['Yes', 'Yes', 'No'])
+additional_reg_table.add_line('Covariates', ['None', 'None', 'PCA', 'PC 1-2'])
+additional_reg_table.add_line('Fixed Effects', ['No', 'Yes', 'Yes', 'No'])
 additional_reg_table.show_degrees_of_freedom(False)
 additional_reg_table.show_r2 = False 
 additional_reg_table.show_adj_r2 = False
