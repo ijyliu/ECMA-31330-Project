@@ -4,6 +4,8 @@
 # Import objects from the setup file
 import os
 import sys
+
+from numpy.core.fromnumeric import std
 sys.path.append(os.path.expanduser('~/repo/ECMA-31330-Project/Source'))
 from ME_Setup import *
 
@@ -16,6 +18,7 @@ import matplotlib
 matplotlib.use('pdf')
 import matplotlib.pyplot as plt
 import seaborn as sns
+import statsmodels.tools.tools as smt
 import statsmodels.formula.api as smf
 from statsmodels.sandbox.regression.gmm import IV2SLS 
 import regex as re
@@ -71,9 +74,11 @@ with pd.option_context('display.max_colwidth', -1):
         corrected_table = re.sub("end{tabular}", "end{tabular}}", corrected_table)
         f.write(corrected_table)
 
-# Standardize all variables
+# Standardize the covariates (for PCA)
 # https://stackoverflow.com/questions/35723472/how-to-use-sklearn-fit-transform-with-pandas-and-return-wb_dataframe-instead-of-num
-std_data = pd.DataFrame(StandardScaler().fit_transform(wb_data), index=wb_data.index, columns=wb_data.columns)
+standardized_covariates = pd.DataFrame(StandardScaler().fit_transform(wb_data[short_covariates_list]), index=wb_data.index, columns=wb_data[short_covariates_list].columns)
+std_data = wb_data
+std_data[short_covariates_list] = standardized_covariates
 
 # Calculate the 'averaged' covariate measure, now that the standardization is done
 std_data['covariates_mean'] =  std_data[short_covariates_list].mean(axis = 1)
@@ -87,17 +92,14 @@ plt.xticks(rotation=90)
 plt.savefig(figures_dir + "/LE_Health_Econ_Correlations_wb_only_short.pdf")
 plt.close()
 
-# OLS for benchmark
-ols_benchmark = smf.ols("life_exp ~ -1 + govt_health_share", data = std_data.reset_index()).fit()
-
 # Single mismeasured covariate OLS
-ols_one_covariate = smf.ols("life_exp ~ -1 + govt_health_share + gdp_pc_ppp", data = std_data.reset_index()).fit()
+ols_one_covariate = smf.ols("life_exp ~ govt_health_share + gdp_pc_ppp", data = std_data.reset_index()).fit()
 
 # Many covariate OLS
-ols_many_covariates = smf.ols("life_exp ~ -1 + govt_health_share + " + covariates_formula_string, data = std_data.reset_index()).fit()
+ols_many_covariates = smf.ols("life_exp ~ govt_health_share + " + covariates_formula_string, data = std_data.reset_index()).fit()
 
 # Mean of standardized covariates OLS
-ols_mean_covariates = smf.ols("life_exp ~ -1 + govt_health_share + covariates_mean", data = std_data.reset_index()).fit()
+ols_mean_covariates = smf.ols("life_exp ~ govt_health_share + covariates_mean", data = std_data.reset_index()).fit()
 
 # Decompose into matrix for PCA analysis
 # This contains only the economic covariates
@@ -134,18 +136,26 @@ plt.savefig(figures_dir + "/Econ_Indicator_Share_Explained_wb_only_short.pdf")
 plt.close()
 
 # Main PCR spec
-partial_pc_regression = smf.ols("life_exp ~ -1 + govt_health_share + PC1", data = std_data).fit()
+partial_pc_regression = smf.ols("life_exp ~ govt_health_share + PC1", data = std_data).fit()
+
+# Instrumental variables- instrument GDP per capita (probably mismeasured) on all the other development indicators
+# Need to add a constant
+std_data_with_constant = smt.add_constant(std_data)
+iv_no_gdp = [item for item in short_covariates_list if item != 'gdp_pc_ppp']
+iv_no_gdp.append('govt_health_share')
+iv_no_gdp.append('const')
+iv_results = IV2SLS(endog = std_data_with_constant['life_exp'], exog = std_data_with_constant[['govt_health_share', 'gdp_pc_ppp', 'const']], instrument = std_data_with_constant[iv_no_gdp]).fit()
 
 # Regression table settings
-reg_table = Stargazer([ols_benchmark, ols_one_covariate, ols_many_covariates, ols_mean_covariates, partial_pc_regression])
+reg_table = Stargazer([ols_one_covariate, ols_many_covariates, ols_mean_covariates, partial_pc_regression, iv_results])
 reg_table.title("Regressions of Life Expectancy on Government Share of Health Spending \label{main_regs}")
 reg_table.dependent_variable_name("Life Expectancy at Birth (Years)")
 reg_table.covariate_order(['govt_health_share'])
 reg_table.rename_covariates({"govt_health_share":"Govt. Share of Health Exp."})
-reg_table.add_line('Covariates', ['None', 'Single', 'All', 'Average of', 'PCA'])
-reg_table.add_line('', ['', 'Measurement', 'Measurements', 'Measurements', ''])
-reg_table.add_line('', ['', '(GDP Per', '', '', ''])
-reg_table.add_line('', ['', 'Capita PPP)', '', '', ''])
+reg_table.add_line('Covariates', ['Single', 'All', 'Average of', 'PCA', 'Instrumental'])
+reg_table.add_line('', ['Measurement', 'Measurements', 'Measurements', '', 'Variable'])
+reg_table.add_line('', ['(GDP Per', '', '', '', '(GDP Per'])
+reg_table.add_line('', ['Capita PPP)', '', '', '', 'Capita PPP)'])
 reg_table.show_degrees_of_freedom = False
 reg_table.show_r2 = False
 reg_table.show_adj_r2 = False
@@ -162,28 +172,24 @@ with open(tables_dir + "/LE_Health_Econ_Regressions_wb_only_short.tex", "w") as 
 
 # Additional results
 
+# Univariate OLS
+univariate_ols = smf.ols("life_exp ~ govt_health_share", data = std_data.reset_index()).fit()
 # Fixed effects
 # Panel Fixed Effects Regression for Benchmark
-fixed_effects_results = smf.ols("life_exp ~ -1 + govt_health_share + " + covariates_formula_string + " + C(year) + C(country)", data = std_data.reset_index()).fit(cov_type='cluster', cov_kwds={'groups': std_data.reset_index()['country']})
+fixed_effects_results = smf.ols("life_exp ~ govt_health_share + " + covariates_formula_string + " + C(year) + C(country)", data = std_data.reset_index()).fit(cov_type='cluster', cov_kwds={'groups': std_data.reset_index()['country']})
 # PCR with fixed effects
-pc_fixed_effects_results = smf.ols("life_exp ~ -1 + govt_health_share + PC1 + C(year) + C(country)", data = std_data.reset_index()).fit(cov_type='cluster', cov_kwds={'groups': std_data.reset_index()['country']})
+pc_fixed_effects_results = smf.ols("life_exp ~ govt_health_share + PC1 + C(year) + C(country)", data = std_data.reset_index()).fit(cov_type='cluster', cov_kwds={'groups': std_data.reset_index()['country']})
 # Use more principal components (this gets at a large share of the variance)
-more_pcs_results = smf.ols("life_exp ~ -1 + govt_health_share + PC1 + PC2", data = std_data).fit()
-# Instrumental variables- instrument GDP per capita (probably mismeasured) on all the other development indicators
-iv_no_gdp = [item for item in short_covariates_list if item != 'gdp_pc_ppp']
-iv_no_gdp.append('govt_health_share')
-iv_results = IV2SLS(endog = std_data['life_exp'], exog = std_data[['govt_health_share', 'gdp_pc_ppp']], instrument = std_data[iv_no_gdp]).fit()
+more_pcs_results = smf.ols("life_exp ~ govt_health_share + PC1 + PC2", data = std_data).fit()
 
 # Regression table settings
-additional_reg_table = Stargazer([fixed_effects_results, pc_fixed_effects_results, more_pcs_results, iv_results])
+additional_reg_table = Stargazer([univariate_ols, fixed_effects_results, pc_fixed_effects_results, more_pcs_results])
 additional_reg_table.title("Additional Regressions \label{additional_regs}")
 additional_reg_table.dependent_variable_name("Life Expectancy at Birth (Years)")
 additional_reg_table.covariate_order(['govt_health_share'])
 additional_reg_table.rename_covariates({"govt_health_share":"Govt. Share of Health Exp."})
-additional_reg_table.add_line('Covariates', ['None', 'PCA', 'PC 1-2', 'Instrumental Variable'])
-additional_reg_table.add_line('', ['', '', '', '(GDP Per'])
-additional_reg_table.add_line('', ['', '', '', 'Capita PPP)'])
-additional_reg_table.add_line('Fixed Effects', ['Yes', 'Yes', 'No', 'No'])
+additional_reg_table.add_line('Covariates', ['None', 'None', 'PCA', 'PC 1-2'])
+additional_reg_table.add_line('Fixed Effects', ['No', 'Yes', 'Yes', 'No'])
 additional_reg_table.show_degrees_of_freedom(False)
 additional_reg_table.show_r2 = False 
 additional_reg_table.show_adj_r2 = False
