@@ -285,49 +285,6 @@ See Theory Appendix
         \end{align}
         
         That is, the average of the missmeasured variables for $x_{i,k}$ is a feasible linear combination that may correct for the missmeasuremnet bias problem.
-        
-        \section*{Estimation of the Principal Component Regression}
-        
-        Recall that the missmeasured variables are such that $x^*_{i,k}=x_{i,k}+\eta_{i,k}$. Then for every $i$, $X_i^*$ can we get
-        \begin{align}
-            X_i^* = X_i +\mu
-        \end{align}
-        
-        and so we could interpret the vector of missmeasured variables $X^*_i$ as a factor model, in which the common factor is the vector of true variables $X_i$. This way, we could rewrite the model as follows
-        \begin{align}
-            y_i &= \gamma t_i + X_i'\beta + \epsilon_i \\
-            X_i^* &= X_i +\mu
-        \end{align}
-        
-        Which is a factor-augmented regression model in which the common ``factors'' between the missmeasured variables of $x_{i,k}$ is in fact $x_{i,k}$. We estimate the model following two-stages. First, we estimate $X_i$ by factor regression. Then, the first-stage is the principal-components estimation
-        \begin{align}
-            \hat{X_i}=\hat{D}^{-1}X_i^*
-        \end{align}
-        
-        Second step is to regress $Y_i$ on the estimated $\hat X_i$. Then, the coefficients would be
-        \begin{align}
-            \left(\begin{array}{l}
-        \hat{\gamma}^{F} \\
-        \hat{\beta}^{F}
-        \end{array}\right)&=\left(\begin{array}{cc}
-        \hat{\sigma}^2_{t} & \hat\Sigma_{t,\hat X} \\
-        \hat \Sigma_{\hat X,t} & \hat {\Sigma}_{\hat X}
-        \end{array}\right)^{-1}\left(\begin{array}{c}
-        \hat \Sigma_{yt} \\
-        \hat \Sigma_{y,\hat X}
-        \end{array}\right)
-        \end{align}
-        
-        Using the \textit{Frisch-Waugh-Lowell} decomposition
-        \begin{align}
-            \hat{\g}^F & = ((M_{\hat{X}}t)'M_{\hat{X}}t)^{-1}(M_{\hat{X}}t)'M_{\hat{X}}y
-        \end{align}
-        
-        Where $M_{\hat{X}}=I-\hat{X}(\hat{X}'\hat{X})^{-1}\hat{X}'$. Then
-        \begin{align}
-             \hat{\g}^F & = ((M_{\hat{X}}t)'M_{\hat{X}}t)^{-1}(M_{\hat{X}}t)'M_{\hat{X}}(t\gamma  + X\beta + \epsilon) \\
-             &=\gamma +((M_{\hat{X}}t)'M_{\hat{X}}t)^{-1}(M_{\hat{X}}t)'M_{\hat{X}}X\beta+((M_{\hat{X}}t)'M_{\hat{X}}t)^{-1}(M_{\hat{X}}t)'M_{\hat{X}}\epsilon
-        \end{align}
 
 \section*{Properties of the Estimator: Monte Carlo Simulations}
 
