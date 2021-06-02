@@ -89,7 +89,7 @@ sns.set(font_scale=0.8)
 plt.subplots(figsize=(12, 10))
 sns.heatmap(std_data.rename(columns = variables_mapped_to_short).drop(columns = 'covariates_mean').corr())
 plt.yticks(rotation=0)
-plt.xticks(rotation=90)
+#plt.xticks(rotation=90)
 plt.savefig(figures_dir + "/LE_Health_Econ_Correlations_wb_only_short.pdf")
 plt.close()
 
