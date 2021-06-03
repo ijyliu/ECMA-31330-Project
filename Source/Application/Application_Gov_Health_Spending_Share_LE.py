@@ -55,13 +55,18 @@ variables_mapped_to_short = {"gdp_pc_ppp":"GDP PC PPP", "NY_GDP_PCAP_CD":"GDP PC
 # Run the empirical analysis
 
 # Summary statistics table
+# Custom sort order that puts covariates in first five rows
+custom_sort_order = ["GDP Per Capita PPP (Current International $)", "GDP Per Capita (Current USD)", "GNP Per Capita PPP (Current International $)", "GNP Per Capita (Current USD)", "ILO GDP Per Person Employed", "Life Expectancy at Birth (All Population)", "Government Share of Health Expenditure"]
+# Sorted series
+sorted_series = pd.Series(custom_sort_order, name = 'index').to_frame()
 sum_stats = (wb_data.describe()
                     .rename(columns = variables_mapped_to_long)
                     .transpose()
                     .reset_index()
                     .drop(columns = ['25%', '75%'])
                     .round(2)
-                    #.astype({'count': 'int32'})
+                    # Sort the variables using a right join
+                    .merge(sorted_series, on = 'index', how = 'right')
                     .rename(columns = {"index":"Variable", "count":"Obs", "mean":"Mean", "std":"SD", "min":"Min", "50%":"Med", "max":"Max"}))
 # Ensure entire strings/columns get printed
 with pd.option_context('display.max_colwidth', -1):
