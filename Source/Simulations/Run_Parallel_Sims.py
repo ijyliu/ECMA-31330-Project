@@ -41,7 +41,7 @@ param_combo_to_run = (pd.read_csv(sim_results_dir + '/22_parameter_combos_to_run
 beta1 = param_combo_to_run['beta1']
 beta2 = param_combo_to_run['beta2']
 covariance = param_combo_to_run['covariance']
-p = param_combo_to_run['p']
+p = int(param_combo_to_run['p'])
 me_cov = param_combo_to_run['me_cov']
 
 N = 3000
