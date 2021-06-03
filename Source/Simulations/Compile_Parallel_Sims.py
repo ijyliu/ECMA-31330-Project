@@ -12,7 +12,8 @@ import pandas as pd
 import glob
 
 # Read all the csv files
-output = pd.concat([pd.read_csv(f) for f in glob.glob(sim_results_dir + '/*_Parallel_Sim_Results.csv')], ignore_index = True)
+output = (pd.concat([pd.read_csv(f) for f in glob.glob(sim_results_dir + '/*_Parallel_Sim_Results.csv')], ignore_index = True)
+            .drop(columns='Unnamed: 0'))
 
 # Save
 output.to_csv(sim_results_dir + '/parallel_n_3000_results.csv', index = False)
