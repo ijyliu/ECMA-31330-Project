@@ -115,7 +115,7 @@
 
     \begin{abstract}
 
-        We argue that using Principal Component Regression (PCR) is a useful solution to bias introduced by measurement error in auxilliary covariates included in a regression. We show its usefulness through econometric theory and then use Monte Carlo simulations to show how it provides benefits for different parameters and correlations between the true covariate and the variable of interest. We then apply this method to study the relationship between life expectancy and the level of government involvement in a country's healthcare system.
+        We show that using Principal Component Regression (PCR) is a useful solution to bias introduced by measurement error in auxilliary covariates included in a regression. We show its usefulness through econometric theory and then use Monte Carlo simulations to show how it provides benefits for different parameters and correlations between the true covariate and the variable of interest. We also find that PCR is outperformed by an instrumental variables approach. We then apply these methods to study the relationship between life expectancy and the level of government involvement in a country's healthcare system.
         
     \end{abstract}
 
@@ -297,7 +297,7 @@
         In our simulations, we assume default values of $\rho = 0.5$, $\beta_1 = \beta_2 = 1$, and $p=5$. We then vary each factor while holding the others fixed, and perform 1,000 simulations of the DGP followed by an OLS regression on either the PCA value from the $p$ measurements of the true $z_i$, or on a single one of the measurements of $z_i$. For each simulation, we generate 3,000 observations of $y_i,x_i$, etc. The first two rows of each panel in Table \ref{sim_rho_5_noexp} show the results for different values of $\rho$.
 
         \begin{table}[!htbp] \centering
-            \caption{Average Coefficients for Values of $\rho$ (No Transformation of Measurements) \label{sim_rho_5_noexp}}
+            \caption{Average Coefficients for Values of $\rho$ (Uncorrelated Measurement Errors) \label{sim_rho_5_noexp}}
             \scalebox{0.75}{
             \begin{tabular}{@{\extracolsep{5pt}}lccccc}
         \\[-1.8ex]\hline
@@ -307,9 +307,9 @@
         \\[-1.8ex] & -0.9 & -0.5 & 0 & 0.5 & 0.9 \\
         \hline \\[-1.8ex]
         & \multicolumn{5}{c}{\textit{Coefficient on Main Variable}} \\
-        \input{../Output/Tables/covariance_coefs_no_exp.tex}
+        \input{../Output/Tables/parallel_covariance_coefs_me_cov_0.tex}
             & \multicolumn{5}{c}{\textit{Mean Absolute Percentage Error}} \\
-            \input{../Output/Tables/covariance_apes_no_exp.tex} \\[-4mm]
+            \input{../Output/Tables/parallel_covariance_apes_me_cov_0.tex} \\[-4mm]
             \hline \\[-1.8ex]
             Simulations & 1,000 & 1,000 & 1,000 & 1,000 & 1,000\\
         \hline
@@ -321,12 +321,12 @@
 
         However, the performance advantages that we see from using PCR could be driven by the benefit of having multiple measurements of our true covariate of interest, as opposed to any special advantages from PCR specifically. We test this question by comparing the estimated $\beta_1$ in our PCR regressions with the estimated $\beta_1$ when we include all $p$ measurements as separate covariates in the regression, and the $\beta_1$ obtained when the covariate is the mean of all $p$ measurements of the true covariate. We also show the results for an instrumental variables regression where we use other measurements of the true covariate as an instrument for a single measurement of the covariate. The results from these regressions for different values of $\rho$ are shown in the bottom three rows of each panel of Table \ref{sim_rho_5_noexp}.
 
-        As one can see from these results (and results for different values of $\beta_1$, $\beta_2$, and $p$ in the simulation appendix), there does not seem to be a noticeable difference between using PCR, all measurements, or the average of measurements, while the instrumental variable regression performs slightly worse. Thus, our simulations suggest that there are major benefits to having multiple measurements of a latent covariate of interest, but under our first framework PCR does not noticeably improve on other standard ways of including those multiple measurements in the regression.
+        As one can see from these results (and results for different values of $\beta_1$, $\beta_2$, and $p$ in the simulation appendix), there does not seem to be a noticeable difference between using PCR, all measurements, or the average of measurements. However, the instrumental variable regression performs far better than these other methods, correcting for almost all bias and moving the estimated coefficient value close to 1 (although with noticeably larger standard errors than the other methods). Thus, our simulations suggest that, when measurement errors are not correlated with one another, there are major benefits to having multiple measurements of a latent covariate of interest. However, under our first framework PCR does not noticeably improve on two other ways of incorporating these other measurements (taking their average or including all measurements as separate covariates) and performs much worse than using instrumental variables regression with these additional measurements.
 
-        We also explore how our results differ under a different framework of measurement error. For the following regressions (and those in the simulation appendix) we transform half of the covariate measurements by taking the $z_{i,j}^*$ value from before and transforming it, creating a new $z_{i,j}'$ value such that $z_{i,j}' = e^{z_{i,j}^*}$. This allows us to analyze the performance of our different techniques in a situation where the measurements of the true covariate are on different scales from one another. \footnote{This is often the case; for example, one could measure income inequality through a Gini coefficient and the percent of income that goes to the top 1\% of income-earners, but these variables are on totally different scales from each other.} Table \ref{sim_rho_5_exp} shows the results of our five techniques in this new context.
+        We also explore how our results differ under a different framework of measurement error. For the following regressions (and those in the simulation appendix) we relax our assumption that the measurement errors are uncorrelated with one another. This means that we replace the diagonal matrix $\Sigma$ from before with a matrix where the diagonal values continue to be $1$ but we replace all other values in the matrix (that used to be $0$) with $0.5$. Since our instrumental variables technique is typically promoted for use with classical measurement error, we wanted to see how these relative methods changed when that assumption is relaxed. Table \ref{sim_rho_5_exp} shows the results of our five techniques in this new context.
 
         \begin{table}[!htbp] \centering
-            \caption{Average Coefficients for Values of $\rho$ (Half of Measurements are Transformed) \label{sim_rho_5_exp}}
+            \caption{Average Coefficients for Values of $\rho$ (Correlated Measurement Errors) \label{sim_rho_5_exp}}
             \scalebox{0.75}{
             \begin{tabular}{@{\extracolsep{5pt}}lccccc}
         \\[-1.8ex]\hline
@@ -336,9 +336,9 @@
         \\[-1.8ex] & -0.9 & -0.5 & 0 & 0.5 & 0.9 \\
         \hline \\[-1.8ex]
         & \multicolumn{5}{c}{\textit{Coefficient on Main Variable}} \\
-        \input{../Output/Tables/covariance_coefs_exp.tex}
+        \input{../Output/Tables/parallel_covariance_coefs_me_cov_0.5.tex}
         & \multicolumn{5}{c}{\textit{Mean Absolute Percentage Error}} \\
-            \input{../Output/Tables/covariance_apes_exp.tex} \\[-4mm]
+            \input{../Output/Tables/parallel_covariance_apes_me_cov_0.5.tex} \\[-4mm]
             \hline \\[-1.8ex]
             Simulations & 1,000 & 1,000 & 1,000 & 1,000 & 1,000\\
         \hline
@@ -347,9 +347,9 @@
         \end{table}
 
 
-        We can see that taking the average of the covariate measurements now performs noticeably worse than PCR or using all measurements as separate covariates. Additionally, IV techniques seem to perform better in this paradigm and attain results consistent with those for the PCR and all measurements techniques. As can be seen in the simulation appendix, these findings hold for other values of $\beta_1$, $\beta_2$, and $\rho$.
+        We can see that all methods that use multiple covariate measurements perform worse than in the uncorrelated measurement error case, with IV having an especially noteworthy negative change in performance. PCR still performs better than using a single measurement, and in line with using all measurements or the average of the measurements, while performing only slightly worse than IV. In fact, the average coefficient for PCR is within a single standard deviation of the IV coefficient, for every $\rho$ value studied. Additionally, IV has larger standard errors than PCR (and the other techniques) under this measurement error framerwork. As can be seen in the simulation appendix, these findings roughly hold for other values of $\beta_1$, $\beta_2$, and $\rho$ (although larger $p$ values seem to erode any advantage that IV holds over PCR).
 
-        Overall, these simulations thus tell us that PCR is a useful way of reducing measurement error-caused bias in OLS regression with a latent covariate, and that the performance of this technique is in line with, or better than, other techniques for reducing that bias. Using PCR provides significant performance benefits relative to using a single mismeasured covariate of the true latent covariate in a regression. When the measurements of the true covariate have the same scale and only have Gaussian measurement error, then PCR performs about as well as taking the average of all covariate measurements or as using all measurements as separate covariates in an OLS regression. When we took the exponential of half of the measurements, PCR outperformed taking the average of the covariate measurements and performed in line with using all measurements as covariates or using an IV technique.
+        Overall, these simulations thus tell us that PCR helps to reduce measurement error-induced bias in OLS regression with a latent covariate relative to including only a single measurement of that covariate. Additionally, it seems to perform in line with taking the average of those covariate measurements and using each measurement as a separate covariate in the regression. However, PCR performs much worse than an instrumental variable regression when the covariate measurement errors are uncorrelated with one another, and ever-so-slightly worse when covariate measurement errors are correlated.
 
     \section*{Application: Government Share of Healthcare Spending and Life Expectancy}
 
@@ -571,10 +571,10 @@ The coefficients are as follows
 
     \section*{Simulation Appendix}
 
-    % Non-transformed
+    % Uncorrelated Measurement Errors
 
     \begin{table}[!htbp] \centering
-        \caption{Average Coefficients for Values of $\beta_1$ (No Transformation of Measurements) \label{sim_beta1_5_noexp}}
+        \caption{Average Coefficients for Values of $\beta_1$ (Uncorrelated Measurement Errors) \label{sim_beta1_5_noexp}}
         \scalebox{0.75}{
           \begin{tabular}{@{\extracolsep{5pt}}lcccc}
       \\[-1.8ex]\hline
@@ -584,9 +584,9 @@ The coefficients are as follows
       \\[-1.8ex] & 0.1 & 1 & 10\\
       \hline \\[-1.8ex]
       & \multicolumn{3}{c}{\textit{Coefficient on Main Variable}} \\
-      \input{../Output/Tables/beta1_coefs_no_exp.tex}
+      \input{../Output/Tables/parallel_beta1_coefs_me_cov_0.tex}
       & \multicolumn{3}{c}{\textit{Mean Absolute Percentage Error}} \\
-      \input{../Output/Tables/beta1_apes_no_exp.tex} \\[-4mm]
+      \input{../Output/Tables/parallel_beta1_apes_me_cov_0.tex} \\[-4mm]
       \hline \\[-1.8ex]
       Simulations & 1,000 & 1,000 & 1,000 \\
       \hline
@@ -595,19 +595,19 @@ The coefficients are as follows
       \end{table}
 
       \begin{table}[!htbp] \centering
-        \caption{Average Coefficients for Values of $\beta_2$ (No Transformation of Measurements) \label{sim_beta2_5_noexp}}
+        \caption{Average Coefficients for Values of $\beta_2$ (Uncorrelated Measurement Errors) \label{sim_beta2_5_noexp}}
         \scalebox{0.75}{
           \begin{tabular}{@{\extracolsep{5pt}}lcccc}
       \\[-1.8ex]\hline
       \hline \\[-1.8ex]
-      & \multicolumn{3}{c}{\textit{True $\beta_1$}} \
+      & \multicolumn{3}{c}{\textit{True $\beta_2$}} \
       \cr \
       \\[-1.8ex] & 0.1 & 1 & 10\\
       \hline \\[-1.8ex]
       & \multicolumn{3}{c}{\textit{Coefficient on Main Variable}} \\
-        \input{../Output/Tables/beta2_coefs_no_exp.tex}
+        \input{../Output/Tables/parallel_beta2_coefs_me_cov_0.tex}
       & \multicolumn{3}{c}{\textit{Mean Absolute Percentage Error}} \\
-       \input{../Output/Tables/beta2_apes_no_exp.tex}  \\[-4mm]
+       \input{../Output/Tables/parallel_beta2_apes_me_cov_0.tex}  \\[-4mm]
       \hline \\[-1.8ex]
       Simulations & 1,000 & 1,000 & 1,000 \\
       \hline
@@ -626,9 +626,9 @@ The coefficients are as follows
       \\[-1.8ex] & 5 & 20 & 50 \\
       \hline \\[-1.8ex]
       & \multicolumn{3}{c}{\textit{Coefficient on Main Variable}} \\
-      \input{../Output/Tables/p_coefs_no_exp.tex}
+      \input{../Output/Tables/parallel_p_coefs_me_cov_0.tex}
       & \multicolumn{3}{c}{\textit{Mean Absolute Percentage Error}} \\
-      \input{../Output/Tables/p_apes_no_exp.tex} \\[-4mm]
+      \input{../Output/Tables/parallel_p_apes_me_cov_0.tex} \\[-4mm]
       \hline \\[-1.8ex]
       Simulations & 1,000 & 1,000 & 1,000  \\
       \hline
@@ -636,10 +636,10 @@ The coefficients are as follows
       \end{tabular}}
       \end{table}
         
-      % Transformed
+      % Correlated Measurement Errors
 
       \begin{table}[!htbp] \centering
-        \caption{Average Coefficients for Values of $\beta_1$ (Half of Measurements are Transformed)\label{sim_beta1_5_exp}}
+        \caption{Average Coefficients for Values of $\beta_1$ (Correlated Measurement Errors)\label{sim_beta1_5_exp}}
         \scalebox{0.75}{
         \begin{tabular}{@{\extracolsep{5pt}}lcccc}
       \\[-1.8ex]\hline
@@ -649,9 +649,9 @@ The coefficients are as follows
       \\[-1.8ex] & 0.1 & 1 & 10\\
       \hline \\[-1.8ex]
       & \multicolumn{3}{c}{\textit{Coefficient on Main Variable}} \\
-      \input{../Output/Tables/beta1_coefs_exp.tex}
+      \input{../Output/Tables/parallel_beta1_coefs_me_cov_0.5.tex}
       & \multicolumn{3}{c}{\textit{Mean Absolute Percentage Error}} \\
-      \input{../Output/Tables/beta1_apes_exp.tex} \\[-4mm]
+      \input{../Output/Tables/parallel_beta1_apes_me_cov_0.5.tex} \\[-4mm]
       \hline \\[-1.8ex]
        Simulations & 1,000 & 1,000 & 1,000 \\
       \hline
@@ -660,19 +660,19 @@ The coefficients are as follows
       \end{table}
 
       \begin{table}[!htbp] \centering
-        \caption{Average Coefficients for Values of $\beta_2$ (Half of Measurements are Transformed) \label{sim_beta2_5_exp}}
+        \caption{Average Coefficients for Values of $\beta_2$ (Correlated Measurement Errors) \label{sim_beta2_5_exp}}
         \scalebox{0.75}{
             \begin{tabular}{@{\extracolsep{5pt}}lcccc}
         \\[-1.8ex]\hline
         \hline \\[-1.8ex]
-        & \multicolumn{3}{c}{\textit{True $\beta_1$}} \
+        & \multicolumn{3}{c}{\textit{True $\beta_2$}} \
         \cr \
         \\[-1.8ex] & 0.1 & 1 & 10\\
         \hline \\[-1.8ex]
         & \multicolumn{3}{c}{\textit{Coefficient on Main Variable}} \\
-        \input{../Output/Tables/beta2_coefs_exp.tex}
+        \input{../Output/Tables/parallel_beta2_coefs_me_cov_0.5.tex}
         & \multicolumn{3}{c}{\textit{Mean Absolute Percentage Error}} \\
-        \input{../Output/Tables/beta2_apes_exp.tex} \\[-4mm]
+        \input{../Output/Tables/parallel_beta2_apes_me_cov_0.5.tex} \\[-4mm]
         \hline \\[-1.8ex]
         Simulations & 1,000 & 1,000 & 1,000 \\
         \hline
@@ -681,7 +681,7 @@ The coefficients are as follows
         \end{table}
 
         \begin{table}[!htbp] \centering
-            \caption{Average Coefficients for Values of $p$ (Half of Measurements are Transformed) \label{sim_p_5_exp}}
+            \caption{Average Coefficients for Values of $p$ (Correlated Measurement Errors) \label{sim_p_5_exp}}
             \scalebox{0.75}{
               \begin{tabular}{@{\extracolsep{5pt}}lccc}
           \\[-1.8ex]\hline
@@ -691,9 +691,9 @@ The coefficients are as follows
           \\[-1.8ex] & 5 & 20 & 50 \\
           \hline \\[-1.8ex]
           & \multicolumn{3}{c}{\textit{Coefficient on Main Variable}} \\
-          \input{../Output/Tables/p_coefs_exp.tex}
+          \input{../Output/Tables/parallel_p_coefs_me_cov_0.5.tex}
           & \multicolumn{3}{c}{\textit{Mean Absolute Percentage Error}} \\
-          \input{../Output/Tables/p_apes_exp.tex} \\[-4mm]
+          \input{../Output/Tables/parallel_p_apes_me_cov_0.5.tex} \\[-4mm]
             
           \hline \\[-1.8ex]
           Simulations & 1,000 & 1,000 & 1,000  \\
