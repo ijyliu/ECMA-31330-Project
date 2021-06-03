@@ -129,7 +129,7 @@
 
         This estimator ties into earlier literature considering the intersection of factor models and principal components analysis and measurement error and latent variables problems. Somewhat similarly to our methods, \cite{nagasawa_identication_2020} develops the use of a proxy variable to deal with unobserved heterogeneity in nuisance parameters and uses a partial effects method. Differing from our setting, \cite{schennach_recent_2016} focuses on nonclassical measurement error and nonlinear cases and notes the usefulness of factor methods and some cases where they are of more use than instrumental variables. \cite{wegge_local_1996} considers a setting in which measurement error regression models are factor analysis models, with the correct regressors being the factors. Latent factors are uncorrelated with the errors. Focusing on measurement error in the main regressor, \cite{schofield_correcting_2015} combines solutions from structural equations modelling and item response theory to deal with misestimation. Finally, \cite{heckman_matching_2010} considers a situation similar to ours, except involving matching estimators. Without correction, matching estimators can be harmed by mismeasured conditioning variables. However, average treatment effects can be identified using factor proxies, and without need for normalization.
 
-        In this paper, we present a theoretical framework and a Monte-Carlo analysis in order to show the properties and behavior of our estimator on large samples under standard assumptions. Additionally, we explore a basic empirical application to our method, by estimating the relationship between economic development on life expectancy at birth. Since there is no consensus on how to measure economic development, we take a sample of different variables that may measure economic development with error (GDP per capita, GNI per capita, Income per Employed Person, among others) over which we apply PCA to estimate coefficients. Our estimator generally behaves as expected in this empirical setting, though it is unclear whether it performs any better or worse than the direct inclusion of covariates, their averaging, or the instrumentation of mismeasured variables with each other.
+        In this paper, we present a theoretical framework and a Monte-Carlo analysis in order to show the properties and behavior of our estimator on large samples under standard assumptions. Additionally, we explore a basic empirical application of our method, by estimating the relationship between economic development on life expectancy at birth. Since there is no consensus on how to measure economic development, we take a sample of different variables that may measure economic development with error (GDP per capita, GNI per capita, Income per Employed Person, among others) over which we apply PCA to estimate coefficients. Our estimator generally behaves as expected in this empirical setting, though it is unclear whether it performs any better or worse than the direct inclusion of covariates, their averaging, or the instrumentation of mismeasured variables with each other.
 
     \section*{Theoretical framework}
 
@@ -184,7 +184,7 @@
                     y_i = \gamma^* t_i +  \beta^*x_i* + \zeta_i
         \end{align}
         
-        Then, the the coefficient of our variable of interest will be biased.
+        Then the coefficient of our variable of interest will be biased.
         \begin{claim}
         \label{claim:one}
         Under measurement error in the covariates, the coefficient is such that:
