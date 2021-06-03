@@ -10,4 +10,6 @@
 #SBATCH --output=%x.out # output file name
 
 module load python
+echo "loaded python"
 python Setup_Parallel_Sims.py
+echo "finished setup script"
