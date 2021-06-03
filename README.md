@@ -1,7 +1,7 @@
 # ECMA-31330-Project
 
 Econometrics and Machine Learning Group Project
-Principal Component Regression as a Solution to Measurement Error Bias
+Principal Component Regression as a Solution to Measurement Error Bias  
 Isaac Liu, Nico Martorelli, Paul Opheim
 
 ## Contents
@@ -10,7 +10,7 @@ Here is the structure of this repository, along with links to files and folders.
 
 ### [Input](Input)
 
-Contains the World Bank Data for the application.
+Contains the World Bank data for the application.
 
 ### [Output](Output)
 
@@ -24,12 +24,10 @@ Contains the [abstract](Release/Abstract.pdf) and [paper](Release/PCR_and_Measur
 
 Contains the project source code.
 
-An important file is [ME_Setup.py](Source/ME_Setup.py) which defines functions and objects used throughout the project.
-
 #### [Application](Source/Application)
 
-Contains code for the GDP and Life Expectancy application.
+Contains code for the life expectancy and government health share application.
 
 #### [Simulations](Source/Simulations)
 
-Contains code to run the Monte Carlo simulations.
+Contains code to run the Monte Carlo simulations and produce relevant tables.
