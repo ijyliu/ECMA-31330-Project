@@ -14,7 +14,7 @@ import pandas as pd
 beta1s = [0.1, 1, 10]
 beta2s = [0.1, 1, 10]
 covariances = [-0.9, -0.5, 0, 0.5, 0.9]
-ps = [5, 20, 50]
+ps = [5, 20, 50, 100, 500]
 me_covs = [0, 0.5]
 
 # Only run certain sims
