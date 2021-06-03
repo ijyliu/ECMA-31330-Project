@@ -15,4 +15,4 @@ import glob
 output = pd.concat([pd.read_csv(f) for f in glob.glob(sim_results_dir + '/*_Parallel_Sim_Results.csv')], ignore_index = True)
 
 # Save
-output.to_csv(sim_results_dir + '/n_3000_results.csv', index = False)
+output.to_csv(sim_results_dir + '/parallel_n_3000_results.csv', index = False)
