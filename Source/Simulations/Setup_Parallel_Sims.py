@@ -1,6 +1,6 @@
 # Directory structure
 import os
-repo_dir = os.path.join(os.path.abspath(''), '../..')
+repo_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../..')
 input_dir = repo_dir + "/Input"
 output_dir = repo_dir + "/Output"
 figures_dir = output_dir + "/Figures"
@@ -36,8 +36,6 @@ parameter_combos = (pd.MultiIndex.from_product([beta1s, beta2s, covariances, ps,
                                  .reset_index(drop = True))
 
 parameter_combos.columns = ['beta1', 'beta2', 'covariance', 'p', 'me_cov']
-
-print(parameter_combos)
 
 parameter_combos['counter'] = parameter_combos.apply(lambda x: make_counter(x.beta1, x.beta2, x.covariance, x.p), axis = 1)
 
