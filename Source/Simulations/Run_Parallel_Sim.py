@@ -14,6 +14,7 @@ import pandas as pd
 from sklearn.decomposition import PCA
 import statsmodels.api as sm
 from statsmodels.sandbox.regression.gmm import IV2SLS 
+import glob
 
 # Supressing Output
 from contextlib import contextmanager
@@ -34,7 +35,7 @@ def suppress_stdout():
 slurm_number = int(sys.argv[1])
 print('slurm job array number: ' + str(slurm_number))
 # Select the parameters
-param_combo_to_run = (pd.read_csv(sim_results_dir + '/22_parameter_combos_to_run.csv')
+param_combo_to_run = (pd.read_csv(glob.glob(sim_results_dir + '/*_parameter_combos_to_run.csv')[0])
                         .iloc[slurm_number, :]
                         .to_dict())
 
