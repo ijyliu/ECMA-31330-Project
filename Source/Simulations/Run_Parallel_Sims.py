@@ -11,7 +11,7 @@ sim_results_dir = output_dir + "/Sim_Results"
 import sys
 import numpy as np
 import pandas as pd
-from pca import pca
+from sklearn.decomposition import PCA
 import statsmodels.api as sm
 from statsmodels.sandbox.regression.gmm import IV2SLS 
 
@@ -97,9 +97,9 @@ for k in range(1000):
     # Suppress output
     with suppress_stdout():
         # Use PCA on the mismeasured values
-        pca_model = pca()
+        pca_model = PCA()
         pca_results = pca_model.fit_transform(scaled_mismeasured_z)
-        pca_z = pca_results['PC']['PC1']
+        pca_z = pca_results[:, 0]
 
     # NOTE: in non-pca cases, no need to rescale or normalize since mismeasured variables and x and y have mean 0 and sd 1
 
