@@ -8,6 +8,7 @@
 
 # Get the array end
 readarray -d '' filename < <(find ~/repo/ECMA-31330-Project/Output/Sim_Results -name "*_parameter_combos_to_run.csv" -printf '%f\n')
+echo $filename
 let arrayend=${filename//[^0-9]/}-1
 echo $arrayend
 
