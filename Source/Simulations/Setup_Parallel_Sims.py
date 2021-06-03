@@ -9,6 +9,7 @@ sim_results_dir = output_dir + "/Sim_Results"
 
 # Packages
 import pandas as pd
+import glob
 
 # Create a csv of parameter combos
 beta1s = [0.1, 1, 10]
@@ -42,4 +43,8 @@ parameter_combos['counter'] = parameter_combos.apply(lambda x: make_counter(x.be
 parameter_combos_to_run = (parameter_combos.query('counter >= 3')
                                            .drop(columns = 'counter'))
 
+# Remove preexisting file
+fileList = glob.glob(sim_results_dir + '/*_parameter_combos_to_run.csv')
+for filePath in fileList:
+    os.remove(filePath)
 parameter_combos_to_run.to_csv(sim_results_dir + '/' + str(len(parameter_combos_to_run)) + '_parameter_combos_to_run.csv', index = False)
