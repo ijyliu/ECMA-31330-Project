@@ -1,6 +1,5 @@
 #!/bin/bash
 #SBATCH --job-name=Parallel_Simulations
-# Suppress output
 #SBATCH --output=/dev/null
 
 # Get the array end
