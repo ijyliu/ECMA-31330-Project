@@ -153,15 +153,15 @@ iv_no_gdp.append('const')
 iv_results = IV2SLS(endog = std_data_with_constant['life_exp'], exog = std_data_with_constant[['govt_health_share', 'gdp_pc_ppp', 'const']], instrument = std_data_with_constant[iv_no_gdp]).fit()
 
 # Regression table settings
-reg_table = Stargazer([ols_one_covariate, ols_many_covariates, ols_mean_covariates, partial_pc_regression, iv_results])
+reg_table = Stargazer([partial_pc_regression, ols_one_covariate, ols_many_covariates, ols_mean_covariates, iv_results])
 reg_table.title("Regressions of Life Expectancy on Government Share of Health Spending \label{main_regs}")
 reg_table.dependent_variable_name("Life Expectancy at Birth (Years)")
 reg_table.covariate_order(['govt_health_share'])
 reg_table.rename_covariates({"govt_health_share":"Govt. Share of Health Exp."})
-reg_table.add_line('Covariates', ['Single', 'All', 'Average of', 'PCA', 'Instrumental'])
-reg_table.add_line('', ['Measurement', 'Measurements', 'Measurements', '', 'Variable'])
-reg_table.add_line('', ['(GDP Per', '', '', '', '(GDP Per'])
-reg_table.add_line('', ['Capita PPP)', '', '', '', 'Capita PPP)'])
+reg_table.add_line('Covariates', ['PCA', 'Single', 'All', 'Average of', 'Instrumental'])
+reg_table.add_line('', ['','Measurement', 'Measurements', 'Measurements', 'Variable'])
+reg_table.add_line('', ['', '(GDP Per', '', '', '(GDP Per'])
+reg_table.add_line('', ['', 'Capita PPP)', '', '', 'Capita PPP)'])
 reg_table.show_degrees_of_freedom = False
 reg_table.show_r2 = False
 reg_table.show_adj_r2 = False
