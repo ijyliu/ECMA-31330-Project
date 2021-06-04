@@ -197,9 +197,9 @@
             See Theory Appendix.
         \end{claimproof}
 
-       From $(10)$ it is clear that when $\operatorname{cov}(t,x)\neq 0$ and that $x$ is measured with error (i.e $\sigma_{x^*}^2>\sigma_x^2)$, the coefficient of our variable of interest is biased. If $t$ and $x$ are independent, then measurement error in $x^*$ does not cause any bias. If there is no measurement error in $x^*$, then $\sigma^2_{x^*}=\sigma^2_x$ and so we would not face any kind of bias, as one would expect.
+       From Claim \ref{claim:one} it is clear that when $\operatorname{cov}(t,x)\neq 0$ and that $x$ is measured with error (i.e $\sigma_{x^*}^2>\sigma_x^2)$, the coefficient of our variable of interest is biased. If $t$ and $x$ are independent, then measurement error in $x^*$ does not cause any bias. If there is no measurement error in $x^*$, then $\sigma^2_{x^*}=\sigma^2_x$ and so we would not face any kind of bias, as one would expect.
         
-        Equation $(10)$ also allows us to know the direction of the bias. Given that we are facing measurement error in the covariate, $\sigma^2_{x^*}>\sigma^2_x$ which implies $\sigma^2_{x^*}-\sigma^2_x>0$. Also, it follows from the \textit{Cauchy-Schwarz} inequality that the denominator is also positive. Then, the direction of the bias will depend on the sign of $\beta$ and the covariance of $t$ and $x$, as Table \ref{bias_direction} illustrates.
+        Claim \ref{claim:one} also allows us to know the direction of the bias. Given that we are facing measurement error in the covariate, $\sigma^2_{x^*}>\sigma^2_x$ which implies $\sigma^2_{x^*}-\sigma^2_x>0$. Also, it follows from the \textit{Cauchy-Schwarz} inequality that the denominator is also positive. Then, the direction of the bias will depend on the sign of $\beta$ and the covariance of $t$ and $x$, as Table \ref{bias_direction} illustrates.
         
         \begin{table}[H]
             \centering
@@ -234,13 +234,13 @@
         
         Alternatively, we propose an alternative bias-correction method when there are several mismeasured variables for each covariate; that is when we have more than one $x_{i,k}^*$ for every $x_{i,k}$. Given that in all the mismeasured variables the underlying value is the real value, one could think of extracting the underlying true $x_{i,k}$ through a linear combination of the different $x_{i,k}^*$. Then, we could treat all the $x_{i,k}^*$ as variables that share components as follows:
 
-        \begin{align}
+        \begin{align} \label{variance_max}
            h_{j}=\underset{h^{\prime} h=1, h^{\prime} h_{1}=0, \ldots, h^{\prime} h_{j-1}=0}{\operatorname{argmax}} \operatorname{var}\left[h^{\prime} X^*_k\right]  
         \end{align}
         
         where $h_j$ is the eigenvector of $\Sigma$ associated with the $j^{t h}$ ordered eigenvalue $\lambda_{j}$ of $\Sigma_{X^*_k}$, and the principal components of $X^*_k$ are $U_{j}=h_{j}^{\prime} X^*_k$, where $h_{j}$ is the eigenvector of $\Sigma$ associated with the $j^{t h}$ ordered eigenvalue $\lambda_{j}$ of $\Sigma$. Then, we could then retrieve the vector of true variables $X_i$.
 
-        \begin{claim}
+        \begin{claim} \label{linear_combo}
             \begin{align}
                 X_i=HX^*_i
             \end{align}
@@ -252,14 +252,14 @@
         \end{claimproof}
  
         Our new linear model then would be:
-        \begin{align}
+        \begin{align} \label{eigen_lc}
             y_i = \gamma^{PCR} t_i + H{X^*_i}'\beta^{PCR} + \epsilon_i
         \end{align}
         
         where $\gamma$ is identified.
 
         \begin{claim}
-        Consider equation $(11)$. Then
+        Consider equation (\ref{eigen_lc}). Then
             \begin{align}
                 {\gamma}^{PCR} = \gamma
             \end{align}
@@ -269,9 +269,9 @@
             See Theory Appendix.
         \end{claimproof}
         
-        Note that according to equation $(17)$, the true variable $x_{i,k}$ is a linear combination of the mismeasured variables that the researcher may have, where the weights are such that equation $(16)$ is satisfied. This allows us to think about other linear combinations that could be used as a bias-correction method. 
+        Note that according to Claim \ref{linear_combo}, the true variable $x_{i,k}$ is a linear combination of the mismeasured variables that the researcher may have, where the weights are such that equation $(\ref{variance_max})$ is satisfied. This allows us to think about other linear combinations that could be used as a bias-correction method which need not satisfy (\ref{variance_max}). 
         
-        In particular, take the case in which $h_k='(\frac{1}{n},\frac{1}{n},\dots,\frac{1}{n})$, where $h_k$ is a row vector of dimension $(1\times J)$, and $J$ is the number of mismeasured variables for $x_{i,k}$. Then, equation $(17)$ will be
+        In particular, take the case in which $h_k='(\frac{1}{n},\frac{1}{n},\dots,\frac{1}{n})$, where $h_k$ is a row vector of dimension $(1\times J)$, and $J$ is the number of mismeasured variables for $x_{i,k}$. Then, Claim \ref{linear_combo} will be
         \begin{align}
             \Tilde{x_{i,k}}&=\left(\begin{array}{cccc}
             \frac{1}{n} & \frac{1}{n} & \dots &\frac{1}{n} 
