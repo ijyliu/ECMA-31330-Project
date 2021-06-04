@@ -10,11 +10,11 @@ Here is the structure of this repository, along with links to files and folders.
 
 ### [Input](Input)
 
-Contains the World Bank data for the application.
+Contains the World Bank data for the application and a constructed set of parameter combinations for the simulations.
 
 ### [Output](Output)
 
-Contains [tables](Output/Tables), [figures](Output/Figures), and raw [simulation results](Output/Sim_Results) for the project.
+Contains [tables](Output/Tables), [figures](Output/Figures), and [simulation results](Output/Sim_Results) for the project.
 
 ### [Release](Release)
 
@@ -30,4 +30,4 @@ Contains code for the life expectancy and government health share application.
 
 #### [Simulations](Source/Simulations)
 
-Contains code to run the Monte Carlo simulations and produce relevant tables.
+Contains code to run the Monte Carlo simulations and produce relevant tables. These should be run using the shell script [Parallel_Simulations.sh](Source/Simulations/Parallel_Simulations.sh).
