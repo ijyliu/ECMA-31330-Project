@@ -44,6 +44,7 @@ beta2 = param_combo_to_run['beta2']
 covariance = param_combo_to_run['covariance']
 p = int(param_combo_to_run['p'])
 me_cov = param_combo_to_run['me_cov']
+exp_of_var = param_combo_to_run['exp_of_var']
 
 N = 3000
 
@@ -88,6 +89,10 @@ for k in range(1000):
     mismeasured_z = pd.DataFrame(errors, columns = z_vars)
     for i in mismeasured_z.columns:
         mismeasured_z[i] = mismeasured_z[i] + vars_['true_z']
+
+    # Take e to the power of the values for half of the measurements if log_of_var is true
+    if exp_of_var == 'yes':
+        mismeasured_z.iloc[:,int(len(mismeasured_z.columns)/2):] =np.exp(mismeasured_z.iloc[:,int(len(mismeasured_z.columns)/2):])
 
     # Do feature scaling (normalize to mean 0 and variance 1) for the mismeasured z
     # Note that x and y are already normalized by construction
@@ -168,6 +173,7 @@ for k in range(1000):
     new_output['beta2'] = beta2
     new_output['p'] = p
     new_output['me_cov'] = me_cov
+    new_output['exp_of_var'] = exp_of_var
     output = output.append(new_output)
 
 # Output the dataframe of results

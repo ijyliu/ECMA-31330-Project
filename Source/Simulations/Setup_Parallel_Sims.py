@@ -17,6 +17,7 @@ beta2s = [0.1, 1, 10]
 covariances = [-0.9, -0.5, 0, 0.5, 0.9]
 ps = [5, 20, 50, 100, 500]
 me_covs = [0, 0.5]
+exp_of_vars = ['yes', 'no']
 
 # Only run certain sims
 def make_counter(beta1, beta2, covariance, p):
@@ -32,11 +33,11 @@ def make_counter(beta1, beta2, covariance, p):
     return(counter)
 
 # Scenarios to run
-parameter_combos = (pd.MultiIndex.from_product([beta1s, beta2s, covariances, ps, me_covs])
+parameter_combos = (pd.MultiIndex.from_product([beta1s, beta2s, covariances, ps, me_covs, exp_of_vars])
                                  .to_frame()
                                  .reset_index(drop = True))
 
-parameter_combos.columns = ['beta1', 'beta2', 'covariance', 'p', 'me_cov']
+parameter_combos.columns = ['beta1', 'beta2', 'covariance', 'p', 'me_cov', 'exp_of_var']
 
 parameter_combos['counter'] = parameter_combos.apply(lambda x: make_counter(x.beta1, x.beta2, x.covariance, x.p), axis = 1)
 
