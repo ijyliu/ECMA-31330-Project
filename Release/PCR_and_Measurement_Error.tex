@@ -150,7 +150,7 @@
         \end{align}
         
         where $\g$ is the parameter of the variable of interest $t_i$, $\b=(\b_1,\b_2,\dots \b_p)'$ is the vector of the parameters of the covariates $X_i$ including a constant and $\epsilon_i \sim \operatorname{iid}(0,\sigma^2_\epsilon)$. Under this specification, the coefficients are such that:
-        \begin{align}
+        \begin{align} \label{true_coeffs}
             \left(\begin{array}{l}
         {\gamma} \\
         {\beta}
@@ -169,7 +169,7 @@
         \end{align}
         
         The coefficients would be such that:
-        \begin{align}
+        \begin{align} \label{mismeasured_coeffs}
             \left(\begin{array}{l}
         {\gamma}^* \\
         {\beta}^*
@@ -251,7 +251,7 @@
             \begin{align}
                 X_i=HX^*_i
             \end{align}
-        where $H$ is a matrix compound of the $h_k$ vectors of eigenvalues of $x_{i,k}$, $\forall i,k$.
+        where $H$ is a matrix composed of the $h_k$ vectors of eigenvalues of $x_{i,k}$, $\forall i,k$.
         \end{claim}
 
         \begin{proof}
@@ -416,19 +416,19 @@
             
         \begin{proof}
 
-        Equations $(4)$ and $(5)$ will be such that
-                    \begin{align*}
-                            \left(\begin{array}{l}
-                        {\gamma}^* \\
-                        {\beta}^*
-                        \end{array}\right)&=\left(\begin{array}{cc}
-                        {\sigma}^2_{t} & \operatorname{cov}({t,x^*}) \\
-                        \operatorname{cov}({x^*,t}) & {\sigma}_{x^*}^2
-                        \end{array}\right)^{-1}\left(\begin{array}{c}
-                        \operatorname{cov}{(y,t)} \\
-                        \operatorname{cov}{(y,x^*)}
-                        \end{array}\right) \\
-                        \end{align*}
+        Equations $(\ref{true_coeffs})$ and $(\ref{mismeasured_coeffs})$ will be such that
+        \begin{align*}
+                \left(\begin{array}{l}
+            {\gamma}^* \\
+            {\beta}^*
+            \end{array}\right)&=\left(\begin{array}{cc}
+            {\sigma}^2_{t} & \operatorname{cov}({t,x^*}) \\
+            \operatorname{cov}({x^*,t}) & {\sigma}_{x^*}^2
+            \end{array}\right)^{-1}\left(\begin{array}{c}
+            \operatorname{cov}{(y,t)} \\
+            \operatorname{cov}{(y,x^*)}
+            \end{array}\right) \\
+        \end{align*}
                 
         \end{proof}	
         
@@ -490,7 +490,7 @@
                     Z_i=X_i+\omega_i
                 \end{align*}
                 
-                where $\operatorname{E}(\omega_i)=0$, $\operatorname{Cov}(\epsilon_i,\omega_i)=0$ and that $\omega_i$ brings new information so that $\operatorname{Cov}(\eta_i,\omega_i)=0$. Then, if $Z_i$ satisfies exogeneity and relevance we will be able to identify the parameters without any bias as shown in equations $(13)$ to $(15)$. In fact:
+                where $\operatorname{E}(\omega_i)=0$, $\operatorname{Cov}(\epsilon_i,\omega_i)=0$ and that $\omega_i$ brings new information so that $\operatorname{Cov}(\eta_i,\omega_i)=0$. Then, if $Z_i$ satisfies exogeneity and relevance we will be able to identify the parameters without any bias. In fact:
                 \begin{align*}
                     \operatorname{E}(Z_i\zeta_i)&=\operatorname{E}(Z_i(\epsilon_i-\eta_i\b)\\
                     &=\operatorname{E}(Z_i\epsilon_i)-\operatorname{E}(Z_i\eta_i)\b\\
@@ -498,7 +498,7 @@
                 &=\operatorname{E}(X_i\epsilon_i) + \operatorname{E}(\omega_i\epsilon_i)-(\operatorname{E}(X_i\eta_i)+\operatorname{E}(\omega_i\eta_i))\b
                 \end{align*}
                 
-                And so $Z_i$ is exogenous. Given $(16)$ it is clear that $\operatorname{E}(Z_iX_i)\neq0$ and so relevance is also satisfied. Thus, $\gamma$ and $\b$ may be identified using this kind of instrument.
+                And so $Z_i$ is exogenous. Given $Z_i=X_i+\omega_i$ it is clear that $\operatorname{E}(Z_iX_i)\neq0$ and so relevance is also satisfied. Thus, $\gamma$ and $\b$ may be identified using this kind of instrument.
 
         \end{proof}
 
@@ -534,7 +534,7 @@
         \end{proof}
         
         \begin{claim}
-        Consider equation $(11)$. Then
+        Consider equation $(\ref{eigen_lc})$. Then
         \begin{align*}
         {\gamma}^{PCR} = \gamma
         \end{align*}
@@ -569,7 +569,7 @@
                 \end{array}\right)
                 \end{align*}
                 
-                where the last equality comes from $(13)$
+                where the second equality comes from Equation (\ref{mismeasured_coeffs}) and Claim \ref{linear_combo} and the last equality comes from Claim \ref{linear_combo}.
         \end{proof}
 
 \clearpage
