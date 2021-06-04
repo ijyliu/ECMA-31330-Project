@@ -1,5 +1,3 @@
-/tmp/slurmd/job11540218/slurm_script: line 10: readarray: -d: invalid option
-readarray: usage: readarray [-n count] [-O origin] [-s count] [-t] [-u fd] [-C callback] [-c quantum] [array]
--1
-sbatch: error: Batch job submission failed: Invalid job array specification
-sbatch: error: Batch job submission failed: Job dependency problem
+26_parameter_combos_to_run.csv
+25
+11540435

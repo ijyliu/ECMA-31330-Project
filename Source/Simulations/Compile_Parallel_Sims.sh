@@ -11,3 +11,4 @@
 
 module load python
 python Compile_Parallel_Sims.py
+echo "completed compilation"
