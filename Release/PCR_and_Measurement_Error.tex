@@ -397,177 +397,177 @@
 	\section*{Theory Appendix}
 	\subsection*{Short Proofs}
 
-\setcounter{claim}{0}
-\setcounter{claimproof}{0}
+        \setcounter{claim}{0}
+        \setcounter{claimproof}{0}
 
-	\begin{claim}
-	Under measurement error in the covariates, the coefficient is such that:
-	\begin{align}
-            \gamma^* = \gamma + \beta\frac{\operatorname{cov}(t,x)(\sigma^2_{x^*}-\sigma^2_x)}{\sigma_{t}^2\sigma_{x^*}^2-\operatorname{cov}({t,x})^2}
-        \end{align}
-	\end{claim}
-	
-\begin{claimproof}[\ref{claim:one}]
-
-Then, equations $(4)$ and $(5)$ will be such that
+            \begin{claim}
+            Under measurement error in the covariates, the coefficient is such that:
             \begin{align}
-                    \left(\begin{array}{l}
-                {\gamma}^* \\
-                {\beta}^*
-                \end{array}\right)&=\left(\begin{array}{cc}
-                {\sigma}^2_{t} & \operatorname{cov}({t,x^*}) \\
-                \operatorname{cov}({x^*,t}) & {\sigma}_{x^*}^2
-                \end{array}\right)^{-1}\left(\begin{array}{c}
-                \operatorname{cov}{(y,t)} \\
-                \operatorname{cov}{(y,x^*)}
-                \end{array}\right) \\
+                    \gamma^* = \gamma + \beta\frac{\operatorname{cov}(t,x)(\sigma^2_{x^*}-\sigma^2_x)}{\sigma_{t}^2\sigma_{x^*}^2-\operatorname{cov}({t,x})^2}
                 \end{align}
-           
-\end{claimproof}	
- 
+            \end{claim}
+            
+        \begin{claimproof}[\ref{claim:one}]
 
-\begin{claim}
-Suppose $ Z_i=X_i+\omega_i$. If $\operatorname{E}(\omega_i)=0$, $\operatorname{Cov}(\epsilon_i,\omega_i)=0$ and $\operatorname{Cov}(\eta_i,\omega_i)=0$. Then
-\begin{align}
-\operatorname{E}(Z_i\zeta_i)=0 \ \text{and} \  \operatorname{E}(Z_iX_i)\neq0
-\end{align}
-And so $\gamma$ can be identified through IV regression.
-\end{claim}
-\begin{claimproof}
+        Then, equations $(4)$ and $(5)$ will be such that
+                    \begin{align}
+                            \left(\begin{array}{l}
+                        {\gamma}^* \\
+                        {\beta}^*
+                        \end{array}\right)&=\left(\begin{array}{cc}
+                        {\sigma}^2_{t} & \operatorname{cov}({t,x^*}) \\
+                        \operatorname{cov}({x^*,t}) & {\sigma}_{x^*}^2
+                        \end{array}\right)^{-1}\left(\begin{array}{c}
+                        \operatorname{cov}{(y,t)} \\
+                        \operatorname{cov}{(y,x^*)}
+                        \end{array}\right) \\
+                        \end{align}
+                
+        \end{claimproof}	
+        
 
-Suppose an instrument $Z_i$ that satisfies the relevance condition $\operatorname{E}(Z_i'X_i)\neq 0$ and $\operatorname{E}(Z_i't_i)\neq 0$, and also the exclusion restriction $\operatorname{E}(Z_i'\epsilon_i)=\operatorname{E}(Z_i'\zeta_i)=\operatorname{E}(Z_i'\eta_{i,k})=0$, for all $i$ and $k$. Then premultiplying by $Z_i$ we have
+        \begin{claim}
+        Suppose $ Z_i=X_i+\omega_i$. If $\operatorname{E}(\omega_i)=0$, $\operatorname{Cov}(\epsilon_i,\omega_i)=0$ and $\operatorname{Cov}(\eta_i,\omega_i)=0$. Then
         \begin{align}
-            Z_i'y_i =  Z_i'\gamma^* t_i +  Z_i'{X^{*}_i}' \beta^* +  Z_i'\zeta_i
+        \operatorname{E}(Z_i\zeta_i)=0 \ \text{and} \  \operatorname{E}(Z_iX_i)\neq0
         \end{align}
-        
-        and so
-        \begin{align}
-            \left(\begin{array}{l}
-        {\gamma}^{IV} \\
-        {\beta}^{IV}
-        \end{array}\right)
-        & =\left(\begin{array}{cc}
-        {\Sigma}_{Zt} & \Sigma_{ZX,Zt} \\
-        \Sigma_{Zt,ZX}& {\Sigma}_{ZX}+{\Sigma}_{Z\eta}
-        \end{array}\right)^{-1}\left(\begin{array}{cc}
-        {\Sigma}_{Zt} & \Sigma_{ZX,Zt} \\
-        \Sigma_{Zt,ZX} & {\Sigma}_{ZX}
-        \end{array}\right)\left(\begin{array}{l}
-        {\gamma} \\
-        {\beta}
-        \end{array}\right)\\
-        & =\left(\begin{array}{cc}
-        {\Sigma}_{Zt} & \Sigma_{ZX,Zt} \\
-        \Sigma_{Zt,ZX}& {\Sigma}_{ZX}
-        \end{array}\right)^{-1}\left(\begin{array}{cc}
-        {\Sigma}_{Zt} & \Sigma_{ZX,Zt} \\
-        \Sigma_{Zt,ZX} & {\Sigma}_{ZX}
-        \end{array}\right)\left(\begin{array}{l}
-        {\gamma} \\
-        {\beta}
-        \end{array}\right) \\
-        \left(\begin{array}{l}
-        {\gamma}^{IV} \\
-        {\beta}^{IV}
-        \end{array}\right)
-        & =\left(\begin{array}{l}
-        {\gamma} \\
-        {\beta}
-        \end{array}\right)
-        \end{align}
-        
-        However, finding a reliable source of exogeneity is sometimes difficult, as is demonstrating the exclusion restriction.
-        
-        Suppose now that as instrument we have another measure of $X_i$ so that
-        \begin{align}
-            Z_i=X_i+\omega_i
-        \end{align}
-        
-        where $\operatorname{E}(\omega_i)=0$, $\operatorname{Cov}(\epsilon_i,\omega_i)=0$ and that $\omega_i$ brings new information so that $\operatorname{Cov}(\eta_i,\omega_i)=0$. Then, if $Z_i$ satisfies exogeneity and relevance we will be able to identify the parameters without any bias as shown in equations $(13)$ to $(15)$. In fact:
-        \begin{align}
-            \operatorname{E}(Z_i\zeta_i)&=\operatorname{E}(Z_i(\epsilon_i-\eta_i\b)\\
-            &=\operatorname{E}(Z_i\epsilon_i)-\operatorname{E}(Z_i\eta_i)\b\\
-           &= \operatorname{E}((X_i+\omega_i)\epsilon_i)-\operatorname{E}((X_i+\omega_i)\eta_i)\b \\
-           &=\operatorname{E}(X_i\epsilon_i) + \operatorname{E}(\omega_i\epsilon_i)-(\operatorname{E}(X_i\eta_i)+\operatorname{E}(\omega_i\eta_i))\b
-        \end{align}
-        
-        And so $Z_i$ is exogenous. Given $(16)$ it is clear that $\operatorname{E}(Z_iX_i)\neq0$ and so relevance is also satisfied. Thus, $\gamma$ and $\b$ may be identifies using this kind of instrument.
+        And so $\gamma$ can be identified through IV regression.
+        \end{claim}
+        \begin{claimproof}
 
-\end{claimproof}
+        Suppose an instrument $Z_i$ that satisfies the relevance condition $\operatorname{E}(Z_i'X_i)\neq 0$ and $\operatorname{E}(Z_i't_i)\neq 0$, and also the exclusion restriction $\operatorname{E}(Z_i'\epsilon_i)=\operatorname{E}(Z_i'\zeta_i)=\operatorname{E}(Z_i'\eta_{i,k})=0$, for all $i$ and $k$. Then premultiplying by $Z_i$ we have
+                \begin{align}
+                    Z_i'y_i =  Z_i'\gamma^* t_i +  Z_i'{X^{*}_i}' \beta^* +  Z_i'\zeta_i
+                \end{align}
+                
+                and so
+                \begin{align}
+                    \left(\begin{array}{l}
+                {\gamma}^{IV} \\
+                {\beta}^{IV}
+                \end{array}\right)
+                & =\left(\begin{array}{cc}
+                {\Sigma}_{Zt} & \Sigma_{ZX,Zt} \\
+                \Sigma_{Zt,ZX}& {\Sigma}_{ZX}+{\Sigma}_{Z\eta}
+                \end{array}\right)^{-1}\left(\begin{array}{cc}
+                {\Sigma}_{Zt} & \Sigma_{ZX,Zt} \\
+                \Sigma_{Zt,ZX} & {\Sigma}_{ZX}
+                \end{array}\right)\left(\begin{array}{l}
+                {\gamma} \\
+                {\beta}
+                \end{array}\right)\\
+                & =\left(\begin{array}{cc}
+                {\Sigma}_{Zt} & \Sigma_{ZX,Zt} \\
+                \Sigma_{Zt,ZX}& {\Sigma}_{ZX}
+                \end{array}\right)^{-1}\left(\begin{array}{cc}
+                {\Sigma}_{Zt} & \Sigma_{ZX,Zt} \\
+                \Sigma_{Zt,ZX} & {\Sigma}_{ZX}
+                \end{array}\right)\left(\begin{array}{l}
+                {\gamma} \\
+                {\beta}
+                \end{array}\right) \\
+                \left(\begin{array}{l}
+                {\gamma}^{IV} \\
+                {\beta}^{IV}
+                \end{array}\right)
+                & =\left(\begin{array}{l}
+                {\gamma} \\
+                {\beta}
+                \end{array}\right)
+                \end{align}
+                
+                However, finding a reliable source of exogeneity is sometimes difficult, as is demonstrating the exclusion restriction.
+                
+                Suppose now that as instrument we have another measure of $X_i$ so that
+                \begin{align}
+                    Z_i=X_i+\omega_i
+                \end{align}
+                
+                where $\operatorname{E}(\omega_i)=0$, $\operatorname{Cov}(\epsilon_i,\omega_i)=0$ and that $\omega_i$ brings new information so that $\operatorname{Cov}(\eta_i,\omega_i)=0$. Then, if $Z_i$ satisfies exogeneity and relevance we will be able to identify the parameters without any bias as shown in equations $(13)$ to $(15)$. In fact:
+                \begin{align}
+                    \operatorname{E}(Z_i\zeta_i)&=\operatorname{E}(Z_i(\epsilon_i-\eta_i\b)\\
+                    &=\operatorname{E}(Z_i\epsilon_i)-\operatorname{E}(Z_i\eta_i)\b\\
+                &= \operatorname{E}((X_i+\omega_i)\epsilon_i)-\operatorname{E}((X_i+\omega_i)\eta_i)\b \\
+                &=\operatorname{E}(X_i\epsilon_i) + \operatorname{E}(\omega_i\epsilon_i)-(\operatorname{E}(X_i\eta_i)+\operatorname{E}(\omega_i\eta_i))\b
+                \end{align}
+                
+                And so $Z_i$ is exogenous. Given $(16)$ it is clear that $\operatorname{E}(Z_iX_i)\neq0$ and so relevance is also satisfied. Thus, $\gamma$ and $\b$ may be identified using this kind of instrument.
 
-\begin{claim}
-\begin{align}
-            X_i=HX^*_i
-        \end{align}
-where $H$ is a matrix compound of the $h_k$ vectors of eigenvalues of $x_{i,k}$, $\forall i,k$
-\end{claim}
+        \end{claimproof}
 
-\begin{claimproof}
-Under our assumptions, the vector of mismeasured values $X^*_k$ of $x_{i,k}$, share only one principal component which is precisely $x_{i,k}$. Then, we only have one principal component, $x_{i,k}$, and so the $x_{i,k}$ is such that
+        \begin{claim}
         \begin{align}
-            x_{i,k}=h_{k}^{\prime} X^*_k
-        \end{align}
-        
-        Finally, we could then retrieve the vector of true variables $X_i$
-        \begin{align}
-            X_i=HX^*_i
-        \end{align}
-        
-        where $H$ is a matrix such that
-        \begin{align*}
-            H=\left(\begin{array}{ccccc}
-        h_1 & 0 & 0 & \dots & 0 \\
-        0 & h_2 & 0 & \dots & 0 \\
-        \vdots & \ddots & h_3 & \ddots & \vdots \\
-        0 & \dots & \dots & \dots \ddots & h_p
-        \end{array}\right)
-        \end{align*}
-        
-        and $h_k$ is the vector of eigenvalues for the variable $x_{i,k}$.
-\end{claimproof}
+                    X_i=HX^*_i
+                \end{align}
+        where $H$ is a matrix compound of the $h_k$ vectors of eigenvalues of $x_{i,k}$, $\forall i,k$
+        \end{claim}
 
-\begin{claimproof}
-See Theory Appendix
-\end{claimproof}
- 
-\begin{claim}
-Consider equation $(11)$. Then
-\begin{align}
-{\gamma}^{PCR} = \gamma
-\end{align}
-\end{claim}
+        \begin{claimproof}
+        Under our assumptions, the vector of mismeasured values $X^*_k$ of $x_{i,k}$, share only one principal component which is precisely $x_{i,k}$. Then, we only have one principal component, $x_{i,k}$, and so the $x_{i,k}$ is such that
+                \begin{align}
+                    x_{i,k}=h_{k}^{\prime} X^*_k
+                \end{align}
+                
+                Finally, we could then retrieve the vector of true variables $X_i$
+                \begin{align}
+                    X_i=HX^*_i
+                \end{align}
+                
+                where $H$ is a matrix such that
+                \begin{align*}
+                    H=\left(\begin{array}{ccccc}
+                h_1 & 0 & 0 & \dots & 0 \\
+                0 & h_2 & 0 & \dots & 0 \\
+                \vdots & \ddots & h_3 & \ddots & \vdots \\
+                0 & \dots & \dots & \dots \ddots & h_p
+                \end{array}\right)
+                \end{align*}
+                
+                and $h_k$ is the vector of eigenvalues for the variable $x_{i,k}$.
+        \end{claimproof}
 
-\begin{claimproof}
-The coefficients are as follows
-        \begin{align}
-            \left(\begin{array}{l}
-        {\gamma}^{PCR} \\
-        {\beta}^{PCR}
-        \end{array}\right)&=\left(\begin{array}{cc}
-        {\sigma}^2_{t} & \Sigma_{t,HX^*} \\
-        \Sigma_{HX^*,t} & {\Sigma}_{HX^*}
-        \end{array}\right)^{-1}\left(\begin{array}{c}
-        \Sigma_{yt} \\
-        \Sigma_{y,HX^*}
-        \end{array}\right)\\
-        &=\left(\begin{array}{cc}
-        {\sigma}^2_{t} & \Sigma_{t,HX^*} \\
-        \Sigma_{HX^*,t} & {\Sigma}_{HX^*}
-        \end{array}\right)^{-1}\left(\begin{array}{cc}
-        {\sigma}^2_{t} & \Sigma_{tX} \\
-        \Sigma_{Xt} & {\Sigma}_{X}
-        \end{array}\right)\left(\begin{array}{l}
-        {\gamma} \\
-        {\beta}
-        \end{array}\right)\\
-        &=\left(\begin{array}{l}
-        {\gamma} \\
-        {\beta}
-        \end{array}\right)
-        \end{align}
+        \begin{claimproof}
+        See Theory Appendix.
+        \end{claimproof}
         
-        where the last equality comes from $(13)$
-\end{claimproof}
+        \begin{claim}
+        Consider equation $(11)$. Then
+        \begin{align}
+        {\gamma}^{PCR} = \gamma
+        \end{align}
+        \end{claim}
+
+        \begin{claimproof}
+        The coefficients are as follows
+                \begin{align}
+                    \left(\begin{array}{l}
+                {\gamma}^{PCR} \\
+                {\beta}^{PCR}
+                \end{array}\right)&=\left(\begin{array}{cc}
+                {\sigma}^2_{t} & \Sigma_{t,HX^*} \\
+                \Sigma_{HX^*,t} & {\Sigma}_{HX^*}
+                \end{array}\right)^{-1}\left(\begin{array}{c}
+                \Sigma_{yt} \\
+                \Sigma_{y,HX^*}
+                \end{array}\right)\\
+                &=\left(\begin{array}{cc}
+                {\sigma}^2_{t} & \Sigma_{t,HX^*} \\
+                \Sigma_{HX^*,t} & {\Sigma}_{HX^*}
+                \end{array}\right)^{-1}\left(\begin{array}{cc}
+                {\sigma}^2_{t} & \Sigma_{tX} \\
+                \Sigma_{Xt} & {\Sigma}_{X}
+                \end{array}\right)\left(\begin{array}{l}
+                {\gamma} \\
+                {\beta}
+                \end{array}\right)\\
+                &=\left(\begin{array}{l}
+                {\gamma} \\
+                {\beta}
+                \end{array}\right)
+                \end{align}
+                
+                where the last equality comes from $(13)$
+        \end{claimproof}
 
 \clearpage
 
