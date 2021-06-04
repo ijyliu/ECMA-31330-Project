@@ -35,7 +35,7 @@ def suppress_stdout():
 slurm_number = int(sys.argv[1])
 print('slurm job array number: ' + str(slurm_number))
 # Select the parameters
-param_combo_to_run = (pd.read_csv(glob.glob(sim_results_dir + '/*_parameter_combos_to_run.csv')[0])
+param_combo_to_run = (pd.read_csv(glob.glob(input_dir + '/Simulations/*_parameter_combos_to_run.csv')[0])
                         .iloc[slurm_number, :]
                         .to_dict())
 

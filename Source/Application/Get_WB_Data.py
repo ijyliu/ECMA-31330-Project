@@ -15,11 +15,11 @@ import wbgapi as wb
 import pandas as pd
 
 # Get the list of world bank indicators from the csv file
-indicators_list = (pd.read_csv(input_dir + '/wb_indicators_list.csv')
+indicators_list = (pd.read_csv(input_dir + '/Application/wb_indicators_list.csv')
                     ['Indicator_Code']
                     .tolist())
 
 # Load in the series specified in the file
 wb_data = wb.data.DataFrame(indicators_list, skipAggs=True, numericTimeKeys=True)
 
-wb_data.to_csv(input_dir + "/WB_Data.csv")
+wb_data.to_csv(input_dir + "/Application/WB_Data.csv")

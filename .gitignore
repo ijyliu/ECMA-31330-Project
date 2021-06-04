@@ -27,4 +27,5 @@
 *.Rhistory
 
 # Ignore many small .out files from parallelization
-**/*_Parallel_Run_Simulations.out
+**/*_Run_Parallel_Sim.out
+*_Run_Parallel_Sim.out
