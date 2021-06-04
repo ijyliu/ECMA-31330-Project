@@ -25,7 +25,7 @@ from statsmodels.sandbox.regression.gmm import IV2SLS
 import regex as re
 
 # Load in the WB data
-wb_data = (pd.read_csv(input_dir + "/WB_Data.csv", index_col=['economy', 'series'])
+wb_data = (pd.read_csv(input_dir + "/Application/WB_Data.csv", index_col=['economy', 'series'])
              # Reshape and rename a few columns
              .transpose()
              .stack(level = 'economy')

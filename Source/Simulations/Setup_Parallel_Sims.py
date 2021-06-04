@@ -48,7 +48,7 @@ parameter_combos_to_run = (parameter_combos.query('counter >= 4')
                                            .drop(columns = 'counter'))
 
 # Remove preexisting file
-fileList = glob.glob(sim_results_dir + '/*_parameter_combos_to_run.csv')
+fileList = glob.glob(input_dir + '/Simulations/*_parameter_combos_to_run.csv')
 for filePath in fileList:
     os.remove(filePath)
-parameter_combos_to_run.to_csv(sim_results_dir + '/' + str(len(parameter_combos_to_run)) + '_parameter_combos_to_run.csv', index = False)
+parameter_combos_to_run.to_csv(input_dir + '/Simulations/' + str(len(parameter_combos_to_run)) + '_parameter_combos_to_run.csv', index = False)
