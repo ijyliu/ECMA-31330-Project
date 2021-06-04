@@ -28,6 +28,7 @@
 \usepackage{todonotes}
 \usepackage{lscape}
 \usepackage{comment}
+\usepackage{amsthm}
 \newcommand\der[2]{\frac{\partial{#1}}{\partial{#2}}}
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
@@ -68,6 +69,11 @@
 }
 
 \newcommand{\numpy}{{\tt numpy}}    % tt font for numpy
+
+% Custom proof formatting: https://tex.stackexchange.com/questions/8089/changing-style-of-proof
+\makeatletter
+\renewenvironment{proof}[1][\proofname] {\par\pushQED{\qed}\normalfont\topsep6\p@\@plus6\p@\relax\trivlist\item[\hskip\labelsep\bfseries#1\@addpunct{.}]\ignorespaces}{\popQED\endtrivlist\@endpefalse}
+\makeatother
 
 \usepackage[autostyle, english = american]{csquotes}
 \MakeOuterQuote{"}
@@ -193,9 +199,9 @@
             \end{align}
         \end{claim}
 
-        \begin{claimproof}
+        \begin{proof}
             See Theory Appendix.
-        \end{claimproof}
+        \end{proof}
 
        From Claim \ref{claim:one} it is clear that when $\operatorname{cov}(t,x)\neq 0$ and that $x$ is measured with error (i.e $\sigma_{x^*}^2>\sigma_x^2)$, the coefficient of our variable of interest is biased. If $t$ and $x$ are independent, then measurement error in $x^*$ does not cause any bias. If there is no measurement error in $x^*$, then $\sigma^2_{x^*}=\sigma^2_x$ and so we would not face any kind of bias, as one would expect.
         
@@ -228,9 +234,9 @@
         And so $\gamma$ can be identified through IV regression.
         \end{claim}
 
-        \begin{claimproof}
+        \begin{proof}
         See Theory Appendix.
-        \end{claimproof}
+        \end{proof}
         
         Alternatively, we propose an alternative bias-correction method when there are several mismeasured variables for each covariate; that is when we have more than one $x_{i,k}^*$ for every $x_{i,k}$. Given that in all the mismeasured variables the underlying value is the real value, one could think of extracting the underlying true $x_{i,k}$ through a linear combination of the different $x_{i,k}^*$. Then, we could treat all the $x_{i,k}^*$ as variables that share components as follows:
 
@@ -247,9 +253,9 @@
         where $H$ is a matrix compound of the $h_k$ vectors of eigenvalues of $x_{i,k}$, $\forall i,k$.
         \end{claim}
 
-        \begin{claimproof}
+        \begin{proof}
             See Theory Appendix.
-        \end{claimproof}
+        \end{proof}
  
         Our new linear model then would be:
         \begin{align} \label{eigen_lc}
@@ -265,9 +271,9 @@
             \end{align}
         \end{claim}
 
-        \begin{claimproof}
+        \begin{proof}
             See Theory Appendix.
-        \end{claimproof}
+        \end{proof}
         
         Note that according to Claim \ref{linear_combo}, the true variable $x_{i,k}$ is a linear combination of the mismeasured variables that the researcher may have, where the weights are such that equation $(\ref{variance_max})$ is satisfied. This allows us to think about other linear combinations that could be used as a bias-correction method which need not satisfy (\ref{variance_max}). 
         
@@ -407,7 +413,7 @@
                 \end{align}
             \end{claim}
             
-        \begin{claimproof}[\ref{claim:one}]
+        \begin{proof}
 
         Then, equations $(4)$ and $(5)$ will be such that
                     \begin{align}
@@ -423,7 +429,7 @@
                         \end{array}\right) \\
                         \end{align}
                 
-        \end{claimproof}	
+        \end{proof}	
         
 
         \begin{claim}
@@ -433,7 +439,7 @@
         \end{align}
         And so $\gamma$ can be identified through IV regression.
         \end{claim}
-        \begin{claimproof}
+        \begin{proof}
 
         Suppose an instrument $Z_i$ that satisfies the relevance condition $\operatorname{E}(Z_i'X_i)\neq 0$ and $\operatorname{E}(Z_i't_i)\neq 0$, and also the exclusion restriction $\operatorname{E}(Z_i'\epsilon_i)=\operatorname{E}(Z_i'\zeta_i)=\operatorname{E}(Z_i'\eta_{i,k})=0$, for all $i$ and $k$. Then premultiplying by $Z_i$ we have
                 \begin{align}
@@ -493,7 +499,7 @@
                 
                 And so $Z_i$ is exogenous. Given $(16)$ it is clear that $\operatorname{E}(Z_iX_i)\neq0$ and so relevance is also satisfied. Thus, $\gamma$ and $\b$ may be identified using this kind of instrument.
 
-        \end{claimproof}
+        \end{proof}
 
         \begin{claim}
         \begin{align}
@@ -502,7 +508,7 @@
         where $H$ is a matrix compound of the $h_k$ vectors of eigenvalues of $x_{i,k}$, $\forall i,k$
         \end{claim}
 
-        \begin{claimproof}
+        \begin{proof}
         Under our assumptions, the vector of mismeasured values $X^*_k$ of $x_{i,k}$, share only one principal component which is precisely $x_{i,k}$. Then, we only have one principal component, $x_{i,k}$, and so the $x_{i,k}$ is such that
                 \begin{align}
                     x_{i,k}=h_{k}^{\prime} X^*_k
@@ -524,11 +530,7 @@
                 \end{align*}
                 
                 and $h_k$ is the vector of eigenvalues for the variable $x_{i,k}$.
-        \end{claimproof}
-
-        \begin{claimproof}
-        See Theory Appendix.
-        \end{claimproof}
+        \end{proof}
         
         \begin{claim}
         Consider equation $(11)$. Then
@@ -537,7 +539,7 @@
         \end{align}
         \end{claim}
 
-        \begin{claimproof}
+        \begin{proof}
         The coefficients are as follows
                 \begin{align}
                     \left(\begin{array}{l}
@@ -567,7 +569,7 @@
                 \end{align}
                 
                 where the last equality comes from $(13)$
-        \end{claimproof}
+        \end{proof}
 
 \clearpage
 
