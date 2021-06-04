@@ -16,4 +16,4 @@ output = (pd.concat([pd.read_csv(f) for f in glob.glob(sim_results_dir + '/*_Par
             .drop(columns='Unnamed: 0'))
 
 # Save
-output.to_csv(sim_results_dir + '/parallel_n_3000_results.csv', index = False)
+output.to_csv(sim_results_dir + '/parallel_results.csv', index = False)
