@@ -619,28 +619,30 @@
       \hline \\[-1.8ex]
       \end{tabular}}
       \end{table}
-
+        
       \begin{table}[!htbp] \centering
         \caption{Average Coefficients for Values of $p$ (Uncorrelated Measurement Errors) \label{sim_p_5_noexp}}
         \scalebox{0.75}{
-          \begin{tabular}{@{\extracolsep{5pt}}lcccc}
-      \\[-1.8ex]\hline
-      \hline \\[-1.8ex]
-      & \multicolumn{3}{c}{\textit{Number of p}} \
-      \cr \
-      \\[-1.8ex] & 5 & 20 & 50 \\
-      \hline \\[-1.8ex]
-      & \multicolumn{3}{c}{\textit{Coefficient on Main Variable}} \\
-      \input{../Output/Tables/parallel_p_coefs_me_cov_0.tex}
-      & \multicolumn{3}{c}{\textit{Mean Absolute Percentage Error}} \\
-      \input{../Output/Tables/parallel_p_apes_me_cov_0.tex} \\[-4mm]
-      \hline \\[-1.8ex]
-      Simulations & 1,000 & 1,000 & 1,000  \\
-      \hline
-      \hline \\[-1.8ex]
-      \end{tabular}}
-      \end{table}
-        
+        \begin{tabular}{@{\extracolsep{5pt}}lccccc}
+    \\[-1.8ex]\hline
+    \hline \\[-1.8ex]
+    & \multicolumn{5}{c}{\textit{Number of p}} \
+    \cr \
+    \\[-1.8ex] & 5 & 20 & 50 & 100 & 500 \\
+    \hline \\[-1.8ex]
+    & \multicolumn{5}{c}{\textit{Coefficient on Main Variable}} \\
+    \input{../Output/Tables/parallel_p_coefs_me_cov_0.tex}
+    & \multicolumn{5}{c}{\textit{Mean Absolute Percentage Error}} \\
+    \input{../Output/Tables/parallel_p_apes_me_cov_0.tex} \\[-4mm]
+        \hline \\[-1.8ex]
+        Simulations & 1,000 & 1,000 & 1,000 & 1,000 & 1,000\\
+    \hline
+    \hline \\[-1.8ex]
+    \end{tabular}}
+    \end{table}
+
+
+
       % Correlated Measurement Errors
 
       \begin{table}[!htbp] \centering
@@ -685,28 +687,26 @@
         \end{tabular}}
         \end{table}
 
-        \begin{table}[!htbp] \centering
+          \begin{table}[!htbp] \centering
             \caption{Average Coefficients for Values of $p$ (Correlated Measurement Errors) \label{sim_p_5_exp}}
             \scalebox{0.75}{
-              \begin{tabular}{@{\extracolsep{5pt}}lccc}
-          \\[-1.8ex]\hline
-          \hline \\[-1.8ex]
-          & \multicolumn{3}{c}{\textit{Number of p}} \
-          \cr \
-          \\[-1.8ex] & 5 & 20 & 50 \\
-          \hline \\[-1.8ex]
-          & \multicolumn{3}{c}{\textit{Coefficient on Main Variable}} \\
-          \input{../Output/Tables/parallel_p_coefs_me_cov_0.5.tex}
-          & \multicolumn{3}{c}{\textit{Mean Absolute Percentage Error}} \\
-          \input{../Output/Tables/parallel_p_apes_me_cov_0.5.tex} \\[-4mm]
-            
-          \hline \\[-1.8ex]
-          Simulations & 1,000 & 1,000 & 1,000  \\
-          \hline
-          \hline \\[-1.8ex]
-          \end{tabular}}
-          \end{table}
-
+            \begin{tabular}{@{\extracolsep{5pt}}lccccc}
+        \\[-1.8ex]\hline
+        \hline \\[-1.8ex]
+        & \multicolumn{5}{c}{\textit{Number of p}} \
+        \cr \
+        \\[-1.8ex] & 5 & 20 & 50 & 100 & 500 \\
+        \hline \\[-1.8ex]
+        & \multicolumn{5}{c}{\textit{Coefficient on Main Variable}} \\
+        \input{../Output/Tables/parallel_p_coefs_me_cov_0.5.tex}
+        & \multicolumn{5}{c}{\textit{Mean Absolute Percentage Error}} \\
+        \input{../Output/Tables/parallel_p_apes_me_cov_0.5.tex} \\[-4mm]
+            \hline \\[-1.8ex]
+            Simulations & 1,000 & 1,000 & 1,000 & 1,000 & 1,000\\
+        \hline
+        \hline \\[-1.8ex]
+        \end{tabular}}
+        \end{table}
 
 \clearpage
 
