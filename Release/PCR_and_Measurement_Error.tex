@@ -71,6 +71,7 @@
 \newcommand{\numpy}{{\tt numpy}}    % tt font for numpy
 
 % Custom proof formatting: https://tex.stackexchange.com/questions/8089/changing-style-of-proof
+\renewcommand\qedsymbol{$\blacksquare$}
 \makeatletter
 \renewenvironment{proof}[1][\proofname] {\par\pushQED{\qed}\normalfont\topsep6\p@\@plus6\p@\relax\trivlist\item[\hskip\labelsep\bfseries#1\@addpunct{.}]\ignorespaces}{\popQED\endtrivlist\@endpefalse}
 \makeatother
