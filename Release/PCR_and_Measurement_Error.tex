@@ -409,15 +409,15 @@
 
             \begin{claim}
             Under measurement error in the covariates, the coefficient is such that:
-            \begin{align}
+            \begin{align*}
                     \gamma^* = \gamma + \beta\frac{\operatorname{cov}(t,x)(\sigma^2_{x^*}-\sigma^2_x)}{\sigma_{t}^2\sigma_{x^*}^2-\operatorname{cov}({t,x})^2}
-                \end{align}
+                \end{align*}
             \end{claim}
             
         \begin{proof}
 
         Then, equations $(4)$ and $(5)$ will be such that
-                    \begin{align}
+                    \begin{align*}
                             \left(\begin{array}{l}
                         {\gamma}^* \\
                         {\beta}^*
@@ -428,27 +428,27 @@
                         \operatorname{cov}{(y,t)} \\
                         \operatorname{cov}{(y,x^*)}
                         \end{array}\right) \\
-                        \end{align}
+                        \end{align*}
                 
         \end{proof}	
         
 
         \begin{claim}
         Suppose $ Z_i=X_i+\omega_i$. If $\operatorname{E}(\omega_i)=0$, $\operatorname{Cov}(\epsilon_i,\omega_i)=0$ and $\operatorname{Cov}(\eta_i,\omega_i)=0$. Then
-        \begin{align}
+        \begin{align*}
         \operatorname{E}(Z_i\zeta_i)=0 \ \text{and} \  \operatorname{E}(Z_iX_i)\neq0
-        \end{align}
+        \end{align*}
         And so $\gamma$ can be identified through IV regression.
         \end{claim}
         \begin{proof}
 
         Suppose an instrument $Z_i$ that satisfies the relevance condition $\operatorname{E}(Z_i'X_i)\neq 0$ and $\operatorname{E}(Z_i't_i)\neq 0$, and also the exclusion restriction $\operatorname{E}(Z_i'\epsilon_i)=\operatorname{E}(Z_i'\zeta_i)=\operatorname{E}(Z_i'\eta_{i,k})=0$, for all $i$ and $k$. Then premultiplying by $Z_i$ we have
-                \begin{align}
+                \begin{align*}
                     Z_i'y_i =  Z_i'\gamma^* t_i +  Z_i'{X^{*}_i}' \beta^* +  Z_i'\zeta_i
-                \end{align}
+                \end{align*}
                 
                 and so
-                \begin{align}
+                \begin{align*}
                     \left(\begin{array}{l}
                 {\gamma}^{IV} \\
                 {\beta}^{IV}
@@ -481,44 +481,44 @@
                 {\gamma} \\
                 {\beta}
                 \end{array}\right)
-                \end{align}
+                \end{align*}
                 
                 However, finding a reliable source of exogeneity is sometimes difficult, as is demonstrating the exclusion restriction.
                 
                 Suppose now that as instrument we have another measure of $X_i$ so that
-                \begin{align}
+                \begin{align*}
                     Z_i=X_i+\omega_i
-                \end{align}
+                \end{align*}
                 
                 where $\operatorname{E}(\omega_i)=0$, $\operatorname{Cov}(\epsilon_i,\omega_i)=0$ and that $\omega_i$ brings new information so that $\operatorname{Cov}(\eta_i,\omega_i)=0$. Then, if $Z_i$ satisfies exogeneity and relevance we will be able to identify the parameters without any bias as shown in equations $(13)$ to $(15)$. In fact:
-                \begin{align}
+                \begin{align*}
                     \operatorname{E}(Z_i\zeta_i)&=\operatorname{E}(Z_i(\epsilon_i-\eta_i\b)\\
                     &=\operatorname{E}(Z_i\epsilon_i)-\operatorname{E}(Z_i\eta_i)\b\\
                 &= \operatorname{E}((X_i+\omega_i)\epsilon_i)-\operatorname{E}((X_i+\omega_i)\eta_i)\b \\
                 &=\operatorname{E}(X_i\epsilon_i) + \operatorname{E}(\omega_i\epsilon_i)-(\operatorname{E}(X_i\eta_i)+\operatorname{E}(\omega_i\eta_i))\b
-                \end{align}
+                \end{align*}
                 
                 And so $Z_i$ is exogenous. Given $(16)$ it is clear that $\operatorname{E}(Z_iX_i)\neq0$ and so relevance is also satisfied. Thus, $\gamma$ and $\b$ may be identified using this kind of instrument.
 
         \end{proof}
 
         \begin{claim}
-        \begin{align}
+        \begin{align*}
                     X_i=HX^*_i
-                \end{align}
+                \end{align*}
         where $H$ is a matrix compound of the $h_k$ vectors of eigenvalues of $x_{i,k}$, $\forall i,k$
         \end{claim}
 
         \begin{proof}
         Under our assumptions, the vector of mismeasured values $X^*_k$ of $x_{i,k}$, share only one principal component which is precisely $x_{i,k}$. Then, we only have one principal component, $x_{i,k}$, and so the $x_{i,k}$ is such that
-                \begin{align}
+                \begin{align*}
                     x_{i,k}=h_{k}^{\prime} X^*_k
-                \end{align}
+                \end{align*}
                 
                 Finally, we could then retrieve the vector of true variables $X_i$
-                \begin{align}
+                \begin{align*}
                     X_i=HX^*_i
-                \end{align}
+                \end{align*}
                 
                 where $H$ is a matrix such that
                 \begin{align*}
@@ -535,14 +535,14 @@
         
         \begin{claim}
         Consider equation $(11)$. Then
-        \begin{align}
+        \begin{align*}
         {\gamma}^{PCR} = \gamma
-        \end{align}
+        \end{align*}
         \end{claim}
 
         \begin{proof}
         The coefficients are as follows
-                \begin{align}
+                \begin{align*}
                     \left(\begin{array}{l}
                 {\gamma}^{PCR} \\
                 {\beta}^{PCR}
@@ -567,7 +567,7 @@
                 {\gamma} \\
                 {\beta}
                 \end{array}\right)
-                \end{align}
+                \end{align*}
                 
                 where the last equality comes from $(13)$
         \end{proof}
