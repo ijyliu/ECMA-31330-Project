@@ -39,14 +39,13 @@ param_combo_to_run = (pd.read_csv(glob.glob(sim_results_dir + '/*_parameter_comb
                         .iloc[slurm_number, :]
                         .to_dict())
 
+N = int(param_combo_to_run['N'])
 beta1 = param_combo_to_run['beta1']
 beta2 = param_combo_to_run['beta2']
 covariance = param_combo_to_run['covariance']
 p = int(param_combo_to_run['p'])
 me_cov = param_combo_to_run['me_cov']
 exp_of_var = param_combo_to_run['exp_of_var']
-
-N = 3000
 
 output = pd.DataFrame()
 
@@ -168,6 +167,7 @@ for k in range(1000):
     new_output['pca_coef'] = pca_coef
     new_output['true_val_coef'] = true_val_coef
     new_output['iv_coef'] = iv_coef
+    new_output['N'] = N
     new_output['covariance'] = vars_cov[0][1]
     new_output['beta1'] = beta1
     new_output['beta2'] = beta2

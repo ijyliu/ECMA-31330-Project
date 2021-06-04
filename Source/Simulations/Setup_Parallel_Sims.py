@@ -12,6 +12,7 @@ import pandas as pd
 import glob
 
 # Create a csv of parameter combos
+Ns = [100, 1000, 3000]
 beta1s = [0.1, 1, 10]
 beta2s = [0.1, 1, 10]
 covariances = [-0.9, -0.5, 0, 0.5, 0.9]
@@ -20,7 +21,7 @@ me_covs = [0, 0.5]
 exp_of_vars = ['yes', 'no']
 
 # Only run certain sims
-def make_counter(beta1, beta2, covariance, p):
+def make_counter(beta1, beta2, covariance, p, me_cov):
     counter = 0
     if beta1 == 1:
         counter += 1
@@ -30,18 +31,20 @@ def make_counter(beta1, beta2, covariance, p):
         counter += 1
     if p == 5:
         counter+=1
+    if me_cov == 0:
+        counter+=1
     return(counter)
 
 # Scenarios to run
-parameter_combos = (pd.MultiIndex.from_product([beta1s, beta2s, covariances, ps, me_covs, exp_of_vars])
+parameter_combos = (pd.MultiIndex.from_product([Ns, beta1s, beta2s, covariances, ps, me_covs, exp_of_vars])
                                  .to_frame()
                                  .reset_index(drop = True))
 
-parameter_combos.columns = ['beta1', 'beta2', 'covariance', 'p', 'me_cov', 'exp_of_var']
+parameter_combos.columns = ['N', 'beta1', 'beta2', 'covariance', 'p', 'me_cov', 'exp_of_var']
 
-parameter_combos['counter'] = parameter_combos.apply(lambda x: make_counter(x.beta1, x.beta2, x.covariance, x.p), axis = 1)
+parameter_combos['counter'] = parameter_combos.apply(lambda x: make_counter(x.beta1, x.beta2, x.covariance, x.p, x.me_cov), axis = 1)
 
-parameter_combos_to_run = (parameter_combos.query('counter >= 3')
+parameter_combos_to_run = (parameter_combos.query('counter >= 4')
                                            .drop(columns = 'counter'))
 
 # Remove preexisting file
