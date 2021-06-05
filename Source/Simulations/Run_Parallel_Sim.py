@@ -89,7 +89,7 @@ for k in range(1000):
     for i in mismeasured_z.columns:
         mismeasured_z[i] = mismeasured_z[i] + vars_['true_z']
 
-    # Take e to the power of the values for half of the measurements if log_of_var is true
+    # Take e to the power of the values for half of the measurements if exp_of_var is true
     if exp_of_var == 'yes':
         mismeasured_z.iloc[:,int(len(mismeasured_z.columns)/2):] =np.exp(mismeasured_z.iloc[:,int(len(mismeasured_z.columns)/2):])
 
