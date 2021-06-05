@@ -1,0 +1,53 @@
+This is BibTeX, Version 0.99d
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: PCR_and_Measurement_Error.aux
+Reallocating 'name_of_file' (item size: 1) to 4 items.
+The style file: aea.bst
+Reallocating 'name_of_file' (item size: 1) to 12 items.
+Database file #1: PCR_ME_Refs.bib
+Warning--empty journal in ahmad_can_2017
+Warning--empty journal in grishin_main_2019
+Warning--empty journal in heckman_matching_2010
+Warning--empty journal in nagasawa_identication_2020
+You've used 15 entries,
+            2695 wiz_defined-function locations,
+            683 strings with 7261 characters,
+and the built_in function-call counts, 87158 in all, are:
+= -- 14551
+> -- 945
+< -- 0
++ -- 7041
+- -- 295
+* -- 7809
+:= -- 17075
+add.period$ -- 106
+call.type$ -- 15
+change.case$ -- 195
+chr.to.int$ -- 15
+cite$ -- 19
+duplicate$ -- 218
+empty$ -- 585
+format.name$ -- 298
+if$ -- 15621
+int.to.chr$ -- 5
+int.to.str$ -- 0
+missing$ -- 0
+newline$ -- 52
+num.names$ -- 165
+pop$ -- 16
+preamble$ -- 1
+purify$ -- 225
+quote$ -- 0
+skip$ -- 174
+stack$ -- 0
+substring$ -- 20917
+swap$ -- 85
+text.length$ -- 210
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 60
+warning$ -- 4
+while$ -- 379
+width$ -- 0
+write$ -- 77
+(There were 4 warnings)
