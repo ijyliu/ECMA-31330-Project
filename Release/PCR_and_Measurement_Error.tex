@@ -276,7 +276,7 @@
         
         In particular, take the case in which $h_k=(\frac{1}{n},\frac{1}{n},\dots,\frac{1}{n})$ of dimension $1 \times p$, and $p$ is the number of mismeasured variables for $x_{i,k}$. Then, Claim \ref{linear_combo} will be
         \begin{align}
-            x_{i,k}&=\left(\begin{array}{cccc}
+            \tilde{x}_{i,k}&=\left(\begin{array}{cccc}
             \frac{1}{n} & \frac{1}{n} & \dots &\frac{1}{n} 
             \end{array}\right)\left(\begin{array}{l}
             x^*_{i,1} \\
@@ -284,7 +284,7 @@
             \vdots \\
             x^*_{i,p} 
             \end{array}\right)\\
-            &=\frac{1}{n}\sum_{j=1}^p x^*_{i,j}
+            &=\frac{1}{p}\sum_{j=1}^p x^*_{i,j}
         \end{align}
         
         That is, the average of the mismeasured variables for $x_{i,k}$ is a feasible linear combination that may correct for the mismeasurement bias problem.
