@@ -26,6 +26,20 @@
 **/*.Rhistory
 *.Rhistory
 
-# Ignore .out files from parallelization/cluster runs
+# Ignore .out files
 **/*.out
 *.out
+
+# Ignore LaTeX gunk
+**/*.log
+**/*.aux
+**/*.bbl
+**/*.blg
+**/*.fdb_latexmk
+**/*.fls
+*.log
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
