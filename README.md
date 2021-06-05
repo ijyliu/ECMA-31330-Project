@@ -4,7 +4,7 @@ Econometrics and Machine Learning Group Project
 
 Principal Component Regression as a Solution to Measurement Error Bias
 
-Isaac Liu, Nico Martorelli, Paul Opheim
+Isaac Liu, Nicolas Martorell \& Paul Opheim
 
 The paper can be found [here](Release/PCR_and_Measurement_Error.pdf).
 
