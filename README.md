@@ -38,7 +38,7 @@ Contains code to run the Monte Carlo simulations and produce relevant tables.
 
 ## Replication Instructions
 
-1. Download or clone the repository.
+1. Download or clone the repository. There should be no need to modify directory structure, but the relevant python packages must be installed.
 2. The simulation files are structured such that they may be run on a computing cluster. These steps each have their own .sh scripts and [Parallel_Simulations.sh](Source/Simulations/Parallel_Simulations.sh) is set up to run them all sequentially while requesting the appropriate amount of computing resources.
    1. [Setup_Parallel_Sims.py](Source/Simulations/Setup_Parallel_Sims.py) defines a csv of parameter values and combinations.
    2. [Run_Parallel_Sim.py](Source/Simulations/Run_Parallel_Sim.py) is executed in parallel and performs 1,000 simulations for each parameter combination considered and outputs the results.
