@@ -22,5 +22,24 @@
 **/*.pyc
 *.pyc
 
-# Ignore many small .out files from parallelization
-**/*_Parallel_Run_Simulations.out
+# Ignore R extra files
+**/*.Rhistory
+*.Rhistory
+
+# Ignore .out files
+**/*.out
+*.out
+
+# Ignore LaTeX gunk
+**/*.log
+**/*.aux
+**/*.bbl
+**/*.blg
+**/*.fdb_latexmk
+**/*.fls
+*.log
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
